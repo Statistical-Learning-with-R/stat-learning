@@ -66,7 +66,20 @@ For this course we will be using one main textbook, accompanied by additional re
 
 ## Textbook
 
-![James, Witten, Hastie & Tibshirani, **An Introduction to Statistical Learning with Applications in R**. <https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf>](images/islr.png)
+::: columns
+::: {.column width="40%"}
+[James, Witten, Hastie & Tibshirani, **An Introduction to Statistical Learning with Applications in R** (link to free PDF version)](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+![](images/islr.png)
+:::
+:::
+
 ## Required Technology
 
 ::: columns
@@ -74,8 +87,14 @@ For this course we will be using one main textbook, accompanied by additional re
 ![`R` is the statistical software we will be using in this course (<https://cran.r-project.org/>)](images/R.jpeg){width="50%"}
 :::
 
+::: {.column width="2%"}
+:::
+
 ::: {.column width="30%"}
 ![RStudio is the most popular way to interact with the `R` software. We will be interacting with RStudio through [Posit Cloud](https://posit.cloud/) (Posit is the company that owns RStudio). You will join the Stat 313 workspace, and then be able to access the course homework and lab assignments. We will be walking through this in the first week of lab!](images/rstudio.png){width="75%"}
+:::
+
+::: {.column width="2%"}
 :::
 
 ::: {.column width="30%"}
@@ -91,7 +110,7 @@ For this course we will be using one main textbook, accompanied by additional re
 
 # What is this class?
 
-*Catalog Description*: Applications of statistics for students not majoring in statistics or mathematics. Analysis of variance including one-way classification, randomized blocks, and factorial designs; multiple regression, model diagnostics, and model comparison. Prerequisite: Stat 217, Stat 218, Stat 221 or Stat 312
+*Catalog Description*: Modern methods in predictive modeling. Supervised and unsupervised learning. Regression, classification, and clustering methods, including SVM, LASSO, splines, trees, and random forests. Model assessment and selection using cross validation, bootstrapping, and information criteria. Use of the R programming language. Prerequisite: STAT 305 or STAT 350; STAT 331 or STAT 531; STAT 334; and graduate standing. 
 
 
 # Classroom community and policies
@@ -169,26 +188,6 @@ You are allowed to use technology in the classroom! In fact, we will often do so
 Following Ihab Hassan, I strive to teach statistics so that people will stop killing each other. In my classroom, diversity and individual differences are a sources of strength. One of the greatest failures of Statistics, historically and in the present, has been the exclusion of voices from the field. **Everyone here can learn from each other, and doing so is vital to the structure of the course.** Significant portions of this course involve group work and discussion in class. Some discussions will touch on sensitive topics. **So that everyone feels comfortable participating in these activities, we must listen to each other and treat each other with respect.** Any attitude or belief that espouses the superiority of one group of people over another is not welcome in my classroom. Such beliefs are directly destructive to the sense of community that we strive to create, and will sabotage our ability to learn from each other (and thus sabotage the entire structure of the course).
 
 In summary: Be good to each other.
-
-## Working in teams
-
-Your team will be rotating group roles each week, so that one person does not act as the "team manager" for more than one week. Instead the following roles will circulate each week, so that each member of the group is able to complete each role.
-
-+------------------------------------------------------------+-------------------------------------------------------------------------------------------+---------------------------------------------+
-| **Facilitator**                                            | **Recorder / Reporter**                                                                   | **Team Captain**                            |
-|                                                            |                                                                                           |                                             |
-| Manages team progress through the task                     | Manages in-class report                                                                   | Manages team participation                  |
-|                                                            |                                                                                           |                                             |
-| -   Leads discussion                                       | -   Responsible for organizing and recording answers to the assignment during discussions | -   Encourages participation                |
-|                                                            |                                                                                           |                                             |
-| -   Makes sure everyone understands the task               | -   Compiles a summary of the solutions discussed                                         | -   Finds compromises                       |
-|                                                            |                                                                                           |                                             |
-| -   Keeps the group moving forward                         | -   Solicits feedback on summaries from other group members                               | -   Enforces norms                          |
-|                                                            |                                                                                           |                                             |
-| -   Checks in with group members                           | -   Responsible for submitting final version of assignment                                | -   Brings conversation back if it deviates |
-|                                                            |                                                                                           |                                             |
-| -   Calls professor / TA over for **group questions only** |                                                                                           | -   Substitutes for absent roles            |
-+------------------------------------------------------------+-------------------------------------------------------------------------------------------+---------------------------------------------+
 
 ## What constitutes plagiarism in a programming class?
 
