@@ -110,8 +110,56 @@ For this course we will be using one main textbook, accompanied by additional re
 
 # What is this class?
 
-*Catalog Description*: Modern methods in predictive modeling. Supervised and unsupervised learning. Regression, classification, and clustering methods, including SVM, LASSO, splines, trees, and random forests. Model assessment and selection using cross validation, bootstrapping, and information criteria. Use of the R programming language. Prerequisite: STAT 305 or STAT 350; STAT 331 or STAT 531; STAT 334; and graduate standing. 
+*Catalog Description*: Modern methods and techniques in predictive modeling and classification including splines, smoothing splines, ridge regression, LASSO, regression and classification trees, generalized additive models, logistic regression, and linear discriminant analysis. Model assessment and selection using cross validation, bootstrapping, AIC, and BIC. Use of the R programming language. Prerequisite: STAT 305 or STAT 350; STAT 331 or STAT 531; STAT 334; and graduate standing. 
 
+# Learning Objectives
+
+This course will teach you to perform advanced machine learning and statistical modeling analyses.
+
+After taking this course, you will be able to:
+
+- Perform analyses in R or python and report them with Quarto
+- Justify your choice of statistical learning model with cross-validated metrics and intuitive understanding.
+- Explain the philosophy behind various methods as well as metrics.
+
+Additionally, it is my hope that you will learn to:
+
+- Contribute to and participate in the online Data Science community.
+- Be thoughtful, deliberate, and ethical in your data analysis.
+- Be playful, creative, and fun in your statistical learning applications.
+
+# Course Organization
+
+## Readings & Activities (15%)
+
+**Due Fridays at 5pm**
+
+Each week, you will have a variety of learning to do outside of class. You will have some combination of:
+
+1. Readings, viewings, or walkthroughs to support the material in lecture.
+2. Activities that we get started on together in class.
+
+You are only responsible for meeting due dates on Canvas; anything else that is posted or mentioned in class is optional supporting material.
+
+You are strongly encouraged to work on these in groups, and sharing answers (within reason) is permitted.
+
+Readings and activities are graded on completeness, not correctness. Late work is penalized at -20% per day (or partial day).
+
+Despite these points being “free”, please take them seriously. I will plan our in-class lectures and work assuming you have met all prior deadlines.
+
+## Assignments (20%)
+
+**Due Mondays at 5pm**
+
+Every week, you’ll complete a homework assignemnt that will ask you to answer some conceptual questions and to perform an analysis on real data.
+
+These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other’s written text or code.
+
+## Peer Review (5%)
+
+## Final Project (20%)
+
+## Midterm & Final Exams (20% each)
 
 # Classroom community and policies
 
@@ -169,9 +217,9 @@ If you miss a bunch of classes, please come talk to me. I'm working from the ass
 
 ## What if I need to turn something in late?
 
-Assignments are expected to be submitted on time. However, every student will be permitted to submit up to **three** individual assignments up to 4-days late, by completing the [deadline extension form](https://forms.gle/gUgfUov1EPagjACQ8). [Similar to the "real world," deadline extensions must be requested **before** an assignment is due.]{style="color: #FF0000;"}
+Assignments are expected to be submitted on time. However, every student will be permitted to submit up to **three** individual assignments up to 4-days late, by completing the [deadline extension form](https://forms.gle/CXsNoSbkoacs28cG7). [Similar to the "real world," deadline extensions must be requested **before** an assignment is due.]{style="color: #FF0000;"}
 
-When you complete the deadline extension form you will be required to state (1) what assignment you need an extension for, and (2) your proposed new deadline. **Your new deadline must be within 4-days of the original deadline.**
+When you complete the deadline extension form you will be required to state (1) what assignment you need an extension for, and (2) your proposed new deadline. **Your new deadline must be within 3-days of the original deadline.**
 
 **All** deadline extensions must be done through the form, so I can keep track of who has used their allotment of extensions. If you are registered with DRC to have deadline extensions, you are required to complete a deadline extension request and make a note if your extension is related to a disability related need.
 
@@ -201,7 +249,7 @@ If you have any questions about using and citing sources, you are expected to as
 
 For more information about what constitutes cheating and plagiarism, please see <https://academicprograms.calpoly.edu/content/academicpolicies/Cheating>.
 
-# Course Organization {#sec-schedule}
+# Course Calendar {#sec-schedule}
 
 This class introduces a different statistical learning technique each week. Yes, that sound daunting, but you will find that ideas translate between the different methods. 
 
