@@ -1,0 +1,208 @@
+---
+title: 'STAT 551: Statistical Learning with R'
+subtitle: "Fall 2023"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: true
+    number-depth: 2
+    table-of-contents: true
+    section-divs: true
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+**Instructor: Dr. Allison Theobold** -- call me [**Dr. Theobold**](https://docs.google.com/document/d/1m4e-2l76luAd9WrxiwCVf8-yf-co82dDSe1jHYf-NBo/edit?usp=sharing) or Dr. T! I use **they / she** pronouns (that is my order of preference).
+
+# Welcoming Classroom
+
+I value diversity, inclusion and equity in this (and every) class. I hold the fundamental belief that everyone is fully capable of learning and doing statistics. There is more than one way to address a statistical problem, and our learning will be richer by being open to different ideas, rejecting stereotypes, and being aware of---in order to minimize---our biases. I look forward to getting to know you all as individuals and as a learning community.
+
+# Key information
+
+### Class meetings
+
+**Room:** Building 38, Room 123 (Statistics Studio)
+
+**Times:** MW 2:10pm - 4:00pm
+
+### How to contact me
+
+**Email**: atheobol\@calpoly.edu[^1]
+
+[^1]: See @sec-help for information on what you can expect when you email me.
+
+**Office**: Building 25 Office 105 (by Statistics Department Office)
+
+### Student Hours
+
+These are hours reserved for you! Student hours can have a different structureeach week, depending on the assignments we have and what people hope to accomplish. Some days it may be you and I having a one-on-one conversation, some days it may be talking in a group about questions you have regarding an assignment, and some days it may be you working with others while I circulate around the room to answer questions that arise.
+
+Please note that student hours are not only reserved for talking about the course content! You are also welcome to come by and talk about things that interest you, questions you have about life, and share funny cat gifs. 😻
+
+This quarter I will be holding student hours on Mondays from 12:00 to 1:30pm.
+
+### Personal Meetings
+
+If you would like to talk with me individually, I am happy to offer Zoom appointments from on **Wednesdays** from 1:00pm to 1:30pm for individual appointments. You can make appointments through the following link: <https://calendly.com/allisontheobold>
+
+I do request that you make appointments at least 1-hour ahead of time, so I don't miss our meeting!
+
+If you need to meet, but none of the student hours work for you please let me know! It is possible we can communicate asynchronously through Discord or email, but I am happy to schedule a meeting during another time if necessary.
+
+------------------------------------------------------------------------
+
+# Required Materials
+
+For this course we will be using one main textbook, accompanied by additional resources. The textbook we are using is free, but have the option to obtain a printed copy if you wish.
+
+## Textbook
+
+![James, Witten, Hastie & Tibshirani, **An Introduction to Statistical Learning with Applications in R**. <https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf>](images/islr.png)
+## Required Technology
+
+::: columns
+::: {.column width="30%"}
+![`R` is the statistical software we will be using in this course (<https://cran.r-project.org/>)](images/R.jpeg){width="50%"}
+:::
+
+::: {.column width="30%"}
+![RStudio is the most popular way to interact with the `R` software. We will be interacting with RStudio through [Posit Cloud](https://posit.cloud/) (Posit is the company that owns RStudio). You will join the Stat 313 workspace, and then be able to access the course homework and lab assignments. We will be walking through this in the first week of lab!](images/rstudio.png){width="75%"}
+:::
+
+::: {.column width="30%"}
+![For questions of general interest, such as course clarifications or conceptual questions, please use the Class Discord Server. Refer to the Day One Class Setup materials for more information on how to effectively use this server.](images/discord.jpeg){width="50%"}
+:::
+:::
+
+<!-- ::: callout-caution -->
+
+<!-- I strongly advise you to pay for the \$5 per month plan with Posit Cloud. The free plan only gives you 25 hours of working on projects a month, and I don't want anyone to run out of time and not be able to complete their assignment! -->
+
+<!-- ::: -->
+
+# What is this class?
+
+*Catalog Description*: Applications of statistics for students not majoring in statistics or mathematics. Analysis of variance including one-way classification, randomized blocks, and factorial designs; multiple regression, model diagnostics, and model comparison. Prerequisite: Stat 217, Stat 218, Stat 221 or Stat 312
+
+
+# Classroom community and policies
+
+### Weekly expectations
+
+The module for each week will be released on Friday by 5pm, so you can look over the content and see what the plan is for the week.
+
+### Getting help {#sec-help}
+
+**Discord:** We will use Discord to manage questions and responses regarding course content. There are channels for the different components of each week (e.g., Week 1 Lab Assignment). Please **do not** send an email about homework questions or questions about the course material. It is incredibly helpful for others in the course to see the questions you have and the responses to those questions. I will try to answer any questions posted to Discord within 3-4 hours (unless it is posted at midnight). If you think you can answer another student's question, please respond!
+
+**Email:** I do my best to reply to emails promptly and helpfully. However, I receive *a lot* of emails. To help both you and me, here are some specific expectations about emails:
+
+-   Please tell me what course and section (by time or number) you are in!
+-   If you email me between 9am and 4pm on Monday through Friday, I'll try my best to reply to you on the *same* day.
+-   If you email me outside of those hours, I will do my best to respond to you by the *next working* day. For my own mental health, I **do not** work on weekends. Thus, if you send an email after 4pm on Friday or during the weekend, you will not receive a response until Monday morning.
+-   If your question is much easier to discuss face-to-face, I may ask you to meet with me in my office or on Discord (at a time that works for both of us) rather than answering directly in an email.
+-   Include any relevant photos / screenshots / error messages / PDFs / links with your email.
+
+# Well-being, Access, and Accommodations
+
+## What if I have accommodations or feel that accommodations would be beneficial to my learning?
+
+I enthusiastically support the mission of Disability Resource Center to make education accessible to all. I design all my courses with accessibility at the forefront of my thinking, but if you have any suggestions for ways I can make things more accessible, please let me know. Come talk to me if you need accommodation for your disabilities. I honor self-diagnosis: let's talk to each other about how we can make the course as accessible as possible. See also the standard syllabus statements, which include more information about formal processes.
+
+## I'm having difficulty paying for food and rent, what can I do?
+
+If you have difficulty affording groceries or accessing sufficient food to eat every day, or if you lack a safe and stable place to live, and you believe this may affect your performance in the course, I urge you to contact the Dean of Students for support. Furthermore, please notify me if you are comfortable in doing so. This will enable me to advocate for you and to connect you with other campus resources.
+
+## My mental health is impairing my ability to engage in my classes, what should I do?
+
+National surveys of college students have consistently found that stress, sleep problems, anxiety, depression, interpersonal concerns, death of a significant other and alcohol use are among the top ten health impediments to academic performance. If you are experiencing any mental health issues, I and Cal Poly are here to help you. Cal Poly's Counseling Services (805-756-2511) is a free and confidential resource for assistance, support and advocacy.
+
+## Someone is threatening me, what can I do?
+
+I will listen and believe you if someone is threatening you. I will help you get the help you need. I commit to changing campus culture that responds poorly to dating violence and stalking.
+
+## What if I can't arrange for childcare?
+
+If you are responsible for childcare on short notice, you are welcome to bring children to class with you. If you are a lactating parent, you many take breaks to feed your infant or express milk as needed. If I can support yo in navigating parenting, coursework, and other obligations in any way, please let me know.
+
+# Attendance, Extensions, and Technology
+
+## What if I need to miss class?
+
+I encourage you to attend every class session, but policies are for narcs. I put a great deal of time into making each class session engaging and worth your time. Attendance in this course is not explicitly required, but it degrades your team's trust in you when they don't see you in class.
+
+Here's what you should do if you do miss a class:
+
+-   Talk to a classmate to figure out what information you missed
+-   Check Canvas for any necessary handouts or changes to assignments
+-   Email me with any questions you have after reviewing notes and handouts
+
+If you miss a bunch of classes, please come talk to me. I'm working from the assumption that you care and are trying, but something is getting in your way (health issues? depression / anxiety? college stress?); let's figure out what that is and how I can help.
+
+## What if I need to turn something in late?
+
+Assignments are expected to be submitted on time. However, every student will be permitted to submit up to **three** individual assignments up to 4-days late, by completing the [deadline extension form](https://forms.gle/gUgfUov1EPagjACQ8). [Similar to the "real world," deadline extensions must be requested **before** an assignment is due.]{style="color: #FF0000;"}
+
+When you complete the deadline extension form you will be required to state (1) what assignment you need an extension for, and (2) your proposed new deadline. **Your new deadline must be within 4-days of the original deadline.**
+
+**All** deadline extensions must be done through the form, so I can keep track of who has used their allotment of extensions. If you are registered with DRC to have deadline extensions, you are required to complete a deadline extension request and make a note if your extension is related to a disability related need.
+
+Any late work is required to have a deadline extension request, meaning if you do not complete a deadline extension request for an assignment you **are not** permitted to turn it in late.
+
+## Do I need to bring a computer to class?
+
+You are allowed to use technology in the classroom! In fact, we will often do so as part of in-class activities. However, our class is held in a computer laboratory, so bringing a laptop is not required. You are permitted to use the lab computers, but if you would like to take notes on your computer / surface you are welcome to bring it to class.
+
+# Expectations, Respect, and Integrity
+
+## How can I expect to be treated in this course?
+
+Following Ihab Hassan, I strive to teach statistics so that people will stop killing each other. In my classroom, diversity and individual differences are a sources of strength. One of the greatest failures of Statistics, historically and in the present, has been the exclusion of voices from the field. **Everyone here can learn from each other, and doing so is vital to the structure of the course.** Significant portions of this course involve group work and discussion in class. Some discussions will touch on sensitive topics. **So that everyone feels comfortable participating in these activities, we must listen to each other and treat each other with respect.** Any attitude or belief that espouses the superiority of one group of people over another is not welcome in my classroom. Such beliefs are directly destructive to the sense of community that we strive to create, and will sabotage our ability to learn from each other (and thus sabotage the entire structure of the course).
+
+In summary: Be good to each other.
+
+## Working in teams
+
+Your team will be rotating group roles each week, so that one person does not act as the "team manager" for more than one week. Instead the following roles will circulate each week, so that each member of the group is able to complete each role.
+
++------------------------------------------------------------+-------------------------------------------------------------------------------------------+---------------------------------------------+
+| **Facilitator**                                            | **Recorder / Reporter**                                                                   | **Team Captain**                            |
+|                                                            |                                                                                           |                                             |
+| Manages team progress through the task                     | Manages in-class report                                                                   | Manages team participation                  |
+|                                                            |                                                                                           |                                             |
+| -   Leads discussion                                       | -   Responsible for organizing and recording answers to the assignment during discussions | -   Encourages participation                |
+|                                                            |                                                                                           |                                             |
+| -   Makes sure everyone understands the task               | -   Compiles a summary of the solutions discussed                                         | -   Finds compromises                       |
+|                                                            |                                                                                           |                                             |
+| -   Keeps the group moving forward                         | -   Solicits feedback on summaries from other group members                               | -   Enforces norms                          |
+|                                                            |                                                                                           |                                             |
+| -   Checks in with group members                           | -   Responsible for submitting final version of assignment                                | -   Brings conversation back if it deviates |
+|                                                            |                                                                                           |                                             |
+| -   Calls professor / TA over for **group questions only** |                                                                                           | -   Substitutes for absent roles            |
++------------------------------------------------------------+-------------------------------------------------------------------------------------------+---------------------------------------------+
+
+## What constitutes plagiarism in a programming class?
+
+Paraphrasing or quoting another's work without citing the source is a form of academic misconduct. This included the `R` code produced by someone else! Writing code is like writing a paper, it is obvious if you copied-and-pasted a sentence from someone else into your paper because the way each person writes is different.
+
+Even inadvertent or unintentional misuse or appropriation of another's work (such as relying heavily on source material that is not expressly acknowledged) is considered plagiarism. If you are struggling with writing the `R` code for an assignment, please reach out to me. I would prefer that I get to help you rather than you spending hours Googling things and get nowhere!
+
+Any incident of dishonesty, copying or plagiarism will be reported to the Office of Student Rights and Responsibilities. Cheating or plagiarism will earn you a grade of **N** on the problem or assignment and will remove your ability to submit revisions for that assignment.
+
+If you have any questions about using and citing sources, you are expected to ask for clarification.
+
+For more information about what constitutes cheating and plagiarism, please see <https://academicprograms.calpoly.edu/content/academicpolicies/Cheating>.
+
+# Course Organization {#sec-schedule}
+
+This class introduces a different statistical learning technique each week. Yes, that sound daunting, but you will find that ideas translate between the different methods. 
+
