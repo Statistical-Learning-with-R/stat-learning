@@ -1,0 +1,23 @@
+---
+title: "Week 1 Reading Guide"
+format: docx 
+editor: visual
+---
+
+## Chapter : Statistical Learning)
+
+**What is "reducible error" in statistical learning?**
+
+**Can all error be taken out of a model predicting y? Why not?**
+
+**What is the difference between inferential modeling and predictive modeling?**
+
+**What are the differences between parametric and non-parametric models?**
+
+**What are the advantages to using parametric methods? What are the disadvantages?**
+
+**What is it called when a highly specific (flexible) model is fit to a training dataset?**
+
+**What is the difference between supervised and unsupervised learning?**
+
+**Provide a sketch of typical (squared) bias, variance, training error, test error, and Bayes (or irreducible) error curves on *one* plot.** The x-axis should represent the amount of flexibility in the method, and the y-axis should represent the values for each curve. There should be five total curves! Make sure to label each curve, so I know what it corresponds with.
