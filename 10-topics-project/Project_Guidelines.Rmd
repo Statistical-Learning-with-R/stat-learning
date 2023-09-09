@@ -1,0 +1,159 @@
+---
+title: "Project Guidelines"
+author: "Stat 434"
+output: rmdformats::readthedown
+---
+
+```{r, include = FALSE}
+set.seed(492)
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Overview
+
+Your final project is your chance to demonstrate your knowledge from Stat 434 in a real-world setting.  You have two options for the project:  a **prediction challenge** or a **method tutorial**.
+
+
+#### Due: Sunday, June 6th at midnight
+
+No extensions will be granted for projects, except in highly unusual extenuating circumstances.  Please start early!
+
+
+
+# Option A: Kaggle Competition
+
+If you chose to focus on **prediction** for your project, you will be entering a competition on the data hosting website Kaggle.com.
+
+You can find a list of competitions here: https://www.kaggle.com/competitions
+
+These competitions generally supply a *training set* for you to build your model, and a *validation set*  (without the response variable included).  You will upload your predictions for the *validation set* to Kaggle.
+
+
+You may enter an *open* or *closed* Kaggle competition, it's completely your choice.  The open competitions have more limited options - but they also come with prizes if you place highly! You may not enter more than **three tries** into the competition.  Otherwise, I will consider this to be overfitting to the validation set.
+
+
+For your project, you will turn in:
+
+* Evidence that you successfully entered the competition; e.g., a screenshot of your team's results.
+
+* A write-up or video walking through your modeling process.
+
+ 
+
+# Option B: Tutorial
+
+If you choose to focus on **concepts** for your project, you will create a tutorial explaining one of the concepts from class.
+
+Your tutorial should cover one or two "lectures" worth of material; i.e., between 50% and 100% of a chapter in the textbook.
+
+The target audience for your tutorial is anyone with experience equivalent to the prerequisites of Stat 434: statistics experience up to the level of basic regression.  You can also assume a basic familiarity with R  (or any programming language you use).
+
+Important notes:
+
+* Do not simply  mimic my material from lecture.  You should come up with your own approach to how to explain the modeling ideas.
+
+* Do not simply walk through an example analysis.  You need to explain the ideas and statistical concepts behind the topic, not just show it in action.
+
+* Do not create a *coding* tutorial.  There may be code included to demonstrate ideas, but you are not teaching R/`tidymodels`.  You are teaching the intuition and decision-making behind the methods.
+
+* Do not reference anything done in class, or use datasets that were used in lecture/assignments.  You're starting fresh!
+
+
+You will turn in to me a **write-up** or **video**
+
+
+# Further Details
+
+#### Style
+
+For either project option, I will be grading very strictly for **professionalism**.  
+
+That is to say, your submission should have a style, quality, and clarity that could reasonably be shared in a public place, such as a journal or a blog pots.
+
+The following phrases should *never appear* in your work:
+
+* "As we discussed in class, ..."
+
+* "The data that we chose is...."
+
+* "Like it says in the textbook, ..."
+
+* "We tried [something] but we couldn't get it to work..."
+
+
+Instead, you should write as though you are a professional data scientist sharing your work with the world.
+
+This doesn't mean your project needs to be stuffy and formal; you can use casual language, and include funny images or references, as long as this does not detract from the clarity of the writeup.
+
+A good model for a clear writeups and videos can be found in the blog on this site: https://juliasilge.com/.  (Although that blog is focused on teaching coding tools, whereas yours should be focused on your modeling procedure and/or the concepts behind your model.)
+
+If you chose the video option for your modeling walkthrough and/or tutorial, it needs to be a true walkthrough of code and ideas.  Do not give me a video of you talking over PowerPoint slides!  Your grade will suffer.  
+
+
+#### Format
+
+There are no strict guidelines for format or length of your submissions.
+
+Roughly, I would say 3-5 pages of writeup or 3-5 minutes of video is probably about right in most cases.  But this might vary - maybe you have a ton of visualizations and thus need more pages; maybe you are able to clearly show all the information in a more succinct way.  
+
+Remember, usually less is more.  Longer submissions often mean that you haven't boiled down your work to the "takeaway messages".
+
+
+#### Working in Groups
+
+You may work in groups of **up to three** for this project.
+
+However, you will be expected to submit three (or two) deliverables if you are a group of three (or two). 
+
+These deliverables should be *themed* or *connected* in some way, not just two independent works.  For example, if you are working with one partner, you might:
+
+* Enter a Kaggle competition, and use the data from that competition to create a tutorial for one of your models.
+
+* Enter two Kaggle competitions that relate to the same domain (e.g., two biological data competitions)
+
+* Write two tutorials, using the same example data for both and/or tying the concepts together.
+
+
+Be aware that I will be grading group submissions as if all the work were truly collaborative, regardless of how you split up the work behind the scenes.  That is, if you work in a group of two, and your partner fails to complete their section, you both get a grade of at most 50% - the choice to work together is yours, and I will not be supervising group interactions.
+
+
+**IMPORTANT:** If you opt to work in a group, make sure to add yourselves all to the same "Final Project Group" on Canvas **before** you upload your project.
+
+
+
+# Challenge Points
+
+You have the opportunity to earn **30 Challenge Points** by incorporating a topic not covered in the class.
+
+(Optional lectures on some of these will be given in Week 10.)
+
+This means you would need to teach that topic in your tutorial, or include that method in your Kaggle model.
+
+Some possible topics include:
+
+* Partial Least Squares Regression
+* Splines
+* Bayes Rule Classification
+* Neural Networks
+* Deep learning
+* Survival analysis
+* Time series analysis
+* Multiple testing
+* Naive Bayes
+* GLMs (besides logistic)
+* Bayesian additive regression trees
+* Matrix completion
+* Model-based Clustering
+* Association Rules and Frequent Itemsets
+* Manifold Learning
+* Matrix Completion
+
+You can also propose a topic for my approval, if you have an idea.
+
+Note that Challenge Point bonuses are split among the group:  That is, if a group of two submits one project that incorporates a new topic and one project that does not, each group member receives 15 Challenge Points.
+
+
+
