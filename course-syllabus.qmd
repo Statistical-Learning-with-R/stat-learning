@@ -253,3 +253,184 @@ For more information about what constitutes cheating and plagiarism, please see 
 
 This class introduces a different statistical learning technique each week. Yes, that sound daunting, but you will find that ideas translate between the different methods. 
 
+This schedule is tentative and subject to change.
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(stringr)
+# Create a calendar for your syllabus ----
+# Source: http://svmiller.com/blog/2020/08/a-ggplot-calendar-for-your-semester/
+# 1) what is the first Monday of the semester?
+# Any number of ways to identify dates in R, but we'll use {lubridate} and the ymd() function here.
+# Format: YYYYMMDD. In this example, 4 January 2022.
+# What are the full dates of the semester? Here, I'll exclude exam week as I like to do.
+# In this case: 6 January to 23 April
+quarter_dates <- seq(from = ymd(20230921), 
+                      to = ymd(20231215), 
+                      by = 1)
+# Weekday(s) of class
+class_wdays <- c("Mon", "Wed")
+
+not_here_dates <- c(
+  # Veterans Day
+  ymd("20231110"),
+  # Thanksgiving
+  seq(from = ymd(20231120), 
+      to = ymd(20231124), 
+      by = 1)
+  )
+
+# Week 7 Midterm, Final Exam Friday	Dec 15
+exam_dates <- c(ymd(20231106), ymd(20231108), ymd(20231215))
+
+# Week 9 
+project_dates <- seq(from = ymd(20231127),
+                     to = ymd(20231208), 
+                     by = 1)
+finals_week <- seq(from = ymd(20231211), 
+                   to = ymd(20231215), 
+                   by = 1)
+
+# Custom function for treating the first day of the month as the first week 
+# of the month up until the first Sunday 
+# (unless Sunday was the start of the month)
+wom <- function(date) {
+    first <- wday(as_date(str_c(year(date), 
+                                month(date), 
+                                1, 
+                                sep = "-")
+                          )
+                  )
+    return((mday(date) + (first - 2)) %/% 7 + 1)
+  }
+
+# Create a data frame of dates, assign to Cal
+Cal <- tibble(date = seq(from = ymd(20230901), 
+                         to = ymd(20231231), 
+                         by = 1))  %>%
+  mutate(mon = lubridate::month(date, label = T, abbr = F),
+         wkdy = weekdays(date, abbreviate = T),
+         # make sure Sunday comes first
+         wkdy = fct_relevel(wkdy, "Sun", "Mon", "Tue", "Wed", "Thu","Fri", "Sat"), 
+         quarter = date %in% quarter_dates, 
+         project = date %in% project_dates,
+         exams = date %in% exam_dates, 
+         not_here = date %in% not_here_dates, 
+         exam_wk = date %in% finals_week,
+         day = lubridate::mday(date), 
+         week = wom(date)
+         )
+
+Cal <- Cal %>%
+  mutate(category = case_when(
+    project ~ "Final Project",
+    exams ~ "Exam",
+    not_here ~ "Cal Poly Holiday",
+    quarter & wkdy %in% class_wdays & !not_here & !exam_wk ~ "Class Day",
+    quarter ~ "Quarter",
+    .default = "NA"
+  )
+  )
+
+class_cal <- Cal %>% 
+  ggplot(mapping = aes(x = wkdy, y = week)) +
+  theme_bw() +
+  theme(aspect.ratio = 0.75, 
+        panel.grid.major.x = element_blank(),
+        legend.position = "right",
+        # legend.position = c(1, 0), 
+        # legend.justification = c(1,0),
+        # legend.direction = "vertical", 
+        legend.title = element_blank(),
+        axis.title.y = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank()) +
+  geom_tile(alpha = 0.8, aes(fill = category), color = "black", linewidth = 0.45) +
+  facet_wrap(~mon, scales = "free", ncol = 2) +
+  geom_text(aes(label = day, color = quarter & (!not_here))) +
+  # put your y-axis down, flip it, and reverse it
+  scale_y_reverse(breaks = NULL) +
+  # manually fill scale colors to something you like...
+  scale_color_manual(values = c("FALSE" = "grey80", "TRUE" = "black"), 
+                     guide = "none") + 
+  scale_fill_manual(values = c("Class Day"="purple", 
+                               "Quarter"="white",
+                               "Cal Poly Holiday" = "grey10",
+                               "Final Project" = "forestgreen",
+                               "NA" = "white", # I like these whited out...
+                               "Exam"="orange"),
+                    #... but also suppress a label for a non-class semester day
+                    breaks = c("Quarter", 
+                               "Cal Poly Holiday",
+                               "Final Project",
+                               "Class Day",
+                               "Exam")
+                    )
+
+exam_days <- filter(Cal, category == "Exam") %>%
+  mutate(topic = c("Midterm Exam -- In Class", 
+                   "Midterm Exam -- Take Home",
+                   "Final Exam -- Take Home Deadline"),
+         time = c("In Class", "Take Home", "Take Home")
+         ) %>%
+  rowwise() %>%
+  mutate(sem_week = week(date),
+         Date = str_c(format(date, "%b %e"), 
+                      sep = ",", 
+                      collapse = ", ")
+         )
+
+project_days <- filter(Cal, category == "Final Project", 
+                       day %in% c(28, 4, 6, 8)) %>%
+  mutate(topic = case_when(day == 28 ~ "Final Project Phase 1 Due", 
+                           day == 4 ~ "Splines & Final Project Phase 2 Due",
+                           day == 6 ~ "Neural Networks & Final Project Phase 3 Due",
+                           day == 8 ~ "Final Project Final Report Due"),
+         time = rep("8pm", 
+                    times = 4)
+         ) %>%
+  mutate(Date = format(date, "%b %e"),
+         sem_week = week(date)
+         )
+
+class_days <- filter(Cal, category %in% c("Class Day")) %>%
+  mutate(sem_week = week(date)) %>%
+  group_by(sem_week) %>%
+  summarize(Date = str_c(format(date, "%b %e"), 
+                         sep = ",", 
+                         collapse = ", ")
+            ) %>%
+  mutate(topic = c(
+    "Introduction to Linear Models",
+    "Cross Validation & K-Nearest Neighbors",
+    "Classification",
+    "Trees",
+    "Regularization",
+    "Dimension Reduction",
+    "Support Vector Machines")
+    ) %>%
+  bind_rows(project_days) %>%
+  bind_rows(exam_days) %>%
+  arrange(sem_week) %>%
+  select(Date, Topic = topic)
+```
+
+```{r calendar}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4.5
+class_cal
+```
+
+```{r schedule}
+#| echo: false
+#| eval: true
+#| fig-pos: 'h'
+class_days %>%
+kableExtra::kable(caption = "Tentative schedule of class topics and important due dates", 
+                  format = "simple")
+```
