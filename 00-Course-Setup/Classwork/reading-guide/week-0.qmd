@@ -1,23 +1,33 @@
 ---
 title: "Week 1 Reading Guide"
-format: docx 
+format:
+  html:
+    toc: true
+  pdf:
+    keep-tex: false
+  docx:
+    toc: false
+prefer-html: true
+embed-resources: true
 editor: visual
 ---
 
-## Chapter : Statistical Learning)
+## Chapter 2: Statistical Learning
 
-**What is "reducible error" in statistical learning?**
+1. **What is "reducible error" in statistical learning?**
 
-**Can all error be taken out of a model predicting y? Why not?**
+2. **Can all error be taken out of a model predicting y? Why not?**
 
-**What is the difference between inferential modeling and predictive modeling?**
+3. **What is the difference between inferential modeling and predictive modeling?**
 
-**What are the differences between parametric and non-parametric models?**
+4. **What are the differences between parametric and non-parametric models?**
 
-**What are the advantages to using parametric methods? What are the disadvantages?**
+5. **What are the advantages to using parametric methods? What are the disadvantages?**
 
-**What is it called when a highly specific (flexible) model is fit to a training dataset?**
+6. **What is it called when a highly specific (flexible) model is fit to a training dataset?**
 
-**What is the difference between supervised and unsupervised learning?**
+7. **What is the difference between supervised and unsupervised learning?**
 
-**Provide a sketch of typical (squared) bias, variance, training error, test error, and Bayes (or irreducible) error curves on *one* plot.** The x-axis should represent the amount of flexibility in the method, and the y-axis should represent the values for each curve. There should be five total curves! Make sure to label each curve, so I know what it corresponds with.
+8. **Provide a sketch of typical (squared) bias, variance, training error, test error, and Bayes (or irreducible) error curves on *one* plot.** 
+
+The x-axis should represent the amount of flexibility in the method, and the y-axis should represent the values for each curve. There should be five total curves! Make sure to label each curve, so I know what it corresponds with.

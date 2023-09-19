@@ -1,0 +1,65 @@
+---
+title: "Week 1 Reading Guide"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---
+
+## Chapter 3: Linear Regression
+
+1.  **What does it mean when we say** $b_0$ and $b_1$ are *unbiased* estimates of $\beta_0$ and $\beta_1$?
+
+2.  **When is the standard error of the slope (**$SE(\hat{\beta}_1)$) the smallest? Why does this make sense?
+
+3.  **What is the residual standard error (RSE) an estimate of?**
+
+4.  **Would you always want to choose a model with the lowest RSE? Why or why not?**
+
+5.  **Is there a threshold for a "good"** $R^2$? Meaning, any \$R\^2 below this threshold would suggest there is no linear relationship between the variables?
+
+Suppose you fit four different simple linear regressions modeling the relationship between a penguin's body weight and (1) its flipper length, (2) its bill depth, (3) its bill length, and (4) its species. Then you fit a multiple linear regression where all four variables were included in the same model.
+
+6.  **Will the coefficients for each variable in the multiple linear regression be the same as the coefficient from their respective simple linear regression? If not, in what cases will they be the most different?**
+
+7. **What is p-value for `newspaper` (in Table 3.4) conditional on?**
+
+8. **When the sample size ($n$) is large, what F-statistics would result in you rejecting $H_0$ in an "overall F-test"^[$H_0: \beta_1 = \beta_2 = \cdots = \beta_p = 0$]**
+
+9. **Why should we use an overall F-test instead of individual t-tests to decide if any of the variables in a multiple linear regression have a relationship with the response?**
+
+10. **What does it mean when we say forward selection is a "greedy" approach to variable selection?** 
+
+11. **What model fit statistics could we use in a multiple linear regression?**
+
+12. **Will residual standard error always decrease when a new variable is added to the model?**
+
+13. **How is the slope ($\beta_1$) interpreted in a simple linear regression with a binary categorical variable?**
+
+14. True or False: Changing the baseline group changes all of the estimated / predicted responses (means). 
+
+15. True or False: Changing the baseline group changes how the coefficients are interpreted. 
+
+16. True or False: Changing the baseline group changes the p-values for each coefficient. 
+
+17. **Why should not "significant" main effects be kept in an interaction model?**
+
+18. **In a simple linear regression, when there is a non-linear relationship between the variables how would you expect the residual versus fitted plot to look?** Feel free to sketch a picture!
+
+19. **What happens to the standard errors when the errors in a regression are correlated?**
+
+20. **Suppose you plot the residuals versus fitted values for a regression you fit and you see evidence of a funnel pattern. What should you do?**
+
+21. **Should you always remove "outliers" from your model?**
+
+22. **In order for an "outlier" to heavily influence the slope of a regression line, where does it need to be located?** Feel free to sketch a picture! 
+
+23. **What happens to the standard errors when collinearity is present in a multiple regression?**
+
+24. **When collinearity is present in a multiple regression, what type of error are we more likely to make when conducting hypothesis tests?**
+
+25. **How would you remedy a regression that is found to have multicollinearity?**
