@@ -69,7 +69,6 @@ For this course we will be using one main textbook, accompanied by additional re
 ::: columns
 ::: {.column width="40%"}
 [James, Witten, Hastie & Tibshirani, **An Introduction to Statistical Learning with Applications in R** (link to free PDF version)](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
-
 :::
 
 ::: {.column width="5%"}
@@ -91,7 +90,7 @@ For this course we will be using one main textbook, accompanied by additional re
 :::
 
 ::: {.column width="30%"}
-![RStudio is the most popular way to interact with the `R` software. We will be interacting with RStudio through [Posit Cloud](https://posit.cloud/) (Posit is the company that owns RStudio). You will join the Stat 551 workspace, and then be able to access the course homework and lab assignments. We will be walking through this in the first week of lab!](images/rstudio.png){width="75%"}
+![RStudio is the most popular way to interact with the `R` software. [**We will be interacting with RStudio locally on your computer.**]{.underline} If you cannot get your local install to work, another option is to interact with RStudio through [Posit Cloud](https://posit.cloud/) (Posit is the company that owns RStudio).](images/rstudio.png){width="75%"}
 :::
 
 ::: {.column width="2%"}
@@ -110,7 +109,7 @@ For this course we will be using one main textbook, accompanied by additional re
 
 # What is this class?
 
-*Catalog Description*: Modern methods and techniques in predictive modeling and classification including splines, smoothing splines, ridge regression, LASSO, regression and classification trees, generalized additive models, logistic regression, and linear discriminant analysis. Model assessment and selection using cross validation, bootstrapping, AIC, and BIC. Use of the R programming language. Prerequisite: STAT 305 or STAT 350; STAT 331 or STAT 531; STAT 334; and graduate standing. 
+*Catalog Description*: Modern methods and techniques in predictive modeling and classification including splines, smoothing splines, ridge regression, LASSO, regression and classification trees, generalized additive models, logistic regression, and linear discriminant analysis. Model assessment and selection using cross validation, bootstrapping, AIC, and BIC. Use of the R programming language. Prerequisite: STAT 305 or STAT 350; STAT 331 or STAT 531; STAT 334; and graduate standing.
 
 # Learning Objectives
 
@@ -118,15 +117,15 @@ This course will teach you to perform advanced machine learning and statistical 
 
 After taking this course, you will be able to:
 
-- Perform analyses in R or python and report them with Quarto
-- Justify your choice of statistical learning model with cross-validated metrics and intuitive understanding.
-- Explain the philosophy behind various methods as well as metrics.
+-   Perform analyses in R or python and report them with Quarto
+-   Justify your choice of statistical learning model with cross-validated metrics and intuitive understanding.
+-   Explain the philosophy behind various methods as well as metrics.
 
 Additionally, it is my hope that you will learn to:
 
-- Contribute to and participate in the online Data Science community.
-- Be thoughtful, deliberate, and ethical in your data analysis.
-- Be playful, creative, and fun in your statistical learning applications.
+-   Contribute to and participate in the online Data Science community.
+-   Be thoughtful, deliberate, and ethical in your data analysis.
+-   Be playful, creative, and fun in your statistical learning applications.
 
 # Course Organization
 
@@ -136,8 +135,8 @@ Additionally, it is my hope that you will learn to:
 
 Each week, you will have a variety of learning to do outside of class. You will have some combination of:
 
-1. Readings, viewings, or walkthroughs to support the material in lecture.
-2. Activities that we get started on together in class.
+1.  Readings, viewings, or walkthroughs to support the material in lecture.
+2.  Activities that we get started on together in class.
 
 You are only responsible for meeting due dates on Canvas; anything else that is posted or mentioned in class is optional supporting material.
 
@@ -145,15 +144,15 @@ You are strongly encouraged to work on these in groups, and sharing answers (wit
 
 Readings and activities are graded on completeness, not correctness. Late work is penalized at -20% per day (or partial day).
 
-Despite these points being “free”, please take them seriously. I will plan our in-class lectures and work assuming you have met all prior deadlines.
+Despite these points being "free", please take them seriously. I will plan our in-class lectures and work assuming you have met all prior deadlines.
 
 ## Assignments (20%)
 
 **Due Mondays at 5pm**
 
-Every week, you’ll complete a homework assignemnt that will ask you to answer some conceptual questions and to perform an analysis on real data.
+Every week, you'll complete a homework assignemnt that will ask you to answer some conceptual questions and to perform an analysis on real data.
 
-These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other’s written text or code.
+These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other's written text or code.
 
 ## Peer Review (5%)
 
@@ -251,7 +250,7 @@ For more information about what constitutes cheating and plagiarism, please see 
 
 # Course Calendar {#sec-schedule}
 
-This class introduces a different statistical learning technique each week. Yes, that sound daunting, but you will find that ideas translate between the different methods. 
+This class introduces a different statistical learning technique each week. Yes, that sound daunting, but you will find that ideas translate between the different methods.
 
 This schedule is tentative and subject to change.
 
@@ -434,3 +433,7 @@ class_days %>%
 kableExtra::kable(caption = "Tentative schedule of class topics and important due dates", 
                   format = "simple")
 ```
+
+# California Faculty Association
+
+The California Faculty Association (the labor union of Lecturers, Professors, Coaches, Counselors, and Librarians across the 23 CSU campuses) is in a difficult contract dispute with California State University management. It is possible that we will call a strike or other work stoppage this term. I promise to promptly inform you of any schedule disruption. Our working conditions are your learning conditions; we seek to protect both. For further information go to [www.CFAbargaining.org](https://www.cfabargaining.org/).
