@@ -1,0 +1,211 @@
+---
+title: "Introduction to R & RStudio"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: false
+    number-depth: 2
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: visual
+execute: 
+  echo: true
+  eval: false
+  include: true
+---
+
+```{r packages}
+#| include: false
+library(tidyverse)
+library(flair)
+```
+
+Let's start working in `R`!
+
+![](images/typing_R.gif)
+
+</br>
+
+▶️ Watch Video: 30 min
+
+📖 Readings: 45 minutes
+
+💻 Activities: 5-10 min
+
+✅ Check-ins: 1
+
+------------------------------------------------------------------------
+
+# Step 1: Installing `R` and RStudio
+
+------------------------------------------------------------------------
+
+## Checking your R version
+
+If you already have `R` downloaded, you need to confirm that you have the most up to date version of `R`. **Do not ignore these instructions.** If you neglect to update your version of R, you may find that updating a package will make it so your code will not run.
+
+-   Step 1: Open RStudio
+-   Step 2: At the top of the the Console it will say what version of R you are using
+
+![](images/r-version-f23.png)
+
+If the version **is not** 4.3.1 (like the image above), you need to update your version of R!
+
+## Install or Update R
+
+Download and install R by going to <https://cloud.r-project.org/>.
+
+If you are a **Windows** user:
+
+-   Click on "Download R for Windows"
+
+-   Click on "base"
+
+-   Click on the Download link.
+
+If you are **macOS** user:
+
+-   Click on "Download R for (Mac) OS X"
+
+-   Under "Latest release:" click on R-X.X.X.pkg, where R-X.X.X is the version number. For example, the latest version of R as of January 1, 2023 was R-4.2.2 (Innocent & Trusting).
+
+If you are a **Linux** user:
+
+Click on "Download R for Linux" and choose your distribution for more information on installing `R` for your setup.
+
+:::{.callout-caution}
+# Remove old version
+If you are updating your version of R, make certain the old version is removed from your computer. If you have two versions of R, your computer will automatically run the older version!
+:::
+
+:::{.callout-tip} 
+## Troubleshooting
+
+If you would like a video tutorial on installing R, here is one: <https://vimeo.com/203516510>
+
+__Troubleshooting for Macs__
+
+First, identify which version of OSx you are running. [How-to](https://support.apple.com/en-us/HT201260)
+
+Next, find out which version of `R` your computer can run. [Link](https://cran.r-project.org/bin/macosx/)
+
+If this version is 3.5 or later, download the latest version that your computer can handle.
+
+If this version is 3.4 or earlier, you're going to run in to some trouble. I recommend updating your version of OSx, if you are willing. If you can't, then you can use [rstudio.cloud](rstudio.cloud) to run `R` and RStudio on a free server. However, I recommend strongly against this option; your files will not be saved indefinitely, you will have limited hours to complete your work, your computing power will be limited, and you will need an internet connection at all times to do your work.
+:::
+
+------------------------------------------------------------------------
+
+## Install RStudio
+
+RStudio is an Integrated Development Environment (IDE) for `R`. What does that mean? Well, if you think of `R` as a language, which it is, you can think of RStudio as a program that helps you write and work in the language. RStudio makes programming in `R` much easier and this course requires you to use it!
+
+If you already have RStudio, you need to double check if you have the most recent version (2023.6.2+561). You **cannot** create Quarto documents (what we will live and breathe) unless you have the most recent version of RStudio.
+
+-   Step 1: Open RStudio
+-   Step 2: Click on "Help" in the upper menu
+-   Step 3: Click on "Check for Updates"
+
+If there are no updates to RStudio since you installed it, you are good to go! If you need to update RStudio, you will be sent to Posit (the parent company) to download the most recent version of RStudio desktop.
+
+RStudio can be downloaded [here](https://rstudio.com/products/rstudio/download/)
+
+If you would like a video tutorial on downloading RStudio, here is one: <https://vimeo.com/203516968>
+
+------------------------------------------------------------------------
+
+# Introduction to R
+
+▶️[Required Video: Introduction to `R` (18 minutes)](http://somup.com/creuribzT2)
+
+------------------------------------------------------------------------
+
+## Basics of R Programming
+
+📖[Required Reading: Basics of R](https://r4ds.had.co.nz/workflow-basics.html)
+
+💻[Required Tutorial: RStudio Primer, Basics of Programming in R](https://rstudio.cloud/learn/primers/1.2)
+
+------------------------------------------------------------------------
+
+# Introduction to RStudio
+
+📖[Required Reading: A tour of RStudio, BasicsBasics1](https://rladiessydney.org/courses/ryouwithme/01-basicbasics-1/)
+
+▶️[Required Video: Introduction to RStudio (8 minutes)](http://somup.com/creur3bzOr)
+
+------------------------------------------------------------------------
+
+# ⁉️ Extra Resources
+
+-   [Click Here](https://github.com/rstudio/cheatsheets/blob/main/rstudio-ide.pdf) to download a "cheatsheet" (easy reference page) for RStudio.
+
+-   [Click Here](https://youtu.be/cnQ-v1UUWyE) to watch another walk through video for touring RStudio.
+
+------------------------------------------------------------------------
+
+# Installing Packages
+
+### How to install R packages
+
+▶️[Required Video: Installing R Packages (4 minutes)](http://youtu.be/tXZDoMlXfTE?hd=1)
+
+### Install / Update the tidyverse
+
+Now that you have the hang of working in RStudio, let's install / update the packages we will use in the course.
+
+In this course, we will make heavy use of the **tidyverse** and **tidymodels** suite of packages.
+
+If you **have not** used the tidyverse and / or tidymodels packages before, type the following into your **console** or use the drop down menu in the **Packages** tab:
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+install.packages("tidymodels")
+```
+
+If you **have** used the tidyverse or tidymodels packages before, you only need to update packages.\
+Type the following into your console:
+
+```{r, eval = FALSE}
+library(tidyverse)
+tidyverse_update()
+
+library(tidymodels)
+tidymodels_update()
+```
+
+------------------------------------------------------------------------
+
+# Bringing it all together
+
+✅ Check-in: Introduction to R & RStudio
+
+**Question 1:** Upload a screenshot of your version of R. 
+
+To do this you need to carry out the following steps:
+
+1. Open RStudio
+2. Navigate to the console (likely the bottom left pane)
+3. Take a screenshot of the version of R that shows up at the top of your console
+
+:::{.callout-caution}
+Hint: If your version is not 4.3.1 you will be given an incomplete and asked to install the most recent version of R
+:::
+
+**Question 2:** Upload a screenshot of your version of RStudio. 
+
+To do this you need to carry out the following steps:
+
+1. Open RStudio
+2. Click on "Help" in the upper menu
+3. Click on "About RStudio"
+4. Take a screenshot of the popup displaying your version
+
+:::{.callout-caution}
+Hint: If your version is not 2023.6.2+561 you will be given an incomplete and asked to install the most recent version of RStudio
+:::
+
+
