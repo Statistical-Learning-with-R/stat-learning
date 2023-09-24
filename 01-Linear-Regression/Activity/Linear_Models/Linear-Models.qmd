@@ -1,0 +1,141 @@
+---
+title: "Linear Models Review"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    embed-resources: true
+editor: visual
+---
+
+## Setup
+
+Declare your libraries:
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+```
+
+# The Dataset
+
+Today we will use a dataset containing counts of babies born named "Allison" between 1997 and 2014. Run the chunk below to load the data.
+
+```{r}
+allisons_df <- read_csv(here::here("data", "allisons.csv"))
+```
+
+You can preview the dataset by clicking on the `allison_df` object in the upper right hand corner (of the Environment tab). Or you could type the following code into your console (`View(allison_df)`).
+
+## Inspecting the Data
+
+The first thing we need to do with any dataset is check for missing data, and make sure the variables are the right type. An easy way to do this is to use the `summary()` function which provides a summary of each variable in the dataset:
+
+```{r}
+allisons_df %>% 
+  summary()
+```
+
+Based on the output, it looks like `Year` and `Count` are the correct data type we want (numerical)!
+
+## Visualizing the Data
+
+The next thing we should do is visualize our variables to get a feel for what is going on in this data.
+
+```{r}
+allisons_df %>%
+  ggplot(aes(x = Year, y = Count)) +
+  geom_jitter()
+```
+
+Hmmm.... clearly there is some kind of linear-ish decreasing trend in number of Allisons, but 2008 and 2009 don't seem to fit this trend...
+
+## Fitting a model
+
+Our first step is to establish a which model(s) we want to try on the data.
+
+For now, this is just a simple linear model.
+
+To establish the model, we need to determine which R package it comes from (the "engine") and whether we are doing *regression* or *classification*.
+
+(These functions come from the *tidymodels* package that we loaded in the setup chunk.)
+
+```{r}
+lin_reg <- linear_reg() %>%
+  set_engine("lm") %>%
+  set_mode("regression")
+```
+
+Next, we will **fit** the model to our data:
+
+```{r}
+lin_reg_fit <- lin_reg %>%
+  fit(Count ~ Year, data = allisons_df)
+```
+
+Let's check out the output of this model fit:
+
+```{r}
+lin_reg_fit %>% 
+  broom::tidy()
+```
+
+How do we interpret this?
+
+-   The slope is -102. That means there are about 102 fewer babies named Allison born each year since 1997!
+
+-   The intercept is 209,815 which means the model estimates that nearly 210,000 Allisons would have been born in year 0 (AD). That seems like an interesting prediction...
+
+```{r}
+lin_reg_fit %>% 
+  broom::glance()
+```
+
+-   The p-value of the model is 0.000217. That means it is very likely that there is a relationship between these variables.
+
+-   The r-squared value is 0.585. This means 58.5% of the variance in Allisons over the years is explained by the year the baby was born.
+
+## Residuals
+
+Now let's look the residuals of the model.
+
+First, we can find out what values were predicted by the model:
+
+```{r}
+preds <- lin_reg_fit %>% 
+  predict(new_data = allisons_df)
+```
+
+Then, we can calculate and visualize the residuals:
+
+```{r}
+allisons_df <- allisons_df %>%
+  bind_cols(preds) %>% 
+  rename(Prediction = .pred) %>% 
+  mutate(
+    residuals = Count - Prediction
+  )
+
+allisons_df %>%
+  ggplot(aes(x = Year, y = residuals)) +
+    geom_point()
+```
+
+Do the residuals seem to represent "random noise"?
+
+That is, was our choice of model reasonable?
+
+## Metrics
+
+If we are trying to find the "best" model, we should measure how well this one did.
+
+We can compute the SSE and MSE "by hand":
+
+```{r}
+sum(allisons_df$residuals^2)
+mean(allisons_df$residuals^2)
+```
