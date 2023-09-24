@@ -2,23 +2,25 @@
 title: "Linear Regression Review"
 format: 
   revealjs:
-    css: style.scss
+    theme: [night, style.scss]
+    embed-resources: true
+    slide-number: false
 embed-resources: true
 
 editor: source
 ---
 
-# Linear Models
-
 # Modeling
 
 Recall:  We are assuming that 
 
-.center[.huge[
-(**output**) = .blue[f](**input**) + (noise)
-]]
+::: {.centered}
 
-and we would like to estimate .blue[f].
+**output** =  [f]{style="color: #e28743; font-size: 1.25em"}(**input**) + (noise)
+:::
+</br>
+
+and we would like to estimate [f]{style="color: #e28743; font-size: 1.25em"}.
 
 
 # Linear Model
@@ -32,28 +34,41 @@ Goal:  Use observations $(x_1, y_1), ..., (x_n, y_n)$ to estimate $\beta_0$ and 
 
 # Measures of success
 
-What is the "best" choice of $\hat{\beta}_0$ and $\hat{\beta}_1$?
+What is the "best" choice of $\widehat{\beta}_0$ and $\widehat{\beta}_1$?
 
-. . .
+::: columns
+::: {.column width="30%"}
+::: {.fragment .fade-in-then-out}
+The ones that are **statistically most justified**, under certain assumptions about $Y$ and $X$?
+:::
+:::
 
-* The ones that are **statistically most justified**, under certain assumptions about $Y$ and $X$?
+::: {.column width="3%"}
+:::
 
-. . .
+::: {.column width="30%"}
+::: {.fragment .fade-in-then-out}
+The ones that minimize the prediction error?
 
-* The ones that minimize the prediction error?
+- $|\widehat{y}_i - y_i|$?
+- $(\widehat{y}_i - y_i)^2$?
+- $(\widehat{y}_i - y_i)^4$?
+:::
+:::
 
-    + $|\hat{y}_i - y_i|$?
-    + $(\hat{y}_i - y_i)^2$?
-    + $(\hat{y}_i - y_i)^4$?
-    
-. . .
+::: {.column width="3%"}
+:::
 
-* The ones that minimize the prediction error *on new information*?
+::: {.column width="30%"}
+::: {.fragment .fade-in-then-out}
+The ones that minimize the prediction error *on new information*?
 
-    + $|y_{new} - \hat{y}_{new}|$?
-    + $(y_{new} - \hat{y}_{new})^2$?
-    + $(y_{new} - \hat{y}_{new})^4$?
-    
+- $|y_{new} - \widehat{y}_{new}|$?
+- $(y_{new} - \widehat{y}_{new})^2$?
+- $(y_{new} - \widehat{y}_{new})^4$?
+:::
+:::
+:::
 
 # Maximum Likelihood Estimate (MLE)
 
@@ -62,49 +77,55 @@ Let's assume $X$ is **Normally distributed** with some mean and variance.
 
 Let's assume that $Y$ *given* $X$ is **Normally distributed** with a mean of $\beta_0 + \beta_1 X$ and some variance.
 
-. . .
-
+::: incremental
 * Based on our data, what do we think are the mean and variance of $X$?
 
 * Based on our data, what do we think are the mean and variance of $Y$?
 
 * Based on our data, what is our *best guess* about $\beta_0$ and $\beta_1$?
-
-. . .
-
-What if $Y$ was **Exponentially distributed**?  **Poisson?** **Bernoulli**????
-
+:::
 
 # MSE/SSE/RSE/RMSE
 
+::: {.centered}
 The **residual** of a model is how much you "missed" by:
 
-$y_i - \hat{y_i}$
+$y_i - \widehat{y_i}$
+:::
 
+</br>
 
 . . .
 
+::: columns
+::: {.column width="40%"}
 The **squared residual**, or **squared error** is that squared:
 
+$(y_i - \widehat{y_i})^2$
 
-$(y_i - \hat{y_i})^2$
+:::
 
+::: {.column width="5%"}
+:::
 
-# MSE/SSE/RSE/RMSE
-
+::: {.column width="55%"}
+::: {.fragment}
 The **sum of squared error (SSE)** is all those added up:
 
+$\sum_{i = 1}^n (y_i - \widehat{y_i})^2$
+:::
 
-sum over all $i$ of $(y_i - \hat{y_i})^2$
+</br>
 
-. . .
-
-
+::: {.fragment}
+:::{.smaller}
 This is also called the **residual squared error (RSE)** or **residual sum of squares (RSS)**.
 
-. . .
-
 *(Yes, those are all the same thing.  Statistics is silly sometimes.)*
+:::
+:::
+:::
+:::
 
 
 # MSE/SSE/RSE/RMSE
@@ -112,16 +133,19 @@ This is also called the **residual squared error (RSE)** or **residual sum of sq
 
 The **mean squared error (MSE)** is all those added up and then averaged:
 
-
-sum over all $i$ of $(y_i - \hat{y_i})^2$ divided by $n$
+::: {.centered}
+$\sum_{i = 1}^n \frac{1}{n} (y_i - \widehat{y_i})^2$
+:::
 
 . . .
 
+</br> 
 
 The **root mean squared error (RMSE)** is the square root of the MSE:
 
-
-sum over all $i$ of $(y_i - \hat{y_i})^2$ divided by $n$, then square root it
+::: {.centered}
+$\sqrt{\sum_{i = 1}^n \frac{1}{n} (y_i - \widehat{y_i})^2}$
+:::
 
 
 # MSE/SSE/RSE/RMSE
@@ -138,53 +162,55 @@ that's exactly the same as minimizing the **RMSE**, the **RSS**, the **SSE**, th
 
 . . .
 
-These are all measuring "how far are our predictions from the truth, in squared distance?"
+These are all measuring "how far are our predictions from the truth, in squared distance?"!
 
 . . .
 
-**NOT** the same as "absolute" error ($|y_i - \hat{y_i}|$)
+This is **not** the same as "absolute" error ($|y_i - \widehat{y_i}|$)
 
 
-# Checkpoint:
+# Data Science in the Wild
 
-## Before any modeling analysis, you have to decide what your definition of the .large[BEST MODEL] is!
-
-![](https://beingabitchblog.files.wordpress.com/2017/12/lg.gif)
-
+Before any modeling analysis, you have to decide what your definition of the [best model]{.underline} is!
 
 # Linear model estimates
 
-For linear models (but not *every* model!) the "best" model according to the (Normal) **MLE** and the "best" model according to the **MSE** agree!
+For linear models (but not *every* model!) the "best" model according to the **MLE** and the "best" model according to the **MSE** agree!
 
 . . .
 
 Okay, so how do we calculate $\beta_0$ and $\beta_1$?
 
-
 # Make the computer do it!
 
-![](https://jeffreyhill.typepad.com/.a/6a00d8341d417153ef0147e2ac4dea970b-600wi)
-
+...well technically R! 
 
 # Get the idea, not the math
 
+::: columns
+::: {.column width="45%"}
 **What you DON'T need to know:**
 
-* What mathematical equations are used to compute $\beta_0$ and $\beta_1$.
+* Mathematical equations used to compute $\beta_0$ and $\beta_1$
 
-* What statistical properties your estimates of $\beta_0$ and $\beta_1$ have.
+* Statistical properties of $\beta_0$ and $\beta_1$
 
-* How the computer efficiently does these calculations.
+* How the computer does these calculations
 
-. . .
+:::
 
+::: {.column width="5%"}
+:::
+
+::: {.column width="47%"}
 **What you DO need to know:**
 
-* How to make a computer do the calculations
+* How to **make** a computer do the calculations
 
-* Which measure of model success lead to this estimation choice
+* Which measure of model success lead to this estimation
 
-* How to interpret the results in the real world.
-
+* How to interpret the results
+:::
+:::
 
 # Let's get started.
