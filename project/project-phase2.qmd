@@ -1,0 +1,63 @@
+---
+title: "Project Phase 2: Project Proposal"
+format: html
+editor: visual
+---
+
+# Project Proposal
+
+In this phase, you will write a proposal for your project. The proposal will include an introduction, a project timeline, and preliminary analysis.
+
+This is a common first step when working with external clients: you’ll often do the first bit of work, then come to them with an overview and early results to determine if it’s worth completing the project in full. (Often this is because you’re trying to get them to fund further work; but don’t worry about that aspect in this project!)
+
+Please address this specifically to one or two organizations. That means you can use phrasing like, “Your organization works with…” or “We will provide you with…”
+
+# Introduction
+
+In this section, you want to show the client that you understand the data context and their organization’s needs/goals.
+
+Please write 1-2 pages for this part - consider it a draft for the introduction of your final report. This will contain approximately the same information you wrote up in Phase 1; you are simply reworking it into paragraph form and addressing any issues mentioned in my feedback.
+
+# Previous Work
+
+Find 1-5 articles, reports, or analyses that are similar to the goals of your project. Very briefly summarize their work, and comment on its similarities and differences to your project.
+(It is completely okay if there is huge overlap between your project and analyses that have already been done, but make it clear what you are contributing that is new.)
+
+# Exploratory Analysis
+
+Show some visuals and conclusions from exploring your dataset. These should be a combination of single-variable summaries/visuals, as well as explorations of variable relationships, including between predictors and predictor-response associations.
+
+Make sure that your summaries or plots are accompanied by discussion and interpretation.
+
+# Preliminary Results
+
+Fit at least one model for each of your datasets (or, if you are combining datasets, fit two models with different response variables). You do not need to do any model selection here; you are simply fitting a “first pass” model to get a sense of the problem.
+
+Report and discuss the results of the models. What takeaways from these models will you use to help you refine your analysis?
+
+Your work in the Exploratory Analysis and Preliminary Results sections does not need to be polished; it can be more of a rough draft to get my feedback. As always, the more time you put in now, the more you can simply copy-paste for your final report!
+
+# Project Timeline and Goals
+
+This section should be brief and should outline your plans for the project: what conclusions do you expect to be able to make at the end of the project, and what models and techniques will you use to get there?
+
+# Reflection
+
+In this part, your target audience is your professor, not the client. Briefly answer the following questions.
+
+# Goals
+
+What is the main takeaway message you hope to be able to supply to the partner?
+
+What types of summaries or visualizations do you think would be impactful to communicate your results?
+
+What are some conclusions that you would be excited to discover? What results might be a bit disappointing to you?
+
+# Challenges
+
+Are there any aspects of the data that you are worried about, or that are challenging to clean/manipulate?
+
+Is there any information that is not in your dataset that you wish you could have?
+
+Are there any other concerns you have regarding the success of your project?
+

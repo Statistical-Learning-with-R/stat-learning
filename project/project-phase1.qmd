@@ -1,0 +1,58 @@
+---
+title: "Project Phase 1: Planning"
+format: html
+editor: visual
+embed-resources: true
+---
+
+# Setup
+
+In this project, you will perform a Statistical Learning analysis that can be reasonably described as "Data for Good". That is, you are not only responsible for a correct and complete statistical analysis; you will also be asked to reflect on the specific uses and outcomes of your conclusions.
+
+I would suggest approaching this in one of two ways:
+
+1.  Choose a dataset from a "Data for Good" source. [This Github collection](https://github.com/shreyashankar/datasets-for-good) would be a good place to start. Spend some time checking out datasets that catch your eye, and think about what modeling questions might be answerable with that data.
+
+2.  Come up with an area of research that feels interesting and impactful to you. Write down a few specific research questions that are relevant to that area and answerable with data. Then, seek out datasets that can answer those questions.
+
+Your project must incorporate data from ***at least*** **two different sources**. This does not necessarily mean you will need to reconcile and join different datasets; you may simply answer different but related data questions using the different sources.
+
+\[Answer the questions below, using complete sentences or even paragraphs where possible. Delete the above instructions before turning in your writeup.\]
+
+# Context
+
+What is the primary goal of this data analysis project?
+
+What are some secondary goals of this data analysis project?
+
+Who is the target audience of this project? (Do not think of this as an academic paper. Instead, choose specific organizations or companies that you think might be interested in your results.)
+
+How will the results of this project be used by the target audience?
+
+# Data Understanding
+
+Provide links our citations to the datasets you plan to use.
+
+Who are the data providers? What do their organizations do? Why did they create these datasets?
+
+How was the data collected?
+
+What are the cases, i.e., the rows of the datasets?
+
+What variables will you most likely use as your target variables? What do these variables measure, and how are they quantified?
+
+What variables will you consider using as predictors? What do these variables measure, and how are they quantified?
+
+What data cleaning or manipulation might be necessary to prepare this data for modeling?
+
+# Ethics Reflections
+
+What individuals or groups could be helped by your analysis?
+
+What individuals or groups could be harmed by your analysis?
+
+Are there any natural biases you see in the data collection process?
+
+What information in your dataset should be protected for privacy reasons?
+
+What will you do to ensure your analysis is used for ethical purposes?
