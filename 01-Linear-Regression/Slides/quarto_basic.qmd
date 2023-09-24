@@ -245,7 +245,7 @@ format: revealjs
 Website
 
 ::: {.code-file .sourceCode .cell-code}
-{{< fa file >}} _quarto.yml
+{{< fa file >}} \_quarto.yml
 :::
 
 ``` yaml
@@ -314,7 +314,7 @@ Formatting the text in your document
 :::
 
 ::: {.column width="45%"}
-!\[ \]( ) -- includes images or HTML links
+\![ \]( ) -- includes images or HTML links
 
 \< \> -- embeds URLs
 :::
