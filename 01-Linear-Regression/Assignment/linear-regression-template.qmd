@@ -7,9 +7,17 @@ format:
     code-line-numbers: true
     code-tools: true
 editor: visual
-execute:
-  eval: false
 ---
+
+```{r}
+#| label: packages
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(tidymodels)
+library(broom)
+```
 
 ## Part One
 
@@ -20,7 +28,8 @@ ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance_costs_1.csv
 ```
 
 ```{r}
-ins %>% summary()
+ins %>% 
+  count()
 ```
 
 #### Q2
@@ -54,9 +63,13 @@ lin_reg_spec <- linear_reg() %>%
   set_engine("lm")
 
 ins_lm_fit <- lin_reg_spec %>%
-  fit(_______, _____) 
+  fit(_______, _______, data = ins) 
 
-ins_lm_fit$fit %>% summary()
+# To get coefficient estimates, SEs, p-values, and CIs
+tidy(ins_lm_fit) 
+
+# To model summary statistics
+glance(ins_lm_fit)
 ```
 
 #### Q1
@@ -66,6 +79,10 @@ ins_lm_fit$fit %>% summary()
 #### Q3
 
 #### Q4
+
+#### Q5
+
+#### Q6
 
 ## Part Three
 

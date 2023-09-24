@@ -1,0 +1,443 @@
+---
+title: "Assignment 1: Linear Models"
+author: "Due Monday, October 2 at 5pm"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: packages
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(tidymodels)
+```
+
+# Step 1: Download the Data
+
+The dataset we will study for this assignment contains information about health insurance costs for individuals with no dependents (children) in the United States. The information contained in the data is:
+
+-   Age of primary beneficiary
+
+-   Biological sex of primary beneficiary (recorded as gender) 
+
+-   Body mass index, providing an understanding of body, weights that are relatively high or low relative to height, objective index of body weight (kg / m \^ 2) using the ratio of height to weight, ideally 18.5 to 24.9
+
+-   Whether the beneficiary smokes
+
+-   The beneficiary's residential area in the US, northeast, southeast, southwest, northwest.
+
+-   Individual medical costs billed by health insurance
+
+```{r}
+#| label: data-split
+#| eval: false
+
+ins <- read_csv(here::here("01-Linear-Regression", "Assignment", "data", "insurance.csv"))
+
+set.seed(13938)
+
+splits <- ins %>% 
+  filter(children == 0 ) %>%
+  select(-children) %>%
+  initial_split()
+
+splits %>%
+  training() %>%
+  write_csv(here::here("01-Linear-Regression", "Assignment", "data", "insurance_costs_1.csv"))
+
+
+splits %>%
+  testing() %>%
+  write_csv(here::here("01-Linear-Regression", "Assignment", "data", "insurance_costs_2.csv"))
+```
+
+1.  Read in the dataset, and display some summaries of the data.
+
+```{r}
+#| label: data-summary
+#| echo: fenced
+
+ins <- read_csv(
+  here::here(
+    "01-Linear-Regression", 
+    "Assignment", 
+    "data", 
+    "insurance_costs_1.csv"
+    )
+  )
+
+summary(ins)
+
+ins %>% count(smoker)
+ins %>% count(region)
+ins %>% count(sex)
+```
+
+2.  Fix any concerns you have about the data.
+
+```{r}
+#| label: change-data-type
+
+ins <- ins %>%
+  mutate(
+    smoker = factor(smoker),
+    sex = factor(sex),
+    region = factor(region)
+  )
+```
+
+3.  Make up to three plots comparing the response variable (`charges`) to one of the predictor variables. Briefly discuss each plot.
+
+```{r}
+#| label: scatterplot
+ins %>%
+  ggplot(mapping = aes(x = age, y = charges)) +
+  geom_point()
+```
+
+```{r}
+#| label: region-smoker
+
+library(ggridges)
+library(scales)
+
+ins %>%
+  ggplot(mapping = aes(y = region, x = charges, fill = smoker)) +
+  geom_density_ridges(alpha = 0.5) + 
+  scale_x_continuous(labels = label_dollar()) +
+  labs(x = "Insurance Costs", 
+       title = "Medical Costs by Region of the US", 
+       fill = "Smoker", 
+       y = "")
+```
+
+```{r}
+#| label: region-sex
+ins %>%
+  ggplot(mapping = aes(y = region, x = charges, fill = sex)) +
+  geom_density_ridges(alpha = 0.5) + 
+  scale_x_continuous(labels = label_dollar()) +
+  labs(x = "Insurance Costs", 
+       title = "Medical Costs by Region of the US", 
+       fill = "Sex", 
+       y = "")
+```
+
+## Part Two: Simple Linear Models
+
+1.  Fit a simple linear model to predict the insurance charges from the beneficiary's age. 
+
+```{r}
+#| label: linear-regression
+
+lin_reg_spec <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+
+ins_lm_fit <- lin_reg_spec %>%
+  fit(charges ~ age, data = ins) 
+
+tidy(ins_lm_fit)
+```
+
+2. Interpret the coefficient estimates.
+
+For a person that is 0 years old, the average charge is \$3611.
+
+For each additional year in a person's age, the charges increase by \$229 on average.
+
+3. Discuss the model fit, specifically the p-value associated with `age` and the model's $R^2$.
+
+```{r}
+#| label: model-summary
+
+glance(ins_lm_fit)
+```
+
+The p-value of the model is basically 0. That means there is probably a relationship between the age and the amount of healthcare expenses. 
+
+The r-squared value is 0.09938. This means about 9.9% of the variance in charges can be explained by the linear regression model including `age` as a predictor.
+
+4.  Fit a model that also incorporates the variable `sex`.  
+
+```{r}
+#| label: adding-sex
+
+ins_lm_fit_2 <- lin_reg_spec %>%
+  fit(charges ~ age*sex, data = ins) 
+```
+
+5. Provide interpretations for each of the coefficient estimates. 
+
+```{r}
+tidy(ins_lm_fit_2)
+```
+
+`sexmale`: Insurance charges are on average $1805 higher for men than for women.
+
+`age`: Among women, the insurance charges increase by \$243 on average for every year of age.
+
+`age:sexmale`: Among men, the insurance charges increase by (243 - 30 = ) \$213 on average for every year of age.
+
+6. Does it seem that the relationship between `age` and `cost` differs based on someone's `sex`? Why or why not?
+
+The p-value of the slope for age is near 0, but the p-value for the adjustments due to sex are high. This suggests that there may not be a relationship between a person's designated sex and their insurance prices.
+
+7. How much additional variation in `cost` were we able to explain by adding `sex` into our model?
+
+```{r}
+glance(ins_lm_fit_2)
+```
+
+The r-squared value is 0.1006. This means 10.06% of the variance in charges is explained by sex and age. This isn't a large increase, since we started at 9.9%, so we gained less than 1% from where we started. 
+
+8.  Now fit a model that does not include `sex`, but does include `smoker`. 
+
+```{r, version = "answer_key"}
+ins_lm_fit_3 <- lin_reg_spec %>%
+  fit(charges ~ age*smoker, ins) 
+```
+
+9. Does it seem that the relationship between `age` and `cost` differs based on whether someone was a `smoker`? Why or why not?
+
+```{r}
+tidy(ins_lm_fit_3)
+```
+
+The p-value of the slope for `age` and for `smokeryes` are near 0, suggesting that both these variables have an influence on insurance prices. The p-value of the coefficient for the interaction term is high, suggesting that the relationship between age and charges is not significantly different for smokers versus nonsmokers.
+
+10.  Which model (`sex` or `smoker`) do you think better fits the data? Justify your answer by calculating the MSE for each model, and also by comparing R-squared values.
+
+```{r}
+ins <- ins %>% 
+  mutate(
+    predictions_sex = predict(ins_lm_fit_2, ins)$.pred,
+    predictions_smoke = predict(ins_lm_fit_3, ins)$.pred
+  )
+
+ins %>%
+  rmse(truth = charges,
+      estimate = predictions_Q2)
+
+ins %>%
+  rmse(truth = charges,
+      estimate = predictions_Q3)
+```
+
+Based on the R-squared value being much higher, and the rmse being much lower, the model in Q3 is MUCH better.
+
+## Part Three: Multiple Linear Models
+
+Now let's consider including multiple *quantitative* predictors.
+
+1.  Fit a model that uses `age` and `bmi` as predictors. 
+
+::: {.callout-caution}
+# No interaction
+
+Do not include an interaction term between `age` and `bmi`!
+::: 
+
+2. Provide interpretations for each of the coefficient estimates. 
+
+```{r, version = "answer_key"}
+ins_lm_fit_4 <- lin_reg_spec %>%
+  fit(charges ~ age + bmi, ins) 
+
+tidy(ins_lm_fit_4)
+```
+
+Insurance charges increase by $216 on average for every year of age.
+
+Insurance charges increase by $283 on average for every point on the bmi scale.
+
+3. How does the MSE compare to the model in Part Two Q1? How does the R-squared compare?
+
+```{r}
+glance(ins_lm_fit_4)
+
+ins %>% 
+  mutate(
+    predictions_Q4 = predict(ins_lm_fit_4, ins)$.pred
+  ) %>%
+  rmse(
+    truth = charges,
+    estimate = predictions_Q4
+  )
+```
+
+12% of the variance in charges can be explained by year and age.
+
+The RMSE is higher than in Q3, and barely lower than in Q2.
+
+4. Looking at the plot of `age` versus `charges` it seems like the relationship may not be linear! Fit a model that uses `age` and `age^2` as predictors (your model should not include `bmi`). 
+
+::: {.callout-hint}
+# Fitting a Polynomial
+
+You can fit **both** the linear and quadratic terms using the following formula:
+
+```{r}
+#| label: polynomial-example
+#| eval: false
+charges ~ poly(age, 2)
+```
+
+```{r}
+ins_poly_2 <- lin_reg_spec %>%
+  fit(charges ~ poly(age, 2), ins) 
+```
+
+5. How do the MSE and R-squared compare to the model in P2 Q1?
+
+```{r}
+glance(ins_poly_2)
+
+ins %>% 
+  mutate(
+    predictions = predict(ins_poly_2, ins)$.pred
+  ) %>%
+  rmse(
+    truth = charges,
+    estimate = predictions
+  )
+```
+
+The R-squared and RMSE are almost identical to when we just used age. 
+
+6. Let's get a little wigglier! Fit a polynomial model of degree 4. How do the MSE and R-squared compare to the model in P2 Q1?
+
+```{r, version = "answer_key"}
+ins_poly_4 <- lin_reg_spec %>%
+  fit(charges ~ poly(age, 4), ins) 
+
+glance(ins_poly_4)
+
+ins %>% 
+  mutate(
+    predictions = predict(ins_poly_4, ins)$.pred
+  ) %>%
+  rmse(
+    truth = charges,
+    estimate = predictions
+  )
+```
+
+The R-squared and RMSE are slightly better than when we just used age.
+
+7.  According to the MSE and R-squared, which is the best model? Do you agree that this is indeed the "best" model? Why or why not?
+
+Based on the R-squared and RMSE, the best model is the 12-degree polynomial. However, this is a bad way to choose; models with more flexibility will *always* have a better R-squared and RMSE, but they are in danger of overfitting to the data.
+
+8.  Plot the predictions from your model in Q4 as a **line** plot on top of the scatterplot of your original data.
+
+```{r}
+ins %>% 
+  mutate(
+    predictions = predict(ins_poly_12, ins)$.pred
+  ) %>%
+  ggplot() +
+  geom_point(aes(x = age, y = charges)) +
+  geom_line(aes(x = age, y = predictions))
+
+```
+
+## Part Four: New data
+
+Great news! We've managed to collect data about the insurance costs for a few more individuals. You can find the new dataset here: https://www.dropbox.com/s/sky86agc4s8c6qe/insurance_costs_2.csv?dl=1
+
+Consider the following possible models:
+
+-   Only `age` as a predictor.
+
+-   `age` and `bmi` as a predictor.
+
+-   `age`, `bmi`, and `smoker` as predictors (no interaction terms)
+
+-   `age`, and `bmi`, with both quantitative variables having an interaction term with `smoker` (i.e. the formula `~ (age + bmi):smoker`)
+
+-   `age`, `bmi`, and `smoker`as predictors, with both quantitative variables having an interaction term with `smoker` (i.e. the formula `~ (age + bmi)*smoker`)
+
+For each model, *fit* the model on the **original data**.
+
+```{r, version = "answer_key"}
+ins_new <- read_csv("https://www.dropbox.com/s/sky86agc4s8c6qe/insurance_costs_2.csv?dl=1")
+
+fit_1 <- lin_reg_spec %>%
+  fit(charges ~ age, data = ins)
+
+fit_2 <- lin_reg_spec %>%
+  fit(charges ~ age + bmi, data = ins)
+
+fit_3 <- lin_reg_spec %>%
+  fit(charges ~ age + bmi + smoker, data = ins)
+
+fit_4 <- lin_reg_spec %>%
+  fit(charges ~ (age + bmi):smoker, data = ins)
+
+fit_5 <- lin_reg_spec %>%
+  fit(charges ~ (age + bmi)*smoker, data = ins)
+```
+
+Then, use the fitted model to *predict* on the **new data**.
+
+```{r, version = "answer_key"}
+ins_new <- ins_new %>%
+  mutate(
+    preds_1 = predict(fit_1, ins_new)$.pred,
+    preds_2 = predict(fit_2, ins_new)$.pred,
+    preds_3 = predict(fit_3, ins_new)$.pred,
+    preds_4 = predict(fit_4, ins_new)$.pred,
+    preds_5 = predict(fit_5, ins_new)$.pred,
+  )
+```
+
+Report the MSE for each model's **new** predictions. Based on this, which is the best model to use?
+
+```{r, version = "answer_key"}
+ins_new %>%
+  rmse(
+    truth = charges,
+    estimate = preds_1
+  )
+
+ins_new %>%
+  rmse(
+    truth = charges,
+    estimate = preds_2
+  )
+
+ins_new %>%
+  rmse(
+    truth = charges,
+    estimate = preds_3
+  )
+
+ins_new %>%
+  rmse(
+    truth = charges,
+    estimate = preds_4
+  )
+
+ins_new %>%
+  rmse(
+    truth = charges,
+    estimate = preds_5
+  )
+```
+
+The last model had the best MSE, although the second to last was close. %%%
+
+Make a plot showing the residuals of your final chosen model.
+
+```{r, version = "answer_key"}
+ins_new %>% 
+  mutate(
+    resids = charges - preds_1 
+  ) %>%
+  ggplot() +
+  geom_point(aes(x = age, y = resids))
+
+```
