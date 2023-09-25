@@ -72,29 +72,23 @@ tidy(ins_lm_fit)
 glance(ins_lm_fit)
 ```
 
-#### Q1
-
-#### Q2
-
-#### Q3
-
 #### Q4
 
 #### Q5
 
 #### Q6
 
+#### Q7
+
+#### Q8
+
+#### Q9
+
 ## Part Three
 
 #### Q1
 
 #### Q2
-
-```{r}
-## put this in the formula when you fit your model
-
-charges ~ poly(age, 2)
-```
 
 #### Q3
 

@@ -16,7 +16,7 @@ editor: visual
 library(tidyverse)
 ```
 
-1.  Write the names of your group members below, as a bullet point list.
+1.  Write the names of your group members below, **as a bullet point list**.
 
 2.  Find something that all of you enjoy for fun. Insert a related picture or meme below.
 
