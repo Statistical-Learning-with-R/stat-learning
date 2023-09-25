@@ -31,29 +31,6 @@ The dataset we will study for this assignment contains information about health 
 
 -   Individual medical costs billed by health insurance
 
-```{r}
-#| label: data-split
-#| eval: false
-
-ins <- read_csv(here::here("01-Linear-Regression", "Assignment", "data", "insurance.csv"))
-
-set.seed(13938)
-
-splits <- ins %>% 
-  filter(children == 0 ) %>%
-  select(-children) %>%
-  initial_split()
-
-splits %>%
-  training() %>%
-  write_csv(here::here("01-Linear-Regression", "Assignment", "data", "insurance_costs_1.csv"))
-
-
-splits %>%
-  testing() %>%
-  write_csv(here::here("01-Linear-Regression", "Assignment", "data", "insurance_costs_2.csv"))
-```
-
 1.  Read in the dataset, and display some summaries of the data.
 
 ```{r}
@@ -205,30 +182,15 @@ ins_lm_fit_age_smoke <- lin_reg_spec %>%
   fit(charges ~ age*smoker, ins) 
 ```
 
-12.  Does it seem that the relationship between `age` and `cost` differs based on whether someone was a `smoker`? Why or why not?
+12.  Which model (`sex` or `smoker`) do you think better fits the data? Justify your answer by calculating the MSE for each model, and also by comparing R-squared values.
 
 ```{r}
-tidy(ins_lm_fit_age_smoke)
-```
-
-The p-value of the slope for `age` and for `smokeryes` are near 0, suggesting that both these variables have an influence on insurance prices. The p-value of the coefficient for the interaction term is high, suggesting that the relationship between age and charges is not significantly different for smokers versus nonsmokers.
-
-13. Which model (`sex` or `smoker`) do you think better fits the data? Justify your answer by calculating the MSE for each model, and also by comparing R-squared values.
-
-```{r}
-
 ins <- ins %>% 
   mutate(
     predictions_sex = predict(ins_lm_fit_age_sex, new_data = ins)$.pred,
     predictions_smoke = predict(ins_lm_fit_age_smoke, new_data = ins)$.pred
-  ) 
-# %>%
-#   rename_with(.cols = starts_with("predictions"),
-#               .fn = ~str_replace(string = .x,
-#                                  pattern = "\\$.pred",
-#                                  replacement = "")
-#               )
-
+  )
+                
 ins %>%
   rmse(truth = charges,
       estimate = predictions_sex)
@@ -244,7 +206,7 @@ Based on the R-squared value being much higher, and the RMSE being much lower, t
 
 Now let's consider including multiple *quantitative* predictors.
 
-14.  Fit a model that uses `age` and `bmi` as predictors.
+13.  Fit a model that uses `age` and `bmi` as predictors.
 
 ::: callout-caution
 # No interaction
@@ -252,7 +214,7 @@ Now let's consider including multiple *quantitative* predictors.
 Do not include an interaction term between `age` and `bmi`!
 :::
 
-15.  Provide interpretations for each of the coefficient estimates.
+14.  Provide interpretations for each of the coefficient estimates.
 
 ```{r, version = "answer_key"}
 ins_lm_fit_age_bmi <- lin_reg_spec %>%
@@ -261,15 +223,27 @@ ins_lm_fit_age_bmi <- lin_reg_spec %>%
 tidy(ins_lm_fit_age_bmi)
 ```
 
-Insurance charges increase by \$216 on average for every year of age.
+Insurance charges increase by $216 on average for every year of age.
 
-Insurance charges increase by \$283 on average for every point on the bmi scale.
+Insurance charges increase by $283 on average for every point on the bmi scale.
 
-16.  How does the RMSE compare to the model with `smoker`? How does the R-squared compare?
+15.  How does the R-squared compare to the model with `smoker`? 
 
 ```{r}
 glance(ins_lm_fit_age_bmi)
+```
 
+12% of the variance in charges can be explained by year and age.
+
+16. How does the RMSE compare to the model with `smoker`?
+
+::: {.callout-tip}
+# Calculate RMSE
+
+Look back at this week's activity to remember how we calculated the RMSE of a model!
+:::
+
+```{r}
 ins %>% 
   mutate(
     predictions_age_bmi = predict(ins_lm_fit_age_bmi, new_data = ins)$.pred
@@ -279,8 +253,6 @@ ins %>%
     estimate = predictions_age_bmi
   )
 ```
-
-12% of the variance in charges can be explained by year and age.
 
 The RMSE (11,126) is higher than in the model with `smoker` (5,804), and barely lower than the model with `sex` (11,250).
 
@@ -303,7 +275,7 @@ ins_poly_2 <- lin_reg_spec %>%
   fit(charges ~ poly(age, 2), data = ins) 
 ```
 
-18.  How do the RMSE and R-squared compare to the model when we just used `age` (Part 2, Question 1)?
+18.  How do the RMSE and R-squared compare to the model when we just used `age` (Step 3, Question 4)?
 
 ```{r}
 glance(ins_poly_2)
@@ -320,7 +292,7 @@ ins %>%
 
 The R-squared (0.0996) and RMSE (11,257) are almost identical to when we just used `age` ($R^2 = 0.0994$, RMSE = 11,258).
 
-19.  Let's get a little wigglier! Fit a polynomial model of degree 4. How do the RMSE and R-squared compare to the model when we just used `age` (Part 2, Question 1)?
+19.  Let's get a little wigglier! Fit a polynomial model of degree 4. How do the RMSE and R-squared compare to the model when we just used `age` (Step 3, Question 4)?
 
 ```{r, version = "answer_key"}
 ins_poly_4 <- lin_reg_spec %>%
