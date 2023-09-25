@@ -12,24 +12,23 @@ execute:
   warning: false
 ---
 
-:::{.larger}
+::: larger
 Warm-up (2-3 minutes)
 :::
 
 . . .
 
-:::{.large}
+::: large
 ::: {style="color: #b76352;"}
-1. What is something that you are good at doing?
+1.  What is something that you are good at doing?
 
-3. How did you get good at the thing you are good at doing?
+2.  How did you get good at the thing you are good at doing?
 :::
 :::
 
 ## 
 
-:::{.larger}
-
+::: larger
 About Me...
 :::
 
@@ -57,8 +56,8 @@ from Colorado Mesa University
 
 Every analysis we will do assumes a structure like:
 
-:::{.centered}
-[**output** = [f]{style="color: #abdbe3; font-size: 1.25em"}(**input**) + (noise)]{.large}
+::: centered
+[**output** = ]{.large}[f]{style="color: #abdbe3; font-size: 1.25em"}(**input**) + (noise)
 :::
 
 . . .
@@ -67,20 +66,20 @@ Every analysis we will do assumes a structure like:
 
 ...or, if you prefer...
 
-:::{.centered}
-[**response variable(s)** = [f]{style="color: #abdbe3; font-size: 1.25em"}(**explanatory variables**) + (noise)]{.midi}
+::: centered
+[**response variable(s)** = ]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**explanatory variables**) + (noise)
 :::
 
 . . .
 
-:::{.centered}
-[**dependent variable(s)** = [f]{style="color: #abdbe3; font-size: 1.25em"}(**independent variables**) + (noise)]{.midi}
+::: centered
+[**dependent variable(s)** = ]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**independent variables**) + (noise)
 :::
 
 . . .
 
-:::{.centered}
-[**target** = [f]{style="color: #abdbe3; font-size: 1.25em"}(**predictors**) + (noise)]{.midi}
+::: centered
+[**target** = ]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**predictors**) + (noise)
 :::
 
 # Modeling
@@ -95,7 +94,7 @@ In any case: we are trying to reconstruct information in **data**, and we are hi
 ::: {.column width="40%"}
 The function [f]{style="color: #abdbe3; font-size: 1.5em"} might be very simple...
 
-::: {.large}
+::: large
 Y = X + $\epsilon$
 :::
 :::
@@ -128,11 +127,15 @@ You will often hear people refer to **machine learning** in reference to the top
 
 [My opinion:]{.larger}
 
-**Statistical learning** is more concerned with the *model structure*, *interpretation of estimates*,  and *understanding error*.
+:::{.midi}
+**Statistical learning** is more concerned with the *model structure*, *interpretation of estimates*, and *understanding error*.
+:::
 
 . . .
 
+:::{.midi}
 **Machine learning** is more concerned with *model implementation* and *computational demands*.
+:::
 
 ## Quantitative (numeric) vs. qualitative (categorical)
 
@@ -142,7 +145,7 @@ Often, the nature of our models will differ depending on the types of data invol
 
 ::: columns
 ::: {.column width="45%"}
-[**regression**]{style="color: #e28743; font-size: 1.25em"} 
+[**regression**]{style="color: #e28743; font-size: 1.25em"}
 
 the response variables are *quantitative*
 :::
@@ -167,8 +170,6 @@ the response variables are *categorical*
 
 . . .
 
-</br>
-
 **unsupervised** learning: our data does NOT include any observations of the output variable
 
 > What social groups already exist among the Stat 551 students?
@@ -179,15 +180,21 @@ So, why do we care about estimating [f]{style="color: #abdbe3; font-size: 1.25em
 
 . . .
 
+</br>
+
+::: {.midi}
 **prediction**: We are trying to use future **inputs** to guess about future **outputs**.
 
 > Which articles are Dr. T. most likely to read?
+:::
 
 . . .
 
+::: {.midi}
 **inference**: We are trying to tell a story about the **relationship** between variables.
 
 > Which genes are more activated when breast cancer is present?
+:::
 
 # What do we need to learn?
 
@@ -195,14 +202,14 @@ So, why do we care about estimating [f]{style="color: #abdbe3; font-size: 1.25em
 
 It is important to think carefully about:
 
-:::{.incremental}
-* **Assumptions:** What do various models assume to be true about the data structure?  Are these justified?
+::: incremental
+-   **Assumptions:** What do various models assume to be true about the data structure? Are these justified?
 
-* **Interpretations:** What can we learn by estimating [f]{style="color: #abdbe3; font-size: 1.25em"} for a particular model?  Is that information what we are looking for?
+-   **Interpretations:** What can we learn by estimating [f]{style="color: #abdbe3; font-size: 1.25em"} for a particular model? Is that information what we are looking for?
 
-* **Estimation:** How is each [f]{style="color: #abdbe3; font-size: 1.25em"} being approximated?  Will this be a close approximation?
+-   **Estimation:** How is each [f]{style="color: #abdbe3; font-size: 1.25em"} being approximated? Will this be a close approximation?
 
-* **Usage:** What are we going to do once we estimate [f]{style="color: #abdbe3; font-size: 1.25em"}?  Do certain models lend themselves better than others?
+-   **Usage:** What are we going to do once we estimate [f]{style="color: #abdbe3; font-size: 1.25em"}? Do certain models lend themselves better than others?
 :::
 
 ## Estimation
@@ -229,18 +236,18 @@ The "best" model is the one that matches the truth.
 
 . . .
 
-But:  What the heck is the *truth*???
+But: What the heck is the *truth*???
 
 # In this Class
 
 You will learn:
 
-- To apply many different models to real data using **R**.
+-   To apply many different models to real data using **R**.
 
-- To interpret the output of these model estimates
+-   To interpret the output of these model estimates
 
-- To use *cross-validation* to compare models
+-   To use *cross-validation* to compare models
 
-- To explain the general structure and philosophy behind each model
+-   To explain the general structure and philosophy behind each model
 
-- To select an appropriate "best" model for a data analysis, and make a well-reasoned argument for your choice.
+-   To select an appropriate "best" model for a data analysis, and make a well-reasoned argument for your choice.
