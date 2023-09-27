@@ -19,13 +19,15 @@ library(tidymodels)
 library(broom)
 ```
 
-## Part One
-
-#### Q1
+## Step 1
 
 ```{r}
-ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance_costs_1.csv?dl=1")
+ins <- read_csv(here::here("path", "to", "your", "data.csv"))
 ```
+
+## Step 2
+
+#### Q1
 
 ```{r}
 ins %>% 
@@ -46,16 +48,19 @@ ins <- ins %>%
 ```{r}
 ### Code for scatter plot
 ins %>%
-  ggplot(aes(x = ???, y = ???, color = ???)) +
+  ggplot(mapping = aes(x = ???, y = ???, color = ???)) +
   geom_point()
 
 ### Code for boxplot
 ins %>%
-  ggplot(aes(x = ???, y = ???, fill = ???)) +
+  ggplot(mapping = aes(x = ???, y = ???, fill = ???)) +
   geom_boxplot()
 ```
 
-## Part Two
+
+## Step 3
+
+#### Q4
 
 ```{r}
 lin_reg_spec <- linear_reg() %>%
@@ -64,19 +69,21 @@ lin_reg_spec <- linear_reg() %>%
 
 ins_lm_fit <- lin_reg_spec %>%
   fit(_______, _______, data = ins) 
-
-# To get coefficient estimates, SEs, p-values, and CIs
-tidy(ins_lm_fit) 
-
-# To model summary statistics
-glance(ins_lm_fit)
 ```
-
-#### Q4
 
 #### Q5
 
+```{r}
+# To get coefficient estimates, SEs, p-values, and CIs
+tidy(ins_lm_fit) 
+```
+
 #### Q6
+
+```{r}
+# To model summary statistics
+glance(ins_lm_fit)
+```
 
 #### Q7
 
@@ -84,26 +91,46 @@ glance(ins_lm_fit)
 
 #### Q9
 
-## Part Three
+#### Q10
 
-#### Q1
+#### Q11
 
-#### Q2
+#### Q12
 
-#### Q3
+## Step 4
 
-#### Q4
+#### Q13
 
-#### Q5
+#### Q14
 
-#### Q6
+#### Q15
 
-```{r, eval = FALSE}
+#### Q16
+
+#### Q17
+
+#### Q18
+
+#### Q19
+
+#### Q20
+
+#### Q21
+
+```{r}
 <YOUR DATASET> %>%
   ggplot() +
-  geom_point(aes(x = age, y = charges)) +
-  geom_line(aes(x = age, y = predicted_charges))
+  geom_point(mapping = aes(x = age, y = charges)) +
+  geom_line(mapping = aes(x = age, y = predicted_charges))
 
 ```
 
-## Part Four
+## Step 5
+
+#### Q22
+
+#### Q23
+
+#### Q24
+
+#### Q25
