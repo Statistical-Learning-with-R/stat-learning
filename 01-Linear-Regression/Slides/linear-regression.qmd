@@ -78,11 +78,13 @@ Let's assume $X$ is **Normally distributed** with some mean and variance.
 Let's assume that $Y$ *given* $X$ is **Normally distributed** with a mean of $\beta_0 + \beta_1 X$ and some variance.
 
 ::: incremental
+::: {.smaller}
 * Based on our data, what do we think are the mean and variance of $X$?
 
 * Based on our data, what do we think are the mean and variance of $Y$?
 
 * Based on our data, what is our *best guess* about $\beta_0$ and $\beta_1$?
+:::
 :::
 
 # MSE/SSE/RSE/RMSE
@@ -119,9 +121,7 @@ $\sum_{i = 1}^n (y_i - \widehat{y_i})^2$
 
 ::: {.fragment}
 :::{.smaller}
-This is also called the **residual squared error (RSE)** or **residual sum of squares (RSS)**.
-
-*(Yes, those are all the same thing.  Statistics is silly sometimes.)*
+This is also called the **residual squared error (RSE)** or **residual sum of squares (RSS)**. *Yes, those are all the same thing.  Statistics is silly sometimes.*
 :::
 :::
 :::
@@ -191,12 +191,13 @@ Okay, so how do we calculate $\beta_0$ and $\beta_1$?
 ::: {.column width="45%"}
 **What you DON'T need to know:**
 
+::: {.smaller}
 * Mathematical equations used to compute $\beta_0$ and $\beta_1$
 
 * Statistical properties of $\beta_0$ and $\beta_1$
 
 * How the computer does these calculations
-
+:::
 :::
 
 ::: {.column width="5%"}
@@ -205,11 +206,13 @@ Okay, so how do we calculate $\beta_0$ and $\beta_1$?
 ::: {.column width="47%"}
 **What you DO need to know:**
 
+:::{.smaller}
 * How to **make** a computer do the calculations
 
 * Which measure of model success lead to this estimation
 
 * How to interpret the results
+:::
 :::
 :::
 
