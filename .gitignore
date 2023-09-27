@@ -34,8 +34,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 /.quarto/
-01-Intro-Linear-Models
-02-CV-KNN
 03-Classification
 04-Trees
 publish.yml
