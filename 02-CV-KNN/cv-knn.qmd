@@ -59,9 +59,14 @@ The second chapter we will focus on discusses k-nearest neighbors!
 
 ## Textbook Reading
 
-Will be posted by 5pm Sunday!
+📖 [**Required Reading:** *ISLR -- Chapter 3, Section 5*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
 
-<!-- 📖 [**Required Reading:** *ISLR -- Chapter 5 Resampling Methods*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf) -->
+::: {.callout-tip}
+# Reread Carefully!
+
+It is possible you already skimmed this section, but we are dedicating time specifically to this section this week, so I would encourage you to reread the **entire** section more carefully. 
+
+:::
 
 ### Reading Guide -- Due Wednesday, October 4 at 2:10pm
 
