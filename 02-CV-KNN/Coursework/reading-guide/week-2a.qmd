@@ -11,3 +11,30 @@ editor: visual
 ---
 
 ## Chapter 5: Cross Validation
+
+1. What is the purpose of cross-validation?
+
+2. Why are the curves in Figure 5.2 (right hand side) so variable? 
+
+3. Describe to someone what leave-one-out cross validation is.
+
+::: {.callout-tip}
+You can assume the person is familiar with linear regression. Your description 
+should address the following questions:
+
+- What data are used when fitting the model?
+- What is calculated about each model?
+- How many models are fit?
+:::
+
+4. Why does LOOCV have less bias than the validation approach?
+
+5. In what scenarios is LOOCV too "expensive" to implement?
+
+6. LOOCV is a special case of k-Fold cross validation when k is set to ___.
+
+7. What are "typical" choices of k in k-Fold CV?
+
+8. Which method (LOOCV or k-Fold CV) has higher bias? Why?
+
+9. Which method (LOOCV or k-Fold CV) has higher variance? Why?

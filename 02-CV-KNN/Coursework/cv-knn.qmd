@@ -10,7 +10,7 @@ format:
     number-depth: 2
     code-block-bg: "#76b5c5"
     highlight-style: monochrome
-editor: visual
+editor: source
 execute: 
   echo: true
   eval: false
@@ -25,7 +25,7 @@ The first chapter we will focus on discusses cross validation!
 
 📖 [**Required Reading:** *ISLR -- Chapter 5 Resampling Methods*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
 
-::: {.callout-warning}
+::: callout-warning
 # Don't read the sections on Classification and Boostrapping
 
 Don't read Section 5.1.5 or Section 5.2!
@@ -33,9 +33,9 @@ Don't read Section 5.1.5 or Section 5.2!
 
 ### Reading Guide -- Due Monday, October 2 at 2:10pm
 
-Will be posted by 8pm Friday! 
+Will be posted by 8pm Friday!
 
-<!-- 📝 [Download the Word Document](reading-guide/week-2a.docx) -->
+📝 [Download the Word Document](reading-guide/week-2a.docx)
 
 ::: callout-note
 # Submission
@@ -43,15 +43,7 @@ Will be posted by 8pm Friday!
 Submit your completed reading guide to the Canvas assignment portal!
 :::
 
-# Concept Quiz -- Due Monday, October 2 at 2:10pm
-
-Will be posted by 8pm Friday! 
-
-<!-- **Question 1** -- Which answer is correct? -->
-
-<!-- **Question 2** --  -->
-
-<!-- **Question 3** --  -->
+# Concept Quiz -- No quiz this week, just the reading guide!
 
 # K-Nearest Neighbors
 
@@ -61,18 +53,17 @@ The second chapter we will focus on discusses k-nearest neighbors!
 
 📖 [**Required Reading:** *ISLR -- Chapter 3, Section 5*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
 
-::: {.callout-tip}
+::: callout-tip
 # Reread Carefully!
 
-It is possible you already skimmed this section, but we are dedicating time specifically to this section this week, so I would encourage you to reread the **entire** section more carefully. 
-
+It is possible you already skimmed this section, but we are dedicating time specifically to this section this week, so I would encourage you to reread the **entire** section more carefully.
 :::
 
 ### Reading Guide -- Due Wednesday, October 4 at 2:10pm
 
 Will be posted by 5pm Sunday!
 
-<!-- 📝 [Download the Word Document](reading-guide/week-2a.docx) -->
+📝 [Download the Word Document](reading-guide/week-2b.docx)
 
 # Concept Quiz -- Due Wednesdau, October 4 at 2:10pm
 
