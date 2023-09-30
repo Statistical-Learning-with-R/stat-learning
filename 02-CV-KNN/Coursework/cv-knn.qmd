@@ -43,7 +43,7 @@ Will be posted by 8pm Friday!
 Submit your completed reading guide to the Canvas assignment portal!
 :::
 
-# Concept Quiz -- No quiz this week, just the reading guide!
+## Concept Quiz -- No quiz this week, just the reading guide!
 
 # K-Nearest Neighbors
 
@@ -65,6 +65,6 @@ Will be posted by 5pm Sunday!
 
 📝 [Download the Word Document](reading-guide/week-2b.docx)
 
-# Concept Quiz -- Due Wednesdau, October 4 at 2:10pm
+## Concept Quiz -- Due Wednesdau, October 4 at 2:10pm
 
 Will be posted by 5pm Sunday!
