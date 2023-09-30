@@ -1,0 +1,14 @@
+---
+title: "Week 2 Reading Guide -- Part 2"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---
+
+## Chapter 3: K-Nearst Neighbors Linear Regression
+

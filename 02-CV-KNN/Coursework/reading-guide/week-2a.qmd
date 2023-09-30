@@ -1,0 +1,13 @@
+---
+title: "Week 2 Reading Guide -- Part 1"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---
+
+## Chapter 5: Cross Validation
