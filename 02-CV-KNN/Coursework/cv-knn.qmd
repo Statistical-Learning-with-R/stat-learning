@@ -61,9 +61,7 @@ It is possible you already skimmed this section, but we are dedicating time spec
 
 ### Reading Guide -- Due Wednesday, October 4 at 2:10pm
 
-Will be posted by 5pm Sunday!
-
-📝 [Download the Word Document](reading-guide/week-2b.docx)
+No reading guide for this section, only a concept quiz!
 
 ## K-Nearest Neighbors Video 
 
@@ -71,4 +69,14 @@ Here's a helpful video which explains how k-Nearest Neighbors works: <https://ww
 
 ## Concept Quiz -- Due Wednesdau, October 4 at 2:10pm
 
-Will be posted by 5pm Sunday!
+**Question 1** -- [Parametric / Nonparametric] methods make strong assumptions about the functional form of $f(X)$, whereas [parametric / nonparametric] methods do not make assumptions about the functional form of $f(X)$. Linear regression is an example of a [parametric / nonparametric] method and k-nearest neighbors is an example of a [parametric / nonparametric] method.
+
+**Question 2** -- A small value for $k$ results in a model with [low / high] bias and [low / high] variance. A large value for $k$ results in a model with [low / high] bias and [low / high] variance.
+
+
+**Question 3** --If the true relationship is linear, k-nearest neighbors will always perform [better / worse] than linear regression.
+
+
+**Question 4** -- If the true relationship is highly non-linear, k-nearest neighbors will [always / sometimes / never] perform worse than linear regression.
+
+
