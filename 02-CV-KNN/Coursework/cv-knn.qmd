@@ -65,6 +65,10 @@ Will be posted by 5pm Sunday!
 
 📝 [Download the Word Document](reading-guide/week-2b.docx)
 
+## K-Nearest Neighbors Video 
+
+Here's a helpful video which explains how k-Nearest Neighbors works: <https://www.youtube.com/watch?v=HVXime0nQeI>
+
 ## Concept Quiz -- Due Wednesdau, October 4 at 2:10pm
 
 Will be posted by 5pm Sunday!
