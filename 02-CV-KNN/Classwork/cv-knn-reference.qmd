@@ -1,0 +1,177 @@
+---
+title: "Cross Validation & K-Nearest-Neighbors"
+subtitle: "R Cheatsheet"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute: 
+  eval: false
+---
+
+## Cross Validation
+
+**Step 1** -- Specify your model structure
+
+```{r}
+lr_mod <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+```
+
+**Step 2** -- Split your data
+
+```{r}
+ins_cvs <- vfold_cv(ins, v = 10)
+```
+
+**Step 3** -- Fit your model(s)
+
+```{r}
+poly_1_cv <- lr_mod %>%
+  fit_resamples(charges ~ bmi,
+                resamples = ins_cvs)
+```
+
+**Step 4** -- Get your model statistics
+
+```{r}
+collect_metrics(poly_1_cv)
+```
+
+## K-Nearest-Neighbors
+
+**Step 1** -- Specify your model structure
+
+```{r}
+knn_mod <- nearest_neighbor(neighbors = 5) %>%
+  set_engine("kknn") %>%
+  set_mode("regression")
+```
+
+**Do you need to make changes to the variables in your model?**
+
+::: columns
+::: {.column width="40%"}
+**NO**
+
+**Step 2** -- Fit your model
+
+```{r}
+knn_fit_1 <- knn_mod %>%
+  fit(charges ~ age, 
+      data = ins)
+```
+
+**Step 3** -- Summarize your model
+
+```{r}
+knn_fit_1$fit %>% 
+  summary()
+```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+**YES!**
+
+**Step 2** -- Make a recipe
+
+```{r}
+ins_rec <- recipe(charges ~ age + region, 
+                  data = ins) %>%
+  step_dummy(region) %>% 
+  step_normalize(age)
+```
+
+**Step 3** -- Make a workflow
+
+```{r}
+ins_wflow <- workflow() %>%
+  add_recipe(ins_rec) %>%
+  add_model(knn_mod)
+```
+
+**Step 4** -- Fit your model
+
+```{r}
+ins_fit <- ins_wflow %>% fit(ins) 
+```
+
+**Step 5** -- Summarize your model
+
+```{r}
+pull_workflow_fit(ins_fit)
+```
+:::
+:::
+
+## Tuning Your Value of $K$ (aka Combining CV and KNN)
+
+**Step 1** -- This replaces the old Step 1!
+
+```{r}
+knn_mod_tune <- nearest_neighbor(neighbors = tune()) %>%
+  set_engine("kknn") %>%
+  set_mode("regression")
+```
+
+**Step 2** -- Create a set of values to try
+
+```{r}
+k_grid <- grid_regular(neighbors(c(1,50)), 
+                       levels = 25)
+```
+
+::: {.callout-tip}
+# Specifying range of values for `neighbors()`
+
+Technically, you could also use
+
+```{r}
+grid_regular(neighbors(), 
+             levels = 25)
+```
+
+and `grid_regular()` would choose a range of values for $K$ that it believes is reasonable. If you want to specify a full range of values for $K$, you need to specify a vector (e.g., `c(1, 50)`) **inside** of `neighbors()`. 
+
+:::
+
+**Step 3** -- Make a new workflow
+
+```{r}
+ins_wflow <- workflow() %>%
+  add_recipe(ins_rec) %>%
+  add_model(knn_mod_tune)
+```
+
+**Step 4** -- Fit cross-validations for all values of $K$
+
+```{r}
+ins_cv <- vfold_cv(ins, v = 10)
+
+knn_grid_search <-
+  tune_grid(
+    ins_wflow,
+    resamples = ins_cv,
+    grid = k_grid
+  )
+```
+
+**Step 5** -- Summarize your models
+
+```
+knn_grid_search %>% collect_metrics()
+```
+
+**Step 6** -- Find the best RMSE
+
+```{r}
+knn_grid_search %>% 
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  slice_min(mean)
+```
