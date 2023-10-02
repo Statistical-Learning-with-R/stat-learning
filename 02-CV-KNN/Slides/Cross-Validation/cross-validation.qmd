@@ -3,6 +3,7 @@ title: "Cross Validation"
 format: 
   revealjs:
     theme: [dark, style.scss]
+    embed-resources: true
 editor: visual
 execute: 
   echo: true
