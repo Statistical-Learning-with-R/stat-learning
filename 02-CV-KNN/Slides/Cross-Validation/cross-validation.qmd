@@ -1,0 +1,464 @@
+---
+title: "Cross Validation"
+format: 
+  revealjs:
+    theme: [dark, style.scss]
+editor: visual
+execute: 
+  echo: true
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: packages
+
+library(tidymodels)
+library(tidyverse)
+library(broom)
+```
+
+##  {background-color="#34605f"}
+
+</br>
+</br>
+</br>
+
+[Overfitting]{style="color: #000000; font-size: 4em"}
+
+## Choosing a Model
+
+::: columns
+::: {.column width="55%"}
+Recall:  We are assuming that
+
+::: {.centered}
+**output** =  [f]{style="color: #e28743; font-size: 1.25em"}(**input**) + (noise)
+:::
+
+and we would like to estimate [f]{style="color: #e28743; font-size: 1.25em"}.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="40%"}
+::: {.fragment}
+Here's a suggestion:
+
+[f]{style="color: #e28743; font-size: 1.25em"}( x ) := y
+
+for every (x,y) we observe
+:::
+:::
+:::
+
+</br> 
+</br> 
+
+. . .
+
+Then we win! $\widehat{y}_i = y_i$ and we have an MSE of zero! 
+
+## Overfitting
+
+Recall from Assignment 1:
+
+```{r}
+#| message: false
+#| echo: false
+#| label: load-data
+
+ins <- read_csv(here::here("01-Linear-Regression", 
+                           "Assignment",
+                           "data", 
+                           "insurance_costs_1.csv"
+                           )
+                )
+ins
+```
+
+## Overfitting
+
+More flexible models fit the data better!
+
+::: {.panel-tabset}
+
+## Fitting the Models
+
+```{r}
+#| label: fitting-polynomial-models
+#| echo: true
+#| code-line-numbers: false
+
+lr_mod <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+
+bmi_poly_1 <- lr_mod %>%
+  fit(charges ~ bmi, data = ins)
+
+
+bmi_poly_20 <- lr_mod %>%
+  fit(charges ~ poly(bmi, 20), data = ins)
+```
+
+## Extracting the Predictions
+
+```{r}
+#| label: extracting-predictions
+#| echo: true
+#| code-line-numbers: false
+
+ins <- ins %>%
+  mutate(
+    preds_1 = predict(bmi_poly_1, 
+                      new_data = ins, 
+                      type = "raw"),
+    preds_20 = predict(bmi_poly_20, 
+                       new_data = ins, 
+                       type = "raw")
+  )
+```
+
+[Note that `type = "raw"` outputs the predictions as a **vector** rather than a dataframe!]{.smaller}
+:::
+
+## 1st Order Polynomial
+
+```{r}
+#| label: first-order-tidy
+#| echo: true
+#| code-line-numbers: false
+
+tidy(bmi_poly_1)
+```
+
+. . .
+
+```{r}
+#| label: first-order-glance
+#| code-line-numbers: false
+
+glance(bmi_poly_1)
+```
+
+
+# 20th Order Polynomial
+
+```{r}
+#| label: 20-order-tidy
+#| code-line-numbers: false
+
+tidy(bmi_poly_20)
+```
+
+. . .
+
+```{r}
+#| label: 20-order-glance
+#| code-line-numbers: false
+
+glance(bmi_poly_20)
+```
+
+
+## Comparing RMSE Between Models
+
+::: columns
+::: {.column width="47%"}
+```{r}
+ins %>% 
+  rmse(truth = charges, 
+          estimate = preds_1)
+```
+:::
+
+::: {.column width="6%"}
+:::
+
+::: {.column width="47%"}
+```{r}
+ins %>% 
+  rmse(truth = charges, 
+          estimate = preds_20)
+```
+:::
+:::
+
+. . .
+
+</br> 
+</br> 
+
+::: {.centered}
+::: {.midi}
+So, which model is better?
+:::
+:::
+
+## Does the 20th Order Seem Necessary?
+
+```{r}
+#| echo: false
+ins %>% 
+  ggplot() +
+  geom_point(aes(x = bmi, y = charges)) +
+  geom_line(aes(x = bmi, y = preds_20),
+            color = "red", 
+            lwd = 1.25) +
+  geom_line(aes(x = bmi, y = preds_1),
+            color = "blue", 
+            lwd = 1.25) +
+  scale_y_continuous(labels = label_dollar()) +
+  labs(x = "BMI", 
+       y = "", 
+       title = "Modeling Medical Charges with Polynomial Models")
+
+```
+
+##  {background-color="#34605f"}
+
+[Overfitting = "unnecessarily wiggly"]{style="color: #000000; font-size: 4em"}
+
+## Bias and variance
+
+::: columns
+::: {.column width="45%"}
+[bias]{style="color: #e28743; font-size: 1.25em"} = how much the model is fit to the data it is [trained on]{style="color: #e28743; font-size: 1.25em"}, instead of being generalizeable to *any* data
+
+</br>
+
+::: {.fragment}
+[variance]{style="color: #76b5c5; font-size: 1.25em"} = how much *prediction error* there is on the [training data]{style="color: #76b5c5; font-size: 1.25em"}
+:::
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+::: {.fragment}
+![](https://media1.giphy.com/media/3o6Mb9T54A8sVZm8IU/source.gif)
+:::
+:::
+:::
+
+##  {background-color="#34605f"}
+
+</br>
+
+[Solutions to Overfitting]{style="color: #000000; font-size: 4em"}
+
+## Theoretical solutions to overfitting
+
+One idea is to come up with a *metric* that **penalizes** complexity / flexibility in the model.
+
+. . .
+
+</br>
+
+::: columns
+::: {.column width="40%"}
+
+measure of fit - number of predictors
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+::: {.fragment}
+Examples:
+
+1. Adjusted R-squared
+
+2. AIC (Akaike Information Criterion)
+
+3. BIC (Bayesian Information Criterion)
+
+4. Mallow's Cp
+:::
+:::
+:::
+
+## Theoretical solutions to overfitting
+
+::: columns
+::: {.column width="45%"}
+**Pros:**
+
+* Easy to compare models quickly: only one number to compute per model.
+
+* Basis for each metric has some mathematical justification
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+**Cons:**
+
+* Which one is *most* justified?
+
+* What if they don't agree?  (which is common!)
+
+:::
+:::
+
+##  {background-color="#34605f"}
+
+</br>
+
+[Training and test splits]{style="color: #000000; font-size: 4em"}
+
+## Training and test data
+
+</br>
+
+What if we randomly set aside 10% of our data to be our [test]{style="color: #e28743"} data?
+
+. . .
+
+</br>
+
+We [train]{style="color: #76b5c5"} the model using the remaining 90% of the data.
+
+. . .
+
+</br>
+
+Then we check the prediction accuracy on the [test]{style="color: #e28743"} data, which the model could not possibly have *overfit*?
+
+## Training and test data
+
+::: {.panel-tabset}
+
+## Initial Splits
+```{r}
+# Set seed, so our "randomness" is consistent
+set.seed(190498)
+
+# Specifying the proportion of the data to be retained for analysis (training)
+ins_split <- ins %>% initial_split(prop = 0.90)
+```
+
+## Testing & Training Datasets
+```{r}
+ins_test <- ins_split %>% testing()
+ins_train <- ins_split %>% training()
+```
+
+## Verify Dimensions
+
+```{r}
+dim(ins)
+dim(ins_test)
+dim(ins_train)
+```
+
+:::
+
+## Training and test data
+
+Fit the models on the [training data only]{style="color: #76b5c5"}
+
+</br>
+
+```{r mods}
+#| code-line-numbers: "|2,5"
+
+bmi_poly_1 <- lr_mod %>%
+  fit(charges ~ bmi, data = ins_train)
+
+bmi_poly_20 <- lr_mod %>%
+  fit(charges ~ poly(bmi, 20), data = ins_train)
+```
+
+## Training and test data
+
+Find model predictions on the [test data only]{style="color: #e28743"}
+
+```{r preds}
+#| code-line-numbers: "|4,7"
+
+ins_test <- ins_test %>%
+  mutate(
+    preds_1 = predict(bmi_poly_1, 
+                      new_data = ins_test, 
+                      type = "raw"),
+    preds_20 = predict(bmi_poly_20, 
+                       new_data = ins_test, 
+                       type = "raw")
+  )
+```
+
+## Training and test data
+
+Check model metrics on the [test data only]{style="color: #e28743"}
+
+```{r metrics}
+#| code-line-numbers: "|3"
+
+ins_test %>% 
+  rmse(truth = charges, 
+          estimate = preds_1)
+```
+
+. . .
+
+</br>
+
+```{r}
+#| code-line-numbers: "|3"
+
+ins_test %>% 
+  rmse(truth = charges, 
+          estimate = preds_20)
+```
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+**Your turn!**
+:::
+
+::: {.larger}
+Open [`Activity-Test-Training.qmd`](../../Classwork/Activity-Test-Training.qmd)
+:::
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+Cross-Validation
+:::
+
+## Cross-Validation
+
+If the *test/training* split helps us measure model success...
+
+
+. . .
+
+
+... but it's random, so it's not the same every time...
+
+. . .
+
+... why not do it a bunch of times?
+
+## k-fold Cross-Validation
+
+![](k_fold.png)
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+**Your turn!**
+:::
+
+::: {.larger}
+Open `Activity-CV.qmd`
+:::

@@ -3,6 +3,7 @@ title: "Cross-Validation"
 author: "YOUR NAME HERE"
 format: 
   html:
+    theme: dark
     code-fold: true
     code-line-numbers: true
     code-tools: true
@@ -23,7 +24,6 @@ library(tidyverse)
 library(tidymodels)
 ```
 
-
 ## Code from slides
 
 ```{r}
@@ -37,25 +37,22 @@ lr_mod <- linear_reg() %>%
   set_engine("lm")
 ```
 
-
-
-
 ```{r}
 ins_cvs <- vfold_cv(ins, v = 10)
 
-poly_1_cv <- lr_mod %>%
+bmi_poly_1_cv <- lr_mod %>%
   fit_resamples(charges ~ bmi,
                 resamples = ins_cvs)
 
-poly_2_cv <- lr_mod %>%
+bmi_poly_2_cv <- lr_mod %>%
   fit_resamples(charges ~ poly(bmi, 2),
                 resamples = ins_cvs)
 ```
 
 ```{r}
-poly_1_cv %>% collect_metrics()
+bmi_poly_1_cv %>% collect_metrics()
 
-poly_2_cv %>% collect_metrics()
+bmi_poly_2_cv %>% collect_metrics()
 ```
 
 ## Your turn
@@ -64,12 +61,15 @@ Suppose you want to fit a regression that predicts `charges` from `age` and `bmi
 
 Consider four models:
 
-* `age` and `bmi` both have polynomial 1
-* `age` has polynomial 1, `bmi` has polynomial 2
-* `age` has polynomial 2, `bmi` has polynomial 1
-* `age` and `bmi` both have polynomial 2
+**Model 1**: `age` and `bmi` both have polynomial degree 1 (linear) 
+
+**Model 2**: `age` has polynomial degree 1, `bmi` has polynomial degree 2 (quadratic and linear) 
+
+**Model 3**: `age` has polynomial degree 2, `bmi` has polynomial degree 1 
+
+**Model 4**: `age` and `bmi` both have polynomial degree 2
+
 
 (No interactions term for any model.)
 
-Which model is best according to a **Cross-Validation study** with 10 splits?
-
+Which model is best according to a **cross-validation study** with 10 splits?
