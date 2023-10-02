@@ -22,9 +22,7 @@ library(broom)
 
 ##  {background-color="#34605f"}
 
-</br>
-</br>
-</br>
+</br> </br> </br>
 
 [Overfitting]{style="color: #000000; font-size: 4em"}
 
@@ -32,10 +30,10 @@ library(broom)
 
 ::: columns
 ::: {.column width="55%"}
-Recall:  We are assuming that
+Recall: We are assuming that
 
-::: {.centered}
-**output** =  [f]{style="color: #e28743; font-size: 1.25em"}(**input**) + (noise)
+::: centered
+**output** = [f]{style="color: #e28743; font-size: 1.25em"}(**input**) + (noise)
 :::
 
 and we would like to estimate [f]{style="color: #e28743; font-size: 1.25em"}.
@@ -45,7 +43,7 @@ and we would like to estimate [f]{style="color: #e28743; font-size: 1.25em"}.
 :::
 
 ::: {.column width="40%"}
-::: {.fragment}
+::: fragment
 Here's a suggestion:
 
 [f]{style="color: #e28743; font-size: 1.25em"}( x ) := y
@@ -55,12 +53,11 @@ for every (x,y) we observe
 :::
 :::
 
-</br> 
-</br> 
+</br> </br>
 
 . . .
 
-Then we win! $\widehat{y}_i = y_i$ and we have an MSE of zero! 
+Then we win! $\widehat{y}_i = y_i$ and we have an MSE of zero!
 
 ## Overfitting
 
@@ -84,8 +81,7 @@ ins
 
 More flexible models fit the data better!
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Fitting the Models
 
 ```{r}
@@ -145,7 +141,6 @@ tidy(bmi_poly_1)
 glance(bmi_poly_1)
 ```
 
-
 # 20th Order Polynomial
 
 ```{r}
@@ -163,7 +158,6 @@ tidy(bmi_poly_20)
 
 glance(bmi_poly_20)
 ```
-
 
 ## Comparing RMSE Between Models
 
@@ -190,11 +184,10 @@ ins %>%
 
 . . .
 
-</br> 
-</br> 
+</br> </br>
 
-::: {.centered}
-::: {.midi}
+::: centered
+::: midi
 So, which model is better?
 :::
 :::
@@ -231,7 +224,7 @@ ins %>%
 
 </br>
 
-::: {.fragment}
+::: fragment
 [variance]{style="color: #76b5c5; font-size: 1.25em"} = how much *prediction error* there is on the [training data]{style="color: #76b5c5; font-size: 1.25em"}
 :::
 :::
@@ -240,7 +233,7 @@ ins %>%
 :::
 
 ::: {.column width="45%"}
-::: {.fragment}
+::: fragment
 ![](https://media1.giphy.com/media/3o6Mb9T54A8sVZm8IU/source.gif)
 :::
 :::
@@ -262,7 +255,6 @@ One idea is to come up with a *metric* that **penalizes** complexity / flexibili
 
 ::: columns
 ::: {.column width="40%"}
-
 measure of fit - number of predictors
 :::
 
@@ -270,16 +262,16 @@ measure of fit - number of predictors
 :::
 
 ::: {.column width="55%"}
-::: {.fragment}
+::: fragment
 Examples:
 
-1. Adjusted R-squared
+1.  Adjusted R-squared
 
-2. AIC (Akaike Information Criterion)
+2.  AIC (Akaike Information Criterion)
 
-3. BIC (Bayesian Information Criterion)
+3.  BIC (Bayesian Information Criterion)
 
-4. Mallow's Cp
+4.  Mallow's Cp
 :::
 :::
 :::
@@ -290,10 +282,9 @@ Examples:
 ::: {.column width="45%"}
 **Pros:**
 
-* Easy to compare models quickly: only one number to compute per model.
+-   Easy to compare models quickly: only one number to compute per model.
 
-* Basis for each metric has some mathematical justification
-
+-   Basis for each metric has some mathematical justification
 :::
 
 ::: {.column width="5%"}
@@ -302,10 +293,9 @@ Examples:
 ::: {.column width="45%"}
 **Cons:**
 
-* Which one is *most* justified?
+-   Which one is *most* justified?
 
-* What if they don't agree?  (which is common!)
-
+-   What if they don't agree? (which is common!)
 :::
 :::
 
@@ -335,9 +325,9 @@ Then we check the prediction accuracy on the [test]{style="color: #e28743"} data
 
 ## Training and test data
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Initial Splits
+
 ```{r}
 # Set seed, so our "randomness" is consistent
 set.seed(190498)
@@ -347,6 +337,7 @@ ins_split <- ins %>% initial_split(prop = 0.90)
 ```
 
 ## Testing & Training Datasets
+
 ```{r}
 ins_test <- ins_split %>% testing()
 ins_train <- ins_split %>% training()
@@ -359,7 +350,6 @@ dim(ins)
 dim(ins_test)
 dim(ins_train)
 ```
-
 :::
 
 ## Training and test data
@@ -422,17 +412,17 @@ ins_test %>%
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 **Your turn!**
 :::
 
-::: {.larger}
+::: larger
 Open [`Activity-Test-Training.qmd`](../../Classwork/Activity-Test-Training.qmd)
 :::
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 Cross-Validation
 :::
 
@@ -440,9 +430,7 @@ Cross-Validation
 
 If the *test/training* split helps us measure model success...
 
-
 . . .
-
 
 ... but it's random, so it's not the same every time...
 
@@ -456,10 +444,10 @@ If the *test/training* split helps us measure model success...
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 **Your turn!**
 :::
 
-::: {.larger}
+::: larger
 Open [`Activity-CV.qmd`](../../Classwork/Activity-CV.qmd)
 :::
