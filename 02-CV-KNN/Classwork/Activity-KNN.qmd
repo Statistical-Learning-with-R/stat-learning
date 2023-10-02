@@ -7,7 +7,7 @@ format:
     code-line-numbers: true
     code-tools: true
     self-contained: true
-editor: visual
+editor: source
 execute:
   message: false
 ---
@@ -19,17 +19,15 @@ Declare your libraries:
 ```{r}
 #| label: libraries-r
 #| include: false
+
 library(tidyverse)
 library(tidymodels)
 library(kknn)
 ```
 
-
 ```{r}
 ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
-head(ins)
 ```
-
 
 ## Activity Break 1: KNN modeling
 
@@ -43,16 +41,18 @@ knn_mod <- nearest_neighbor(neighbors = 5) %>%
   set_mode("regression")
 ```
 
-
 Fit our model:
 
 ```{r}
 knn_fit_1 <- knn_mod %>%
   fit(charges ~ age, data = ins)
-
-knn_fit_1$fit %>% summary()
 ```
 
+Summarize our model:
+
+```{r}
+knn_fit_1$fit %>% summary()
+```
 
 #### Your task:
 
@@ -62,7 +62,7 @@ How do these models compare to the least-squares regression approach from Tuesda
 
 How do these models compare to a KNN model with 10 neighbors?
 
-## Activity Break 2:  Normalizing variables
+## Activity Break 2: Normalizing variables
 
 #### Code from lecture
 
@@ -75,7 +75,6 @@ ins_rec <- recipe(charges ~ age + region, data = ins) %>%
 ins_rec
 ```
 
-
 Workflow:
 
 ```{r}
@@ -87,7 +86,6 @@ ins_fit <- ins_wflow %>% fit(ins)
 
 ins_fit %>% pull_workflow_fit()
 ```
-
 
 Normalize workflow:
 
@@ -103,7 +101,6 @@ ins_wflow <- workflow() %>%
 ins_wflow
 ```
 
-
 Fit:
 
 ```{r}
@@ -112,13 +109,11 @@ ins_fit <- ins_wflow %>% fit(ins)
 ins_fit %>% pull_workflow_fit()
 ```
 
+#### Your task:
 
-#### Your task: 
+Make a KNN model with K = 5, using age, bmi, smoker, and sex Compare the model with non-normalized variables to one with normalized variables. Which is better?
 
-Make a KNN model with K = 5, using age, bmi, smoker, and sex
-Compare the model with non-normalized variables to one with normalized variables. Which is better?
-
-## Activity Break 3:  Tuning
+## Activity Break 3: Tuning
 
 #### Code from lecture
 
@@ -130,7 +125,6 @@ k_grid <- grid_regular(neighbors(c(1,50)),
 k_grid
 
 ```
-
 
 Make workflow:
 
@@ -148,9 +142,7 @@ ins_wflow <- workflow() %>%
   add_model(knn_mod_tune)
 ```
 
-
 Fit cross-validations for all values of k:
-
 
 ```{r}
 ins_cv <- vfold_cv(ins, v = 10)
@@ -181,7 +173,6 @@ knn_grid_search %>%
   geom_line()
 ```
 
-#### Your task:  
+#### Your task:
 
 Find the best KNN model
-
