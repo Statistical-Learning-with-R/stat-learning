@@ -3,6 +3,7 @@ title: "K Nearest Neighbors Regression"
 format: 
   revealjs:
     theme: [dark, style.scss]
+    embed-resources: true
 editor: source
 execute: 
   echo: true
