@@ -461,5 +461,5 @@ If the *test/training* split helps us measure model success...
 :::
 
 ::: {.larger}
-Open `Activity-CV.qmd`
+Open [`Activity-CV.qmd`](../../Classwork/Activity-CV.qmd)
 :::
