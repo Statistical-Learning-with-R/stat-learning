@@ -1,0 +1,114 @@
+---
+title: "Assignment 2: Cross-Validation and K-Nearest-Neighbors"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+editor: source
+---
+
+```{r}
+#| label: packages
+#| message: false
+#| warning: false
+
+set.seed(3849)
+
+library(tidyverse)
+library(tidymodels)
+```
+
+# Instructions
+
+Your document should also be clearly organized, so that it is easy for a reader to find your answers to each question. If I have a difficult time locating or reading your answer, you risk it being returned with a "revision requested".
+
+# The Data
+
+```{r}
+#| label: load-data
+
+```
+
+# Happiness Scores
+
+## Part 1: Happiness Over Time
+
+1.  Is the happiness in the world changing linearly over time? Fit a simple linear model and interpret the results to address this question.
+
+2.  Was the happiness score approximately the same in all the years? Convert `year` to a factor variable, and fit a simple linear model to address this question.
+
+## Part 2: Happiness Equation
+
+3.  How is each of the six measures of life quality weighted in calculating this score?
+
+4.  Fit a model to estimate the weights, and interpret the coefficients.
+
+5.  Which measures of life quality does the WHR consider to be most important to a country's happiness?
+
+# Predicting Life Expectancy -- Exploring Linear Models
+
+## Part 1: Summary of Approach
+
+6.  Write a short description (bullet points are fine) of your process in narrowing down your model.
+
+7.  How did you approach this problem, without spending hours upon hours fitting and cross-validating zillions of models?
+
+## Part 2: Three Candidates
+
+8.  Choose the three best candidate models among those you tried.
+
+9.  Supply your code and results for comparing these models, and discuss how you decided which *one* model was the best one.
+
+## Part 3: Final Model
+
+10. Summarize the results from your final model. Don't forget to fit your final model on the **full** dataset, even if you used *test / training* data or *cross-validation* during the model selection process.
+
+11. Include a plot of the residuals and discussion of what you see, and interpretations of the coefficients and metrics.
+
+# Predicting Life Expectancy -- K-Nearest-Neighbors
+
+## Part 1: Tuning K
+
+12. For **each** of your top three candidate models from Q8, find the best choice of **K**. Show all your work, and provide a brief summary at the end (e.g., "For Model 1, we choose a K of \[something\] because \[reasons\]. For Model 2, ...")
+
+## Part 2: Best Model
+
+13. Fit and report your single best model from Q9.
+
+You should include:
+
+-   An argument for your choice of K, including a plot.
+
+-   A plot of the residuals
+
+# Predicting on New Data
+
+14. Use your **one** best *least-squares regression* model (Q9) to predict the life expectancy of all countries.
+
+15. Use your **one** best *KNN* model (Q13) to predict the life expectancy of all countries.
+
+16. Which model did a better job predicting the true values in the new data?
+
+# Discussion Questions
+
+## Parametric and Non-Parametric
+
+17. Make an argument for why a **parametric** method, like least-squares regression, might be preferred in this task.
+
+18. Then make an argument for why a **non-parametric** method, like K-Nearest-Neighbors, might be preferred.
+
+## Interpretation and Prediction
+
+19. If your only goal were **interpretation**, which of the candidate models (from *any* section of the assignment) would you have chosen? Why?
+
+20. If your only goal were **prediction** on future data, which of the candidate models would you have chosen? Why?
+
+## Standardization
+
+21. Consider your final best least-squares regression model from Q9. Suppose we fit this model again, but this time, we normalize **all** of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true.
+
+## Quantitative or Categorical?
+
+22. Suppose we add the predictor `year` to our final model as a **categorical variable** and fit the model on all the data. Then, we use this new model to predict on the 2020 data. What is wrong with this plan?

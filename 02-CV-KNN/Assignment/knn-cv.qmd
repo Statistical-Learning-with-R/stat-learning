@@ -1,0 +1,213 @@
+---
+title: "Assignment 2: Cross-Validation and K-Nearest-Neighbors"
+author: "Due Monday, October 9 at 5pm"
+format: html
+embed-resources: true
+editor: visual
+---
+
+# Instructions
+
+You will submit an HTML document to Canvas as your final version.
+
+## Getting Started
+
+[Download starter .qmd file](knn-cv-template.qmd)
+
+You'll notice in the template's YAML there are specifications for how the code should be included (i.e., `code-fold: true`, `code-line-numbers: true`, `code-tools: true`). **Do not change these specifications.**
+
+::: callout-caution
+# Within your document make sure that only relevant output is printed
+
+Do not, for example, print the preview (e.g., `head(data)`) or an entire dataset in your final knitted file.
+:::
+
+::: callout-tip
+# Organization
+
+Your document should also be clearly organized, so that it is easy for a reader to find your answers to each question. If I have a difficult time locating or reading your answer, you risk it being returned with a "revision requested".
+:::
+
+# The Data
+
+```{r}
+#| include: false
+#| message: false
+#| warning: false
+#| label: packages-seed
+
+set.seed(3849)
+
+library(tidyverse)
+library(tidymodels)
+```
+
+The dataset we will use for this assignment pertains to the [World Happiness Report](https://worldhappiness.report/). The following dataset contains information about six measurements of well-being in a country:
+
+-   The Gross Domestic Product (GDP) per capita *(dollars; log scale)*
+
+-   The life expectancy at birth of a healthy citizen *(years)*
+
+-   The social support of friends and family *(scale of 0-1, based on surveys)*
+
+-   The freedom to make life choices in the society *(scale of 0-1, based on surveys)*
+
+-   The generosity of the society *(scale of -1 to 1, based on surveys)*
+
+-   Perception of corruption in government of the country *(scale of 0-1, based on surveys)*
+
+The data also records the year of measurement and the region of the country.
+
+Although it is not a formal question on this assignment, you should begin by reading in the dataset and briefly exploring and summarizing the data, and by adjusting any variables that need cleaning.
+
+Download the data here: [`whr_clean.csv`](data/whr_clean.csv)
+
+# Happiness Scores
+
+The World Happiness Report uses their own, privately-determined formula to combine the six measures of life quality into a "happiness score". The dataset also contains this score, on a scale from 1 to 10.
+
+*Hint: The following two questions require you to fit only ONE model each.*
+
+## Part 1: Happiness Over Time
+
+1.  Is the happiness in the world changing linearly over time? Fit a simple linear model and interpret the results to address this question.
+
+2.  Was the happiness score approximately the same in all the years? Convert `year` to a factor variable, and fit a simple linear model to address this question.
+
+## Part 2: Happiness Equation
+
+3.  How is each of the six measures of life quality weighted in calculating this score?
+
+4.  Fit a model to estimate the weights, and interpret the coefficients.
+
+5.  Which measures of life quality does the WHR consider to be most important to a country's happiness?
+
+*Hint: It is important to put all the metrics on the SAME scale first, since they are all in different units.*
+
+# Predicting Life Expectancy -- Exploring Linear Models
+
+Suppose we would like to know how various quality-of-life measurements impact a country's life expectancy. We plan to use the other five metrics, as well as the region of the country, to try to predict the life expectancy.
+
+Explore many possible candidate models. You should consider the following (within reason):
+
+-   Which variables should be included or omitted
+
+-   Possible interaction terms
+
+::: callout-tip
+# Three- or four-way interactions
+
+I would strongly recommend against including interactions between 3 or more variables. Two-way interactions are a great place to start!
+:::
+
+-   Polynomial terms of the variables
+
+::: callout-tip
+# `step_poly()`
+
+You can use the function `step_poly(<variable name>, degree = 2)` to add polynomial terms in a `recipe`
+:::
+
+-   *Optional*: Log-transformations or square root transformations of variables that appear skewed
+
+::: callout-tip
+# `step_log()`
+
+You can use the functions `step_log()` or `step_sqrt()` in a `recipe`
+:::
+
+Of course, I do **not** expect you to try every possible combination of the above. Instead, you should come up with a reasonable approach that lets you eliminate many model options without trying every single one.
+
+::: callout-caution
+# Include All the Code!
+
+As I expect your analysis to be reproducible, your assignment should keep a record of **every** model you fit during your exploration.
+:::
+
+## Part 1: Summary of Approach
+
+6.  Write a short description (bullet points are fine) of your process in narrowing down your model.
+
+7.  How did you approach this problem, without spending hours upon hours fitting and cross-validating zillions of models?
+
+::: callout-tip
+# Example Summary
+
+> I first fit models on each predictor by itself for polynomial 1 and polynomial 2, to determine if I should use any polynomial terms. I found that \[variable\] should be polynomial 2 but the rest should not. Then, I ...
+:::
+
+## Part 2: Three Candidates
+
+8.  Choose the three best candidate models among those you tried.
+
+9.  Supply your code and results for comparing these models, and discuss how you decided which *one* model was the best one.
+
+## Part 3: Final Model
+
+10. Summarize the results from your final model. Don't forget to fit your final model on the **full** dataset, even if you used *test / training* data or *cross-validation* during the model selection process.
+
+11. Include a plot of the residuals and discussion of what you see, and interpretations of the coefficients and metrics.
+
+# Predicting Life Expectancy -- K-Nearest-Neighbors
+
+Now we will find the best KNN model for predicting life expectancy.
+
+Consider only the three top candidate models from **Q8**.
+
+## Part 1: Tuning K
+
+12. For **each** of your top three candidate models (from Q8), find the best choice of **K**. Show all your work, and provide a brief summary at the end (e.g., "For Model 1, we choose a K of \[something\] because \[reasons\]. For Model 2, ...")
+
+## Part 2: Best Model
+
+13. Fit and report your single best model from Q12.
+
+You should include:
+
+-   An argument for your choice of K, including a plot.
+
+-   A plot of the residuals
+
+# Predicting on New Data
+
+The following code will load up a dataset of the World Happiness Report from 2021, pertaining to happiness measurements in the year 2020. We sometimes call this new data - that was not involved in the **cross-validation** process or in the final model fitting - the **validation** set. It is the "Ultimate" test set, that only gets to be used once ever.
+
+Download the data here: [`whr_2020.csv`](data/whr_2020.csv)
+
+14. Use your **one** best *least-squares regression* model (Q9) to predict the life expectancy of all countries.
+
+15. Use your **one** best *KNN* model (Q13) to predict the life expectancy of all countries.
+
+16. Which model did a better job predicting the true values in the new data?
+
+# Discussion Questions
+
+For these questions, you do **not** have to actually perform any of the computations described. However, if the conceptual answer is not obvious to you, it may help to do so!
+
+### Parametric and Non-Parametric
+
+17. Make an argument for why a **parametric** method, like least-squares regression, might be preferred in this task.
+
+18. Then make an argument for why a **non-parametric** method, like K-Nearest-Neighbors, might be preferred.
+
+::: callout-tip
+# Focus on the Concepts!
+
+Your arguments should be *conceptual*, not numeric. That is, your answers should relate to the data context, assumptions, and goals; not the MSE or similar metrics that you calculated for any specific model fit.
+:::
+
+## Interpretation and Prediction
+
+19. If your only goal were **interpretation**, which of the candidate models (from *any* section of the assignment) would you have chosen? Why?
+
+20. If your only goal were **prediction** on future data, which of the candidate models would you have chosen? Why?
+
+## Standardization
+
+21. Consider your final best least-squares regression model from Q9. Suppose we fit this model again, but this time, we normalize **all** of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true.
+
+## Quantitative or Categorical?
+
+In Part One, Q1, you discovered that (spoiler alert!) the `year` variable did **not** have a linear relationship with the `happiness_score`, but that when we treated `year` as categorical, it did have some relationship.
+
+22. Suppose we add the predictor `year` to our final model as a **categorical variable** and fit the model on all the data. Then, we use this new model to predict on the 2020 data. What is wrong with this plan?
