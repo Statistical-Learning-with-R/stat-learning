@@ -34,8 +34,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 /.quarto/
-03-Classification
-04-Trees
 publish.yml
 _quarto.yml
 index.qmd
