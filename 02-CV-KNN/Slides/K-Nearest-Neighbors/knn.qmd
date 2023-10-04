@@ -122,8 +122,8 @@ head(ins)
 ```{r}
 #| echo: true
 knn_mod <- nearest_neighbor(neighbors = 5) %>%
-  set_engine("kknn") %>%
-  set_mode("regression")
+  set_mode("regression") %>% 
+  set_engine("kknn")
 ```
 
 </br>
@@ -132,27 +132,26 @@ knn_mod <- nearest_neighbor(neighbors = 5) %>%
 . . .
 
 ::: {.panel-tabset}
-## Engine
+## Model Function 
 
-New *engine* - just take it from here: <https://www.tidymodels.org/find/parsnip/>  
-
-(You will have to `install.packages("knn")` if you are on your home computer.)
+New *model function* `nearest_neighbor()`, which has a required `neighbors` argument specifying the number of neighbors to be used. 
 
 ## Mode 
 
 *mode* now matters a lot - "classification" would be possible too!
 
-## Model Function 
+## Engine
 
-New *model function* `nearest_neighbor()`, which has a required `neighbors` argument specifying the number of neighbors to be used. 
+New *engine* - just take it from here: <https://www.tidymodels.org/find/parsnip/>  
 
+(You will have to `install.packages("knn")` if you are on your home computer.)
 :::
 
 ## Fit Our Model
 
 ```{r}
 #| echo: true
-knn_fit_1 <- knn_mod %>%
+knn_fit_age <- knn_mod %>%
   fit(charges ~ age, data = ins)
 ```
 
@@ -160,7 +159,7 @@ knn_fit_1 <- knn_mod %>%
 
 ```{r}
 #| echo: true
-knn_fit_1$fit %>% summary()
+knn_fit_age$fit %>% summary()
 ```
 
 ##  {background-color="#34605f"}
@@ -229,7 +228,7 @@ Suppose we now want to include `region` in our KNN model.
 
 ```{r}
 #| error: true
-knn_fit_2 <- knn_mod %>%
+knn_fit_age_region <- knn_mod %>%
   fit(charges ~ age + region, data = ins)
 ```
 
@@ -286,7 +285,7 @@ ins_fit_region %>%
 ## Compare with Previous Model
 
 ```{r}
-knn_fit_1$fit %>% summary()
+knn_fit_age$fit %>% summary()
 ```
 
 ##  {background-color="#34605f"}
@@ -370,8 +369,6 @@ Does this sound like anything you've heard of before?
 Add it to the workflow!
 
 ```{r}
-#| output-location: slide
-
 ins_rec <- recipe(charges ~ age + region, data = ins) %>%
   step_dummy(region) %>%
   step_normalize(age)
@@ -390,7 +387,7 @@ ins_wflow
 ## Fitting and Obtaining Statistics
 
 ```{r}
-ins_fit_region_age <- fit(ins_wflow, ins) 
+ins_fit_region_age <- fit(ins_wflow, data = ins) 
 
 ins_fit_region_age %>% pull_workflow_fit()
 ```
@@ -449,31 +446,28 @@ Ideally, we'd try many values of the **tuning parameter** and find the best one.
 :::
 :::
 
-## Automatic tuning
+## Initiating a Tuning Process
 
 ```{r knnmod}
 #| code-line-numbers: "|1|5"
-#| output-location: column-fragment
 
-knn_mod <- nearest_neighbor(neighbors = tune()) %>%
-  set_engine("kknn") %>%
-  set_mode("regression")
+knn_mod_tune <- nearest_neighbor(neighbors = tune()) %>%
+  set_mode("regression") %>% 
+  set_engine("kknn")
+```
 
+## Setting Up a Set of Tuning Values (Using Defaults)
+
+```{r}
 k_grid <- grid_regular(neighbors(), levels = 5)
 
 k_grid
 ```
 
-## Automatic tuning
+
+## Setting Up a Set of Tuning Values (Getting Specific)
 
 ```{r knnmod2}
-#| output-location: column-fragment
-#| code-line-numbers: "|4,5"
-
-knn_mod_tune <- nearest_neighbor(neighbors = tune()) %>%
-  set_engine("kknn") %>%
-  set_mode("regression")
-
 k_grid <- grid_regular(neighbors(c(1, 50)), 
                        levels = 25)
 

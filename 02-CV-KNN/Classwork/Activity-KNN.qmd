@@ -37,8 +37,8 @@ Establish our model:
 
 ```{r}
 knn_mod <- nearest_neighbor(neighbors = 5) %>%
-  set_engine("kknn") %>%
-  set_mode("regression")
+  set_mode("regression") %>% 
+  set_engine("kknn")
 ```
 
 Fit our model:
@@ -56,7 +56,7 @@ knn_fit_1$fit %>% summary()
 
 #### Your task:
 
-Use cross validation to choose between a KNN model with 5 neighbors that uses only age versus one that uses both age and bmi.
+Use cross validation to choose between a KNN model with 5 neighbors that (1) uses only age versus (2) using both age and bmi.
 
 How do these models compare to the least-squares regression approach from Tuesday?
 
@@ -111,7 +111,9 @@ ins_fit %>% pull_workflow_fit()
 
 #### Your task:
 
-Make a KNN model with K = 5, using age, bmi, smoker, and sex Compare the model with non-normalized variables to one with normalized variables. Which is better?
+1.Make a KNN model with K = 5, using age, bmi, smoker, and sex 
+
+2. Compare the model with non-normalized variables to one with normalized variables. Which is better?
 
 ## Activity Break 3: Tuning
 
