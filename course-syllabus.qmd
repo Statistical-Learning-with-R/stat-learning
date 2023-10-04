@@ -44,7 +44,7 @@ I value diversity, inclusion and equity in this (and every) class. I hold the fu
 
 ### Student Hours
 
-These are hours reserved for you! Student hours can have a different structureeach week, depending on the assignments we have and what people hope to accomplish. Some days it may be you and I having a one-on-one conversation, some days it may be talking in a group about questions you have regarding an assignment, and some days it may be you working with others while I circulate around the room to answer questions that arise.
+These are hours reserved for you! Student hours can have a different structure each week, depending on the assignments we have and what people hope to accomplish. Some days it may be you and I having a one-on-one conversation, some days it may be talking in a group about questions you have regarding an assignment, and some days it may be you working with others while I circulate around the room to answer questions that arise.
 
 Please note that student hours are not only reserved for talking about the course content! You are also welcome to come by and talk about things that interest you, questions you have about life, and share funny cat gifs. 😻
 
@@ -145,20 +145,20 @@ During class each week you will complete activities which give you an introducti
 
 Activities are also graded on completeness, not correctness. However, despite these points being "free", I encourage you to take them seriously.
 
-## Assignments (20%)
+## Labs (20%)
 
 **Due Mondays at 5pm**
 
-Every week, you'll complete a homework assignment that will push you conceptually and computationally to apply the techniques you learned each week to perform an analysis on real data. These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other's written text or code.
+Every week, you'll complete a lab assignment that will push you conceptually and computationally to apply the techniques you learned each week to perform an analysis on real data. These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other's written text or code.
 
-You will access each week's assignment through Canvas, which you will walk through in Week 1. You will need to submit **only** your rendered HTML document. Assignments will be graded as either Complete or Incomplete, based on the rubric described below.
+You will access each week's assignment through Canvas, which you will walk through in Week 1. You will need to submit **only** your rendered HTML document. Labs will be graded as either Complete or Incomplete, based on the rubric described below.
 
 #### Success / Growing Grading
 
-Different from what you may have experienced, assignments are graded for "proficiency" of specific learning targets, which describe what you should be able to do after taking this course. You'll receive a score for each problem on an assignment according to the **Success** / **Not Yet** rubric below, as well as feedback to help you improve.
+Different from what you may have experienced, lab assignments are graded for "proficiency" of specific learning targets, which describe what you should be able to do after taking this course. You'll receive a score for each problem on an assignment according to the **Success** / **Not Yet** rubric below, as well as feedback to help you improve.
 
 | Score      | Justification                                                                                                           |
-|-------------|----------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | Successful | The solution to the problem is correct, legible, and easy to follow, with all reasoning provided. Any error is trivial. |
 | Growing    | The solution shows growth toward mastering the topic; however, it is incorrect and/or incomplete.                       |
 
@@ -185,6 +185,61 @@ In this project, you will perform a Statistical Learning analysis that can be re
 
 These will have a mix of in-person exams with conceptual questions and take-home data analyses. There will be a midterm exam in Week 7 (November 6-8). The conceptual portion of the final exam will take place on the last day of class (December 6) and the take-home exam will be due at scheduled time of our final exam (December 15, 4:00pm).
 
+# Grade Breakdown
+
+In this class we will be using a contract grading system. This is designed to
+give flexibility and freedom to explore while ensuring a level of
+accountability. Learning to write takes practice. I do not want worries about
+grades to distract us from being creative, taking risks, and ultimately finding
+our voices.
+
+You are guaranteed a grade of a B for this class if you meet the following
+conditions:
+
+-   Submit all pre-class readings, concept quizzes, and class activities on time^[See @sec-late for information on deadline extensions]
+with a maximum of 2 missed assignments.
+-   Submit all lab assignments on time^[See @sec-late for information on deadline extensions] (no missed assignments)
+-   Complete revisions on ___% of assignments where 
+-   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual
+and application portions of the midterm exam. 
+-   Submit the final project on time and meet the "satisfactory" conditions on
+the rubric.
+-   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual
+and application portions of the midterm exam. 
+
+**Grade Deductions** 
+Your grade will decrease by a third of a step (for example a B to a B-) for each
+B condition that you do not meet. Missing assignments will be scaled, so that if
+for example you miss six assignments, turn in two homework assignments late, or
+turn in your final project late your grade will decrease by two thirds of a
+step (for example a B to a C+).
+
+Missing an exam or a project will result in a maximum grade of a C at the
+instructor's discretion.
+
+**Grade Boosters**
+You can increase your letter grade by *up to* a third of a step (for example a B
+to B+) for meeting each of the following conditions (further instructions will
+be provided):
+
+-   Select a data set from
+    [TidyTuesday](https://github.com/rfordatascience/tidytuesday) or [Makeover
+    Monday](https://www.makeovermonday.co.uk/data/) and use the skills you've
+    learned in this course to perform an analysis. You will be required to 
+    submit your *tidy* analysis to the *Data Analysis - Booster* assignment
+    portal.
+-     Complete a final project that goes above and beyond the requirements. Your
+job is to convince me in an additional one page document why you think your
+contribution goes the extra mile.
+<!-- -   I encourage you to suggest your own "boosting" condition via the suggestion -->
+<!--     "box" form on Canvas. -->
+
+For example, to earn an A in this class you must meet the conditions for a B and
+complete three of the "boosting" conditions above to "satisfactory" quality.
+
+Any deviation from the grading policies outlined above will only be to your
+benefit.
+
 # Classroom community and policies
 
 ### Weekly expectations
@@ -197,8 +252,7 @@ The module for each week will be released on Friday by 5pm, so you can look over
 
 **Email:** I do my best to reply to emails promptly and helpfully. However, I receive *a lot* of emails. To help both you and me, here are some specific expectations about emails:
 
--   Please tell me what course and section (by time or number) you are in!
--   If you email me between 9am and 4pm on Monday through Friday, I'll try my best to reply to you on the *same* day.
+-   If you email me between 8am and 4pm on Monday through Friday, I'll try my best to reply to you on the *same* day.
 -   If you email me outside of those hours, I will do my best to respond to you by the *next working* day. For my own mental health, I **do not** work on weekends. Thus, if you send an email after 4pm on Friday or during the weekend, you will not receive a response until Monday morning.
 -   If your question is much easier to discuss face-to-face, I may ask you to meet with me in my office or on Discord (at a time that works for both of us) rather than answering directly in an email.
 -   Include any relevant photos / screenshots / error messages / PDFs / links with your email.
@@ -239,9 +293,9 @@ Here's what you should do if you do miss a class:
 
 If you miss a bunch of classes, please come talk to me. I'm working from the assumption that you care and are trying, but something is getting in your way (health issues? depression / anxiety? college stress?); let's figure out what that is and how I can help.
 
-## What if I need to turn something in late?
+## What if I need to turn something in late? {#sec-late}
 
-Assignments are expected to be submitted on time. However, every student will be permitted to submit up to **three** individual assignments up to 4-days late, by completing the [deadline extension form](https://forms.gle/CXsNoSbkoacs28cG7). [Similar to the "real world," deadline extensions must be requested **before** an assignment is due.]{style="color: #FF0000;"}
+Assignments are expected to be submitted on time. However, every student will be permitted to submit up to **three** individual assignments up to 3-days late, by completing the [deadline extension form](https://forms.gle/CXsNoSbkoacs28cG7). [Similar to the "real world," deadline extensions must be requested **before** an assignment is due.]{style="color: #FF0000;"}
 
 When you complete the deadline extension form you will be required to state (1) what assignment you need an extension for, and (2) your proposed new deadline. **Your new deadline must be within 3-days of the original deadline.**
 
