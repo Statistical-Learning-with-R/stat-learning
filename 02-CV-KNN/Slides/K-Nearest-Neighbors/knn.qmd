@@ -479,8 +479,8 @@ k_grid
 ```{r}
 #| code-line-numbers: "|2,3"
 ins_rec <- recipe(charges ~ age + bmi + sex + smoker, data = ins) %>%
-  step_dummy(all_nominal()) %>%
-  step_normalize(all_numeric())
+  step_dummy(all_nominal_predictors()) %>%
+  step_normalize(all_numeric_predictors())
 
 ins_wflow <- workflow() %>%
   add_recipe(ins_rec) %>%
