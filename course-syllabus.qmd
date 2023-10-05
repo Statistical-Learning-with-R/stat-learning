@@ -129,7 +129,7 @@ Additionally, it is my hope that you will learn to:
 
 # Course Organization
 
-## Readings & Check-in Quizzes (10%)
+## Readings & Check-in Quizzes -- At least 1 every week
 
 **Due Mondays at the start of class**
 
@@ -137,7 +137,7 @@ I favor a "flipped classroom," as it gives you more time to clarify and solidify
 
 The reading guides and quizzes are **marked on completion** as complete or incomplete. You are required to complete both before the start of class (2:10pm) on Monday. I will plan our in-class lectures and work assuming you have met all prior deadlines.
 
-## Activities (10%)
+## Activities -- At least 2 every week
 
 **Due Fridays at 5pm**
 
@@ -145,100 +145,95 @@ During class each week you will complete activities which give you an introducti
 
 Activities are also graded on completeness, not correctness. However, despite these points being "free", I encourage you to take them seriously.
 
-## Labs (20%)
+## Labs -- 8 total
 
 **Due Mondays at 5pm**
 
-Every week, you'll complete a lab assignment that will push you conceptually and computationally to apply the techniques you learned each week to perform an analysis on real data. These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other's written text or code.
+Approximately every week, you'll complete a lab assignment that will push you conceptually and computationally to apply the techniques you learned each week to perform an analysis on real data. These assignments are usually individual work, although occasionally you are allowed to work with a partner. Typical homework rules apply: you are free to discuss ideas and solutions with each other, but you may not look at each other's written text or code.
 
-You will access each week's assignment through Canvas, which you will walk through in Week 1. You will need to submit **only** your rendered HTML document. Labs will be graded as either Complete or Incomplete, based on the rubric described below.
+You will access each week's assignment through Canvas, which you will walk through in Week 1. You will need to submit **only** your rendered HTML document. Labs will be graded based on the rubric described below.
 
-#### Success / Growing Grading
+### Success / Growing Grading
 
-Different from what you may have experienced, lab assignments are graded for "proficiency" of specific learning targets, which describe what you should be able to do after taking this course. You'll receive a score for each problem on an assignment according to the **Success** / **Not Yet** rubric below, as well as feedback to help you improve.
+Different from what you may have experienced, lab assignments are graded for "proficiency" of specific learning targets, which describe what you should be able to do after taking this course. You'll receive a score for *each section* of an assignment, meaning you will receive *one* score for *multiple* questions. Each section will receive either a grade of **Success** or **Growing**, as described in the rubric below. 
 
 | Score      | Justification                                                                                                           |
-|----------------|--------------------------------------------------------|
+|------------------|------------------------------------------------------|
 | Successful | The solution to the problem is correct, legible, and easy to follow, with all reasoning provided. Any error is trivial. |
 | Growing    | The solution shows growth toward mastering the topic; however, it is incorrect and/or incomplete.                       |
 
-#### Completing Revisions
+If any section(s) of your lab were marked "Growing" then (1) you will be provided feedback to help you improve these section(s) and (2) your assignment will be marked "Incomplete" (in Canvas). You are requested to complete revisions on the sections marked "Growing," as detailed in the section below. Once **every** section in your lab assignment has received a "Success," your assignment will be marked "Complete" (in Canvas). 
 
-After the first submission of your assignment, you will have the option to retry any problems for which you scored a **Growing (G)**. A written reflection on how your understanding of the problem changed will accompany any revision. If you don't earn a **Success** by the second try, you can make an appointment with me to meet during my office hours (or another agreed-upon time) to create a reassessment strategy. You can schedule up to one meeting per week.
+### Completing Revisions
 
-You can submit **up to one** revision a week.
+After the first submission of your assignment, you will have the option to retry any sections for which you scored a **Growing (G)**. A written reflection on how your understanding of the problem changed will accompany any revision. If you don't earn a **Success** by the second try, you can make an appointment with me to meet during my office hours (or another agreed-upon time) to create a reassessment strategy. You can schedule up to one meeting per week.
 
-#### Reflections on Your Learning
+You can submit **up to one** revision a week, so please do not let your revisions stack up! **Submit your revision to the same assignment box on Canvas as your original. This helps me keep track of any outstanding revisions each person has.**
+
+### Reflections on Your Learning
 
 Revisions **must** include a reflection describing how you revised your thinking when completing your revision. It's not enough to say "\[x\] was wrong, so I fixed it"---you have to talk about why you got \[x\] wrong in the first place and what you learned that changed your mind. What do you know now that you didn't know before? Who or what helped you learn?
 
--   If your revision does not include reflections, I'll ask you to add them.
--   See some examples of really good reflections [here](https://docs.google.com/document/d/1JNR3cVONeEPwe7umURI1gv0w9qbMz5fyC_S2_qXkHII/edit?usp=sharing) -- they're (mostly) from an introductory statistics class, but I think you'll get the idea.
+-   Reflections are required for your revisions to be accepted. So, if your revision does not include reflections, it will not be regraded until reflections. 
+-   Similarly, if the reflections you submit do not provide sufficient details regarding what you learned, your revisions will be rejected and you will be told to revise your reflections. 
 
-**Submit your revision to the same assignment box on Canvas as your original. This helps me keep track of any outstanding revisions each person has.**
+::: {.callout-tip}
+# Example Reflections
+See some examples of really good reflections [here](https://docs.google.com/document/d/1JNR3cVONeEPwe7umURI1gv0w9qbMz5fyC_S2_qXkHII/edit?usp=sharing) -- they're (mostly) from an introductory statistics class, but I think you'll get the idea.
+:::
 
-## Final Project (20%)
+## Midterm Exam
 
-In this project, you will perform a Statistical Learning analysis that can be reasonably described as "Data for Good." That is, you are not only responsible for a correct and complete statistical analysis; you will also be asked to reflect on the specific uses and outcomes of your conclusions. The project will have various checkpoints throughout the quarter, which I will be sure to announce at least a week in advance.
+These will have a mix of in-person exams with conceptual questions and take-home data analyses. There will be a midterm exam in Week 7 (November 6-8). Each portion of the exam will have criteria which must be met for you to earn a "satisfactory." Any portions of your exam which do not earn a "satisfactory" are eligible for revisions. However, unlike lab assignment revisions, you can only submit **one round** of revisions on your midterm exam. 
 
-## Midterm & Final Exams (20% each)
+#### Reflections on Your Learning
 
-These will have a mix of in-person exams with conceptual questions and take-home data analyses. There will be a midterm exam in Week 7 (November 6-8). The conceptual portion of the final exam will take place on the last day of class (December 6) and the take-home exam will be due at scheduled time of our final exam (December 15, 4:00pm).
+Revisions on your exam must also be accompanied by reflections. Specifically, your reflections on each exam question must state why your previous answer / approach was incorrect. 
+
+## Final Project
+
+In this project, you will perform a Statistical Learning analysis that can be reasonably described as "Data for Good." That is, you are not only responsible for a correct and complete statistical analysis; you will also be asked to reflect on the specific uses and outcomes of your conclusions. The project will have various checkpoints throughout the quarter, which I will be sure to announce at least a week in advance. Each checkpoint will be graded for completion and you will receive feedback for ways you can improve your project. While revisions will not be accepted for the final project, these mechanisms for feedback before your final submission allow you to iteratively improve your project before the final submission. 
+
+
+## Final Exam 
+
+The conceptual portion of the final exam will take place on the last day of class (December 6) and the take-home exam will be due at scheduled time of our final exam (December 15, 4:00pm). Note that due to time constraints, there will not be an opportunity to complete revisions on the final exam. 
 
 # Grade Breakdown
 
-In this class we will be using a contract grading system. This is designed to
-give flexibility and freedom to explore while ensuring a level of
-accountability. Learning to write takes practice. I do not want worries about
-grades to distract us from being creative, taking risks, and ultimately finding
-our voices.
+In this class we will be using a contract grading system. This is designed to give flexibility and freedom to explore while ensuring a level of accountability. Learning to write takes practice. I do not want worries about grades to distract us from being creative, taking risks, and ultimately finding our voices.
 
-You are guaranteed a grade of a B for this class if you meet the following
-conditions:
+**You are guaranteed a grade of a B for this class if you meet the following conditions**:
 
--   Submit all pre-class readings, concept quizzes, and class activities on time^[See @sec-late for information on deadline extensions]
-with a maximum of 2 missed assignments.
--   Submit all lab assignments on time^[See @sec-late for information on deadline extensions] (no missed assignments)
--   Complete revisions on ___% of assignments where 
--   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual
-and application portions of the midterm exam. 
--   Submit the final project on time and meet the "satisfactory" conditions on
-the rubric.
--   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual
-and application portions of the midterm exam. 
+-   Submit all pre-class readings, concept quizzes, and class activities on time[^2] with a maximum of 2 missed assignments.
+-   Submit all lab assignments on time[^3] (no missed assignments)
+-   Obtain a "satisfactory"^[This means that **every** section was marked a "success"] on all but 2 labs assignments
+-   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual and application portions of the midterm exam[^4].
+-   Submit the final project on time and meet the "satisfactory" conditions on the rubric.
+-   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual and application portions of the midterm exam.
 
-**Grade Deductions** 
-Your grade will decrease by a third of a step (for example a B to a B-) for each
-B condition that you do not meet. Missing assignments will be scaled, so that if
-for example you miss six assignments, turn in two homework assignments late, or
-turn in your final project late your grade will decrease by two thirds of a
-step (for example a B to a C+).
+[^2]: See @sec-late for information on deadline extensions
 
-Missing an exam or a project will result in a maximum grade of a C at the
-instructor's discretion.
+[^3]: See @sec-late for information on deadline extensions
 
-**Grade Boosters**
-You can increase your letter grade by *up to* a third of a step (for example a B
-to B+) for meeting each of the following conditions (further instructions will
-be provided):
+[^4]: This can be obtained in either the first attempt or after **one** round of revisions
 
--   Select a data set from
-    [TidyTuesday](https://github.com/rfordatascience/tidytuesday) or [Makeover
-    Monday](https://www.makeovermonday.co.uk/data/) and use the skills you've
-    learned in this course to perform an analysis. You will be required to 
-    submit your *tidy* analysis to the *Data Analysis - Booster* assignment
-    portal.
--     Complete a final project that goes above and beyond the requirements. Your
-job is to convince me in an additional one page document why you think your
-contribution goes the extra mile.
-<!-- -   I encourage you to suggest your own "boosting" condition via the suggestion -->
-<!--     "box" form on Canvas. -->
+**Grade Deductions** Your grade will decrease by a third of a step (for example a B to a B-) for each B condition that you do not meet. Missing assignments will be scaled, so that if for example you miss six activities, turn in two homework assignments late, or turn in your final project late your grade will decrease by two thirds of a step (for example a B to a C+).
 
-For example, to earn an A in this class you must meet the conditions for a B and
-complete three of the "boosting" conditions above to "satisfactory" quality.
+Missing an exam or a project will result in a maximum grade of a C at the instructor's discretion.
 
-Any deviation from the grading policies outlined above will only be to your
-benefit.
+**Grade Boosters** You can increase your letter grade by *up to* a third of a step (for example a B to B+) for meeting each of the following conditions (further instructions will be provided):
+
+- Obtain a "Satisfactory" on **all** lab assignments.
+- Obtain a "Excellent" on **both** portions of the midterm exam.
+- Obtain a "Excellent" on **both** portions of the final exam.
+- Complete a final project that goes above and beyond the requirements. Your job is to convince me in an additional one page document why you think your contribution goes the extra mile. 
+-   Select a data set from [TidyTuesday](https://github.com/rfordatascience/tidytuesday) or [Makeover Monday](https://www.makeovermonday.co.uk/data/) and use the skills you've learned in this course to perform an analysis. You will be required to submit your *tidy* analysis to the *Data Analysis - Booster* assignment portal.
+-   I encourage you to suggest your own "boosting" condition(s)! For example, if a particular mathematical result (e.g., higher variance of LOOCV compared to k-fold) interests you, I would be willing to consider a simulation study as a booster condition. 
+
+**To earn an A in this class you must meet the conditions for a B and complete three of the "boosting" conditions above.** 
+
+Any deviation from the grading policies outlined above will only be to your benefit.
 
 # Classroom community and policies
 
