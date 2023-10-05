@@ -34,6 +34,3 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 /.quarto/
-publish.yml
-_quarto.yml
-index.qmd
