@@ -76,9 +76,9 @@ The World Happiness Report uses their own, privately-determined formula to combi
 
 ## Part 2: Happiness Equation
 
-3.  How is each of the six measures of life quality weighted in calculating this score?
+3.  How is each of the six measures of life quality weighted in calculating this score? Fit a model to estimate the weights.
 
-4.  Fit a model to estimate the weights, and interpret the coefficients.
+4. Provide interpretations for each coefficient. 
 
 5.  Which measures of life quality does the WHR consider to be most important to a country's happiness?
 
