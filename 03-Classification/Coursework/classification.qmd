@@ -1,0 +1,69 @@
+---
+title: "Classification"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: true
+    number-depth: 2
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: source
+execute: 
+  echo: true
+  eval: false
+  include: false
+---
+
+This week we will focus on classification, using both parametric and nonparametric methods. We will break apart the chapter into two installments, starting with *simple* parametric methods (logistic regression), then moving to more *complex* parametric methods (linear discriminant analysis) and then nonparametric methods (KNN). 
+
+# Logistic Regression
+
+## Textbook Reading
+
+📖 [**Required Reading:** *ISLR -- Chapter 4, Sections 4.1-4.3 Classification*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+::: callout-warning
+# Only Logistic Regression
+
+Read pages 129 through 141, stopping after multinomial logistic regression. Also read section 4.6 on the applications of generalized linear models (pages 164 - 170). 
+:::
+
+## Logistic Regression Video 
+
+Here's a helpful video which explains how logistic regression works: <https://youtu.be/yIYKR4sgzI8?si=h_gs42mR6YJ033gW>
+
+## Concept Quiz -- Due Monday, October 9 at 2:10pm
+
+# Linear Discriminant Analysis & k-Nearest-Neighbors
+
+## Textbook Reading
+
+📖 [**Required Reading:** *ISLR -- Chapter 4, Sections 4.4 & 4.5 5*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+### Reading Guide -- Due Wednesday, October 4 at 2:10pm
+
+## K-Nearest Neighbors Video 
+
+Here's a helpful video which explains how k-Nearest-neighbors works with classification: <https://www.youtube.com/watch?v=HVXime0nQeI&ab_channel=StatQuestwithJoshStarmer>
+
+::: {.callout-tip}
+# Start at 2:43 for the section on classification!
+:::
+
+### Reading Guide -- Due Wednesday, October 11 at 2:10pm
+
+Will be posted by 8pm Friday!
+
+📝 [Download the Word Document](reading-guide/week-2a.docx)
+
+::: callout-note
+# Submission
+
+Submit your completed reading guide to the Canvas assignment portal!
+:::
+
+## Concept Quiz -- No quiz for this section, just the reading guide!
+
