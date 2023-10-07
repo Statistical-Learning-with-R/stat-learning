@@ -37,6 +37,16 @@ Here's a helpful video which explains how logistic regression works: <https://yo
 
 ## Concept Quiz -- Due Monday, October 9 at 2:10pm
 
+Suppose we collect data for a group of students in an introductory  statistics class with variables X1 = hours studied, X2 = undergrad GPA, and Y = receive an A. We fit a logistic regression and produce estimated coefficients: $\widehat{\beta_0} = -6$; $\widehat{\beta_1} = 0.05$; $\widehat{\beta_2} = 1$.
+
+**Question 1** -- The probability that a student who studies for 40-hours and has an undergrad GPA of 3.5 gets an A in their introductory statistics course is ___. (round to two decimal places)
+
+**Question 2** -- For this student to have a 50% chance of getting an A in their course, they would need to study for ___ hours. (round to the nearest hour)
+
+**Question 3** -- On average, if people have an odds of 0.37 of defaulting on their credit card payment,  ____ will actually default. (round to two decimal places)
+ 
+ **Question 4** -- Suppose that an individual has a 16 % chance of defaulting on her credit card payment. The odds she will default is ____. (round to two decimal places)
+
 # Linear Discriminant Analysis & k-Nearest-Neighbors
 
 ## Textbook Reading
@@ -45,24 +55,14 @@ Here's a helpful video which explains how logistic regression works: <https://yo
 
 ### Reading Guide -- Due Wednesday, October 4 at 2:10pm
 
+**Will be posted by Sunday at 5pm**
+
 ## K-Nearest Neighbors Video 
 
 Here's a helpful video which explains how k-Nearest-neighbors works with classification: <https://www.youtube.com/watch?v=HVXime0nQeI&ab_channel=StatQuestwithJoshStarmer>
 
 ::: {.callout-tip}
 # Start at 2:43 for the section on classification!
-:::
-
-### Reading Guide -- Due Wednesday, October 11 at 2:10pm
-
-Will be posted by 8pm Friday!
-
-📝 [Download the Word Document](reading-guide/week-2a.docx)
-
-::: callout-note
-# Submission
-
-Submit your completed reading guide to the Canvas assignment portal!
 :::
 
 ## Concept Quiz -- No quiz for this section, just the reading guide!
