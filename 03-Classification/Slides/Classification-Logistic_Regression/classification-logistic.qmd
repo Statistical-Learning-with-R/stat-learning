@@ -1,0 +1,464 @@
+---
+title: "Classification with KNN and Logistic Regression"
+format: 
+  revealjs:
+    theme: [solarized, style.scss]
+    embed-resources: true
+editor: visual
+execute: 
+  echo: true
+---
+
+```{r}
+#| include: false
+options(htmltools.dir.version = FALSE, digits = 4, scipen=999)
+library(tidyverse)
+library(tidymodels)
+library(kknn)
+library(glmnet)
+```
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+Classification with K-Nearest-Neighbors
+:::
+
+## KNN for Categorical Response
+
+We have existing observations
+
+$$(x_1, C_1), ... (x_n, C_n)$$
+
+where the $C_i$ are [categories]{.underline}.
+
+. . .
+
+</br>
+</br>
+
+Given a new observation $x_{new}$, how do we predict $C_{new}$?
+
+## Predicting a Response with KNN
+
+1.  Find the $n$ (e.g., 5) values in $(x_1, ..., x_n)$ that are closest to $x_{new}$
+
+. . .
+
+2.  Let all the closest neighbors "vote" on the category.
+
+. . .
+
+3. Predict $\widehat{C}_{new}$ = the category with the most votes.
+
+## KNN for Classification
+
+To perform **classification** with K-Nearest-Neighbors, we choose the **K** closest observations to our *target*, and we **aggregate** their *response* values.
+
+. . .
+
+</br>
+</br>
+
+::: {.large}
+The Big Questions:
+:::
+
+* What is our definition of *closest*?
+
+* What number should we use for *K*?
+
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+Example
+:::
+
+Let's keep hanging out with the insurance dataset.
+
+Suppose we want to use information about insurance charges to predict whether someone is a smoker or not.
+
+```{r}
+#| message: false
+#| include: false
+ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
+```
+
+```{r}
+ins
+```
+
+## Step 1: Establish the Model
+
+```{r}
+#| code-line-numbers: "|3"
+#| echo: true
+knn_mod <- nearest_neighbor(neighbors = 5) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+```
+
+Notice:
+
+* New `mode` - `"classification"` 
+
+* Everything else is the same!
+
+## Step 2: Fit our Model
+
+```{r}
+#| error: true
+knn_fit_1 <- knn_mod %>%
+  fit(smoker ~ charges, data = ins)
+```
+
+. . .
+
+</br>
+</br>
+</br>
+
+::: {.large}
+
+What should we do???
+
+:::
+
+## Step 2: Transform our Response
+
+```{r}
+ins <- ins %>%
+  mutate(
+    smoker = as.factor(smoker)
+  ) %>%
+  drop_na(smoker)
+```
+
+## Step 3: (Re)Fit our Model
+
+```{r}
+knn_fit_1 <- knn_mod %>%
+  fit(smoker ~ charges, data = ins)
+```
+
+Heck yeah!
+
+. . .
+
+```{r}
+knn_fit_1$fit %>% summary()
+```
+
+##  Try it!
+
+Open [`Activity-Classification.qmd`](../../Classwork/Activity-Classification.qmd).
+
+Select the best KNN model for predicting smoker status.
+
+What metrics does the cross-validation process automatically output?
+
+##  {background-color="#B6CADA"}
+
+
+::: {.larger}
+Logistic Regression
+:::
+
+## Ordinary linear regression classification?
+
+```{r, error = TRUE}
+lm_mod <- linear_reg() %>%
+  set_engine("lm") %>%
+  set_mode("classification")
+```
+
+## Ordinary linear regression with a dummy variable
+
+Consider the following idea:
+
+Convert the `smoker` variable to a dummy variable:
+
+```{r}
+ins <- ins %>%
+  mutate(
+    smoker_number = case_when(
+      smoker == "yes" ~ 1,
+      smoker == "no" ~ 0
+    )
+  )
+```
+
+## Ordinary linear regression with a dummy variable
+
+Fit a linear regression predicting `smoker` dummy var:
+
+```{r}
+lm_mod <- linear_reg() %>%
+  set_engine("lm") %>%
+  set_mode("regression")
+
+ins_rec <- recipe(smoker_number ~ charges, data = ins) %>%
+  step_normalize(all_numeric_predictors())
+
+ins_wflow <- workflow() %>%
+  add_recipe(ins_rec) %>%
+  add_model(lm_mod)
+
+ins_fit <- ins_wflow %>%
+  fit(ins)
+```
+
+## Ordinary linear regression with a dummy variable
+
+Predict each observation to be the smoker closest to the number:
+
+```{r}
+preds <- ins_fit %>% predict(ins)
+
+ins <- ins %>%
+  mutate(
+    predicted_num = preds$.pred,
+    predicted_smoker = round(predicted_num)
+  )
+```
+
+## Ordinary linear regression
+
+How did we do?
+
+```{r}
+ins %>%
+  count(predicted_smoker, smoker_number)
+```
+
+## 
+
+![](images/clap.gif)
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+What's wrong with this?
+:::
+
+## Residuals
+
+```{r}
+#| echo: false
+ins %>%
+  mutate(
+    resids = predicted_num - smoker_number
+  ) %>%
+  ggplot(aes(x = predicted_num, y = resids)) +
+  geom_point()
+```
+
+Linear regression assumes that the residuals are **Normally distributed**.  Obviously, they are not here.
+
+## Logistic Regression
+
+Solution:  How about the same approach, Y is a function of X plus noise, but we let the noise be non-Normal?
+
+</br>
+</br>
+</br>
+
+$$Y = g^{-1}(\beta_0 + \beta_1 X + \epsilon) $$
+
+for some function $g$.
+
+## Logistic Regression
+
+Easier way to think of it:
+
+**Before:**
+
+$$\mu_Y = \beta_0 + \beta_1 X$$
+
+**Now:**
+
+$$g(\mu_Y) = \beta_0 + \beta_1 X$$
+
+. . .
+
+$g$ is called the *link function*
+
+## Logistic Regression
+
+A common link function is *logit* function:
+
+
+$$g(u) = \frac{log(u)}{log(1-u)}$$
+
+. . .
+
+In this case, $u$ represents the *probability* of someone being a smoker.
+
+. . .
+
+Our observations $Y$ have probability 0 or 1, since we observe them.
+
+. . .
+
+Future observations are unknown, so we predict them.
+
+## Logistic Regression
+
+In summary:
+
+::: {.incremental}
+
+* Given *predictors*, we try to predict the **log-odds** of a person being a smoker.
+
+* We assume random noise on the relationship between the predictors and the **log-odds** of the response
+
+* From these **log-odds**, we calculate the **probabilities**.
+
+* We compare the **probabilities** (between 0 and 1) to the **observed truths** (0 or 1 exactly).
+:::
+
+## Step 1: Establish the Model
+
+New model:
+
+```{r}
+logit_mod <- logistic_reg() %>%
+  set_mode("classification") %>%
+  set_engine("glm")
+```
+
+## Step 2: Make a Recipe
+
+Same recipe but sticking with the original (untransformed) `smoker` variable now:
+
+```{r}
+ins_rec <- recipe(smoker ~ charges, data = ins) %>%
+  step_normalize(all_numeric_predictors())
+```
+
+## Step 2: Fit our Model
+
+New workflow:
+
+```{r}
+ins_wflow_logit <- workflow() %>%
+  add_recipe(ins_rec) %>%
+  add_model(logit_mod)
+
+ins_fit <- ins_wflow_logit %>%
+  fit(ins)
+
+ins_fit %>% pull_workflow_fit()
+```
+
+## Step 3: Get our Predictions
+
+Notice:  Now our predictions are of the type `.pred_class`! R did the hard part for us.
+
+```{r}
+preds <- predict(ins_fit, new_data = ins)
+preds
+```
+
+## Log-Odds Predictions
+
+Suppose we wanted to see the predicted **log-odds values**:
+
+```{r}
+predict(ins_fit, new_data = ins, type = "raw")
+```
+
+## Probability Predictions
+
+Suppose we wanted to see the predicted **probabilities**:
+
+```{r}
+predict(ins_fit, new_data = ins, type = "prob")
+```
+
+## Plotting our Logisitic Regression
+
+```{r}
+#| output-location: slide
+
+pred_probs <- predict(ins_fit, new_data = ins, type = "prob")
+
+ins %>%
+  mutate(
+    pred_probs = pred_probs$.pred_yes
+  ) %>%
+  ggplot(mapping = aes(y = pred_probs, x = charges, color = smoker)) +
+  geom_point(alpha = 0.75) +
+  scale_x_continuous(labels = label_dollar()) +
+  labs(x = "Charges", 
+       y = "",
+       title = "Predicted Probability of Being a Smoker based on Insurance Charges", 
+       color = "Smoking Status")
+```
+
+## Logistic Regression
+
+How many did we get correct?
+
+```{r}
+preds <- ins_fit %>% predict(ins)
+
+ins <- ins %>%
+  mutate(
+    predicted_smoker = preds$.pred_class
+  ) 
+
+ins %>% count(predicted_smoker, smoker)
+```
+
+## Logistic Regression
+
+What percentage did we get correct?
+
+```{r}
+ins %>%
+  mutate(
+    correct = (predicted_smoker == smoker)
+  ) %>%
+  count(correct) %>%
+  mutate(
+    pct = n/sum(n)
+  )
+```
+
+## Logistic Regression
+
+What percentage did we get correct?
+
+```{r}
+ins %>%
+  accuracy(truth = smoker,
+           estimate = predicted_smoker)
+```
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+Questions to ponder
+:::
+
+::: {.incremental}
+::: {.smaller}
+* What if we have a categorical variable where 99% of our values are Category A?
+
+* What if we have a categorical variable with more than 2 categories?
+
+* What if we want to do a transformation besides logistic?
+
+* Are there other ways to do classification besides these **logistic regression** and **KNN**?
+
+:::
+:::
+
+## Try it!
+
+Open `Activity-Classification.qmd` again.
+
+Select the best logistic regression model for predicting smoker status.
+
+Report the cross-validated metrics - how do they compare to KNN?

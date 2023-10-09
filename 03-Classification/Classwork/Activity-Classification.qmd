@@ -24,7 +24,6 @@ library(tidymodels)
 library(glmnet)
 ```
 
-
 ## KNN
 
 #### Code from Lecture
@@ -34,15 +33,13 @@ ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
 head(ins)
 ```
 
-
 ```{r}
 ins <- ins %>%
   mutate(
     smoker = factor(smoker)
   ) %>%
-  drop_na()
+  drop_na(smoker)
 ```
-
 
 ```{r}
 knn_mod <- nearest_neighbor(neighbors = 5) %>%
@@ -62,7 +59,7 @@ workflow_1 <- workflow() %>%
 knn_fit_1 <- workflow_1 %>%
   fit(ins)
 
-knn_fit_1$fit %>% extract_fit_parsnip()
+extract_fit_parsnip(knn_fit_1)
 ```
 
 ```{r}
@@ -74,12 +71,9 @@ ins %>%
            estimate = preds)
 ```
 
-
-
 #### Your tasks
 
-Select the best KNN model for predicting smoker status
-What metrics does the cross-validation process automatically output?
+Select the best KNN model for predicting smoker status What metrics does the cross-validation process automatically output?
 
 ## Logistic Regression
 
@@ -90,10 +84,6 @@ logit_mod <- logistic_reg() %>%
   set_mode("classification") %>%
   set_engine("glm")
 ```
-
-
-
-
 
 ```{r}
 rec_2 <- recipe(smoker ~ charges, data = ins) %>%
@@ -129,8 +119,13 @@ ins %>%
   mutate(
     pred_probs = pred_probs$.pred_yes
   ) %>%
-  ggplot(aes(y = pred_probs, x = charges, color = smoker)) +
-  geom_point()
+  ggplot(mapping = aes(y = pred_probs, x = charges, color = smoker)) +
+  geom_point(alpha = 0.75) +
+  scale_x_continuous(labels = label_dollar()) +
+  labs(x = "Charges", 
+       y = "",
+       title = "Predicted Probability of Being a Smoker based on Insurance Charges", 
+       color = "Smoking Status")
 ```
 
 ```{r}
@@ -154,6 +149,4 @@ ins %>%
 
 #### Your tasks
 
-Select the best logistic regression model for predicting smoker status
-Report the cross-validated metrics - how do they compare to KNN?
-
+Select the best logistic regression model for predicting smoker status Report the cross-validated metrics - how do they compare to KNN?
