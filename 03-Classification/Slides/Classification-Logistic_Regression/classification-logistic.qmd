@@ -20,7 +20,7 @@ library(glmnet)
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 Classification with K-Nearest-Neighbors
 :::
 
@@ -34,8 +34,7 @@ where the $C_i$ are [categories]{.underline}.
 
 . . .
 
-</br>
-</br>
+</br> </br>
 
 Given a new observation $x_{new}$, how do we predict $C_{new}$?
 
@@ -49,7 +48,7 @@ Given a new observation $x_{new}$, how do we predict $C_{new}$?
 
 . . .
 
-3. Predict $\widehat{C}_{new}$ = the category with the most votes.
+3.  Predict $\widehat{C}_{new}$ = the category with the most votes.
 
 ## KNN for Classification
 
@@ -57,21 +56,19 @@ To perform **classification** with K-Nearest-Neighbors, we choose the **K** clos
 
 . . .
 
-</br>
-</br>
+</br> </br>
 
-::: {.large}
+::: large
 The Big Questions:
 :::
 
-* What is our definition of *closest*?
+-   What is our definition of *closest*?
 
-* What number should we use for *K*?
-
+-   What number should we use for *K*?
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 Example
 :::
 
@@ -101,9 +98,9 @@ knn_mod <- nearest_neighbor(neighbors = 5) %>%
 
 Notice:
 
-* New `mode` - `"classification"` 
+-   New `mode` - `"classification"`
 
-* Everything else is the same!
+-   Everything else is the same!
 
 ## Step 2: Fit our Model
 
@@ -115,14 +112,10 @@ knn_fit_1 <- knn_mod %>%
 
 . . .
 
-</br>
-</br>
-</br>
+</br> </br> </br>
 
-::: {.large}
-
+::: large
 What should we do???
-
 :::
 
 ## Step 2: Transform our Response
@@ -150,7 +143,7 @@ Heck yeah!
 knn_fit_1$fit %>% summary()
 ```
 
-##  Try it!
+## Try it!
 
 Open [`Activity-Classification.qmd`](../../Classwork/Activity-Classification.qmd).
 
@@ -160,8 +153,7 @@ What metrics does the cross-validation process automatically output?
 
 ##  {background-color="#B6CADA"}
 
-
-::: {.larger}
+::: larger
 Logistic Regression
 :::
 
@@ -232,12 +224,11 @@ ins %>%
   count(predicted_smoker, smoker_number)
 ```
 
-## 
+## {background-color="#B6CADA"}
 
-![](images/clap.gif)
-##  {background-color="#B6CADA"}
+![](images/clap.gif) 
 
-::: {.larger}
+::: larger
 What's wrong with this?
 :::
 
@@ -253,15 +244,13 @@ ins %>%
   geom_point()
 ```
 
-Linear regression assumes that the residuals are **Normally distributed**.  Obviously, they are not here.
+Linear regression assumes that the residuals are **Normally distributed**. Obviously, they are not here.
 
 ## Logistic Regression
 
-Solution:  How about the same approach, Y is a function of X plus noise, but we let the noise be non-Normal?
+Solution: How about the same approach, Y is a function of X plus noise, but we let the noise be non-Normal?
 
-</br>
-</br>
-</br>
+</br> </br> </br>
 
 $$Y = g^{-1}(\beta_0 + \beta_1 X + \epsilon) $$
 
@@ -287,7 +276,6 @@ $g$ is called the *link function*
 
 A common link function is *logit* function:
 
-
 $$g(u) = \frac{log(u)}{log(1-u)}$$
 
 . . .
@@ -306,15 +294,14 @@ Future observations are unknown, so we predict them.
 
 In summary:
 
-::: {.incremental}
+::: incremental
+-   Given *predictors*, we try to predict the **log-odds** of a person being a smoker.
 
-* Given *predictors*, we try to predict the **log-odds** of a person being a smoker.
+-   We assume random noise on the relationship between the predictors and the **log-odds** of the response
 
-* We assume random noise on the relationship between the predictors and the **log-odds** of the response
+-   From these **log-odds**, we calculate the **probabilities**.
 
-* From these **log-odds**, we calculate the **probabilities**.
-
-* We compare the **probabilities** (between 0 and 1) to the **observed truths** (0 or 1 exactly).
+-   We compare the **probabilities** (between 0 and 1) to the **observed truths** (0 or 1 exactly).
 :::
 
 ## Step 1: Establish the Model
@@ -353,7 +340,7 @@ ins_fit %>% pull_workflow_fit()
 
 ## Step 3: Get our Predictions
 
-Notice:  Now our predictions are of the type `.pred_class`! R did the hard part for us.
+Notice: Now our predictions are of the type `.pred_class`! R did the hard part for us.
 
 ```{r}
 preds <- predict(ins_fit, new_data = ins)
@@ -438,20 +425,19 @@ ins %>%
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 Questions to ponder
 :::
 
-::: {.incremental}
-::: {.smaller}
-* What if we have a categorical variable where 99% of our values are Category A?
+::: incremental
+::: smaller
+-   What if we have a categorical variable where 99% of our values are Category A?
 
-* What if we have a categorical variable with more than 2 categories?
+-   What if we have a categorical variable with more than 2 categories?
 
-* What if we want to do a transformation besides logistic?
+-   What if we want to do a transformation besides logistic?
 
-* Are there other ways to do classification besides these **logistic regression** and **KNN**?
-
+-   Are there other ways to do classification besides these **logistic regression** and **KNN**?
 :::
 :::
 
