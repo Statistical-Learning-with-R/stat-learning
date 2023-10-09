@@ -1,0 +1,62 @@
+---
+title: "Week 3 Reading Guide -- LDA & Naive Bayes"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---
+
+**Why would we consider using methods other than logistic regression for classification problems?**
+
+## Linear Discriminant Analysis for $p = 1$
+
+In the formula $Pr(Y = k | X = x) = \frac{\pi_k f_k(x)}{\sum_{l=1}^K \pi_l f_l(k)}$
+
+**What does** $\pi_k$ represent?
+
+**What does** $f_k(x)$ represent?
+
+**How do we estimate** $\pi_k$?
+
+**What classifier has the lowest error rate of all classifiers?**
+
+**Is linear discriminant analysis a parametric or nonparametric method?**
+
+**Suppose there is no information for estimating** $\pi_k$. In this instance, what value does LDA use for $\hat{\pi}_k$?
+
+## Linear Discriminant Analysis for $p > 1$
+
+**If the two predictor variables are uncorrelated, how does the multivariate Gaussian distribution look?**
+
+**What is a "null classifier"?**
+
+**In what scenarios does a null classifier perform well?**
+
+**What is sensitivity?**
+
+**What is specificity?**
+
+**Fill in the table below with the following terms: sensitivity, specificity, Type I error, Type II error**
+
+|           |        |     |
+|-----------|--------|-----|
+|           | Actual |     |
+| Predicted | No     | Yes |
+| No        |        |     |
+| Yes       |        |     |
+
+## An Empiracle Comparison
+
+**In what scenarios does logistic regression perform the best?**
+
+**In what scenarios does LDA perform the best?**
+
+**In what scenarios does QDA perform the best?**
+
+**In what scenarios does Naive Bayes perform the best?**
+
+**In what scenarios does KNN (with CV) perform the best?**

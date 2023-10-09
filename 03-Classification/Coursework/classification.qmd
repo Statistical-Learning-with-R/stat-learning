@@ -47,7 +47,7 @@ Suppose we collect data for a group of students in an introductory  statistics c
  
  **Question 4** -- Suppose that an individual has a 16 % chance of defaulting on her credit card payment. The odds she will default is ____. (round to two decimal places)
 
-# Linear Discriminant Analysis & k-Nearest-Neighbors
+# Generative Models
 
 ## Textbook Reading
 
@@ -55,7 +55,7 @@ Suppose we collect data for a group of students in an introductory  statistics c
 
 ### Reading Guide -- Due Wednesday, October 4 at 2:10pm
 
-**Will be posted by Sunday at 5pm**
+📝 [Download the Word Document](reading-guide/week-3.docx)
 
 ## K-Nearest Neighbors Video 
 
