@@ -12,9 +12,27 @@ execute:
   message: false
 ---
 
-## Setup
+# Instructions
 
-Declare your libraries:
+You will submit an HTML document to Canvas as your final version.
+
+## Getting Started
+
+[Download starter .qmd file](classification-template.qmd)
+
+You'll notice in the template's YAML there are specifications for how the code should be included (i.e., `code-fold: true`, `code-line-numbers: true`, `code-tools: true`). **Do not change these specifications.**
+
+::: callout-caution
+# Within your document make sure that only relevant output is printed
+
+Do not, for example, print the preview (e.g., `head(data)`) or an entire dataset in your final knitted file.
+:::
+
+::: callout-tip
+# Organization
+
+Your document should also be clearly organized, so that it is easy for a reader to find your answers to each question. If I have a difficult time locating or reading your answer, you risk it being returned with a "revision requested".
+:::
 
 ```{r}
 #| label: libraries-r
@@ -44,7 +62,7 @@ Our dataset consists of clinical data from patients who entered the hospital com
 
 -   `trtbps` : resting blood pressure (in mm Hg)
 
--   `chol` : cholesteral in mg/dl fetched via BMI sensor
+-   `chol` : cholesterol in mg/dl fetched via BMI sensor
 
 -   `restecg` : resting electrocardiographic results
 
@@ -59,13 +77,31 @@ Our dataset consists of clinical data from patients who entered the hospital com
     -   0 = not at risk of heart attack
     -   1 = at risk of heart attack
 
-Although it is not a formal question on this assignment, you should begin by reading in the dataset and briefly exploring and summarizing the data, and by adjusting any variables that need cleaning.
+# Part Zero
 
 ```{r}
-ha <- read_csv("https://www.dropbox.com/s/aohbr6yb9ifmc8w/heart_attack.csv?dl=1")
+#| eval: false
+
+ha <- read_csv(here::here("03-Classification", 
+                          "Assignment", 
+                          "data", 
+                          "heart_attack.csv")
+               )
 ```
 
+
+Download the [`heart_attack.csv`](data/heart_attack.csv) and read in the data. Perform any data cleaning you believe is necessary.  
+
+::: {.callout-tip}
+# Setting Primary Target
+
+You will find it helpful to reorder the `output` variable, so that the "at risk" group (e.g., level `1`) is the first level.
+
+Here's some example code that you might find helpful:
+
 ```{r}
+#| eval: false
+
 ha <- ha %>%
   mutate(
     across(.cols = c(sex, cp, restecg), 
@@ -81,19 +117,33 @@ ha <- ha %>%
 
 This section asks you to create a final best model for each of the model types studied this week. For each, you should:
 
--   Find the best model based on `roc.auc` for predicting the `target` variable.
+-   Find the best model based on `roc.auc` for predicting the `output` variable.
 
--   Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class. (Hint: Code is provided from lecture; alternatively, `conf_mat` is a nice shortcut function for this task.)
+-   Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class. 
+
+::: {.callout-tip}
+# Look over past code
+
+Code is provided from lecture; alternatively, `conf_mat()` is a nice shortcut function for this task.)
+:::
 
 -   Report the (cross-validated!) `roc.auc` metric.
 
 -   Fit the final model.
 
--   (Where applicable) Interpret the coefficients and/or estimates produced by the model fit.
+::: callout-caution
+# Include All the Code!
 
-You should certainly try multiple model recipes to find the best model. However, you do not need to include these attempts in your writeup. You *should* include any hyperparameter tuning steps in your writeup, though.
+As I expect your analysis to be reproducible, your assignment should keep a record of **every** model you fit during your exploration.
+:::
 
 #### Q1: KNN
+
+::: {.callout-tip}
+# Tuning
+
+You *should* include a discussion of your hyperparameter tuning steps in your write-up.
+:::
 
 #### Q2: Logistic Regression
 
@@ -101,15 +151,26 @@ You should certainly try multiple model recipes to find the best model. However,
 
 #### Q4: QDA
 
+
+# Part Two: Interpreting Models
+
 #### Q5: Interpretation
 
-Which predictors were most important to predicting heart attack risk?
+Which predictors were most important to predicting heart attack risk? Were these predictors consistent across the different types of models you fit?
 
 #### Q6: ROC Curve
 
-Plot the ROC Curve for your favorite model from Q1-4.
+Plot the ROC for your favorite model from Q1-4.
+
+::: {.callout-tip}
+# Making an ROC Curve
+
+Here's some code to help you plot your favorite model's ROC:
 
 ```{r}
+#| eval: false
+#| echo: true
+
 ha %>%
   mutate(
     preds = predict(model_final, ha, type = "prob")$.pred_1
@@ -121,51 +182,76 @@ ha %>%
   autoplot()
 ```
 
-# Part Two: Metrics
+:::
+
+# Part Three: Metrics
 
 Consider the following metrics:
 
--   **True Positive Rate** or **Recall** or **Sensitivity** = Of the observations that are truly Class A, how many were predicted to be Class A?
+-   **True Positive Rate** or **Sensitivity** = Of the observations that are truly Class A, how many were predicted to be Class A?
 
 -   **Precision** or **Positive Predictive Value** = Of all the observations classified as Class A, how many of them were truly from Class A?
 
--   **True Negative Rate** or **Specificity** or **Negative Predictive Value** = Of all the observations classified as NOT Class A, how many were truly NOT Class A?
+-   **True Negative Rate** or **Specificity** = Of all the observations classified as NOT Class A, how many were truly NOT Class A?
 
 Compute each of these metrics (cross-validated) for your four models in Part One.
 
-Hint: You can specify which metrics you want to calculate as follows:
+::: {.callout-tip}
+# Specifying Metrics
 
-```{r, eval = FALSE}
+You can specify which metrics you want to calculate as follows:
+
+```{r}
+#| eval: false
+
 my_workflow %>%
   fit_resamples(cvs,
                 metrics = metric_set(accuracy, roc_auc)) %>%
   collect_metrics()
 ```
 
-# Part Three: Validation
+For a list of all available metrics here: <https://yardstick.tidymodels.org/articles/metric-types.html>
+:::
+
+# Part Four: Validation
 
 Before sharing the dataset with you, I set aside a random 10% of the observations to serve as a final validation set.
 
+Download the [`heart_attack_validation.csv`](daheart_attack_validation.csv) and read in the data. Remember to clean these data the **same** way you cleaned the training data. 
+
 ```{r}
-ha_validation <- read_csv("https://www.dropbox.com/s/jkwqdiyx6o6oad0/heart_attack_validation.csv?dl=1")
+#| eval: false
+#| echo: false
+
+ha_validation <- read_csv(here::here("03-Classification", 
+                          "Assignment", 
+                          "data", 
+                          "heart_attack_validation.csv")
+               )
 ```
 
 ```{r}
+#| eval: false
+#| echo: false
+
 ha_validation <- ha_validation %>%
   mutate(
-    sex = factor(sex),
-    cp = factor(cp),
-    restecg = factor(restecg),
-    output = factor(output, levels = c(1,0)) # make "at-risk" the primary target
+    across(.cols = c(sex, cp, restecg), 
+           .fns = ~as.factor(.x)
+           ), 
+    output = factor(output, levels = c(1, 0)
+                    ) # make "at-risk" the primary target
   ) %>%
-  drop_na()
+  drop_na(output)
 ```
 
-Use each of your final models in Part One Q1-4, predict the `output` variable in the validation dataset.
+Use each of your final models in Part One Q1-4 to:
 
-For each, output a confusion matrix, and report the `roc.auc`, the `precision`, and the `recall`.
+- predict the `output` variable in the validation dataset
+- output a confusion matrix
+- report the `roc.auc`, the `precision`, and the `recall`
 
-Compare these values to the cross-validated estimates you reported in Part One and Part Two. Did our measure of model success turn out to be approximately correct for the validation data?
+Compare these values to the cross-validated estimates you reported in Part One. Did our measure of model success turn out to be approximately correct for the validation data?
 
 # Part Four: Discussion
 

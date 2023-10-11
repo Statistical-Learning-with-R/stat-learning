@@ -120,7 +120,4 @@ qda_mod <- discrim_regularized(frac_common_cov = 0) %>%
 Use Cross-Validation to find the best QDA model to predict smoker status.
 
 How does it compare to the LDA, Logistic Regression, and KNN approaches?
-
-# Metrics
-
-https://yardstick.tidymodels.org/articles/metric-types.html
+ 

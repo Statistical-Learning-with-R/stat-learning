@@ -1,0 +1,109 @@
+---
+title: "Classification: LDA and QDA"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+embed-resources: true
+---
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(discrim)
+```
+
+# Part Zero
+
+```{r}
+#| label: data-read
+
+```
+
+
+# Part One: Fitting Models
+
+#### KNN
+
+#### Logistic Regression
+
+#### LDA
+
+#### QDA
+
+
+# Part Two: Interpreting Models
+
+#### Interpretation
+
+#### ROC Curve
+
+
+# Part Three: Metrics
+
+Consider the following metrics:
+
+-   **True Positive Rate** or **Sensitivity** = Of the observations that are truly Class A, how many were predicted to be Class A?
+
+-   **Precision** or **Positive Predictive Value** = Of all the observations classified as Class A, how many of them were truly from Class A?
+
+-   **True Negative Rate** or **Specificity** = Of all the observations classified as NOT Class A, how many were truly NOT Class A?
+
+Compute each of these metrics (cross-validated) for your four models in Part One.
+
+#### KNN
+
+#### Logistic Regression
+
+#### LDA
+
+#### QDA
+
+
+# Part Four: Validation
+
+```{r}
+#| label: validation-data
+
+```
+
+Use each of your final models in Part One to:
+
+- predict the `output` variable in the validation dataset
+- output a confusion matrix
+- report the `roc.auc`, the `precision`, and the `recall`
+
+Compare these values to the cross-validated estimates you reported in Part One. Did our measure of model success turn out to be approximately correct for the validation data?
+
+#### KNN
+
+#### Logistic Regression
+
+#### LDA
+
+#### QDA
+
+# Part Four: Discussion
+
+#### Q1
+
+The hospital faces severe lawsuits if they deem a patient to be low risk, and that patient later experiences a heart attack.
+
+#### Q2
+
+The hospital is overfull, and wants to only use bed space for patients most in need of monitoring due to heart attack risk.
+
+#### Q3
+
+The hospital is studying root causes of heart attacks, and would like to understand which biological measures are associated with heart attack risk.
+
+#### Q4
+
+The hospital is training a new batch of doctors, and they would like to compare the diagnoses of these doctors to the predictions given by the algorithm to measure the ability of new doctors to diagnose patients.
