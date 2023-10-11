@@ -1,0 +1,43 @@
+---
+title: "Classification with KNN, Logistic Regression, LDA & QDA"
+subtitle: "R Cheatsheet"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute: 
+  eval: false
+---
+
+# KNN 
+
+```{r}
+knn_mod <- nearest_neighbor(neighbors = 5) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+```
+
+# Logistic Regression
+
+```{r}
+logit_mod <- logistic_reg() %>%
+  set_mode("classification") %>%
+  set_engine("glm")
+```
+
+# LDA 
+
+```{r}
+lda_mod <- discrim_linear() %>%
+  set_engine("MASS") %>%
+  set_mode("classification")
+```
+
+# QDA 
+
+```{r}
+qda_mod <- discrim_regularized(frac_common_cov = 0) %>% 
+  set_engine('klaR') %>% 
+  set_mode('classification')
+```
+
