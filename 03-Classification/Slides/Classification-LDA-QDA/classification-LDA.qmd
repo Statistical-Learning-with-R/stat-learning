@@ -13,6 +13,8 @@ embed-resources: true
 #| include: false
 #| label: packages
 
+options(htmltools.dir.version = FALSE, digits = 4, scipen=999)
+
 library(tidyverse)
 library(tidymodels)
 library(kknn)
@@ -34,7 +36,7 @@ Given a new observation $x_{new}$, how do we predict $C_{new}$?
 
 </br>
 
-**LDA** Come up with a "cutoff":  if $x_{new} >$ cutoff, predict class A, if not, predict class B.
+**LDA** Come up with a "cutoff": if $x_{new} >$ cutoff, predict class A, if not, predict class B.
 
 ## A simple example
 
@@ -77,11 +79,10 @@ dat %>%
 
 . . .
 
-::: {.incremental}
-- What's our sensitivity?
-- What's our specificity?
+::: incremental
+-   What's our sensitivity?
+-   What's our specificity?
 :::
-
 
 ## What if we move the cutoff?
 
@@ -117,21 +118,19 @@ dat %>%
 
 ## LDA, in General
 
-
 To perform **classification** with **Linear Discriminant Analysis**, we choose the *best dividing line* between the two classes.
 
 . . .
 
 </br>
 
-::: {.large}
+::: large
 The Big Questions
 :::
 
-* What is our definition of **best**?
+-   What is our definition of **best**?
 
-* What if we allow the line to "wiggle"?
-
+-   What if we allow the line to "wiggle"?
 
 ## Example
 
@@ -149,14 +148,13 @@ ins <- ins %>%
   drop_na(smoker)
 ```
 
-
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 Quick Quiz
 :::
 
-::: {.large}
+::: large
 What do we have to change?
 :::
 
@@ -179,7 +177,6 @@ lda_mod <- discrim_linear() %>%
   set_mode("classification")
 ```
 
-
 ## Step 2: Fit our model!
 
 ::: columns
@@ -197,12 +194,10 @@ lda_fit_1 <- lda_mod %>%
 :::
 
 ::: {.column width="45%"}
-::: {.fragment}
-
+::: fragment
 ```{r}
 lda_fit_1 
 ```
-
 :::
 :::
 :::
@@ -211,12 +206,32 @@ lda_fit_1
 
 ```{r}
 #| echo: false
+
+sig <- ins %>% 
+  group_by(smoker) %>% 
+  summarise(var = var(charges)) %>% 
+  summarise(sig = sum(var)) %>% 
+  pull(sig)
+
+start = (1 / (lda_fit_1$fit$means[2] - lda_fit_1$fit$means[1]))
+
+cut_pt1 = (lda_fit_1$fit$means[2]^2 - lda_fit_1$fit$means[1]^2) / 2
+
+cut_pt2 = (sig * log(lda_fit_1$fit$prior[1] - lda_fit_1$fit$prior[2]))
+
+cut = start * (cut_pt1 + cut_pt2) 
+
 ggplot(data = ins, 
        mapping = aes(x = charges, fill = smoker)) +
-  geom_density(alpha = 0.5)
+  geom_density(alpha = 0.5) +
+  scale_x_continuous(labels = label_dollar()) +
+  scale_y_continuous() +
+  labs(x = "Medical Charges", 
+       y = "Density", 
+       fill = "Smoking Status") + 
+  geom_vline(xintercept = cut)
 ```
 
-HOW DO YOU GET THE BOUNDARY FROM THE COEFFICIENTS????
 
 ## Step 3: Make some predictions!
 
@@ -235,10 +250,9 @@ ins %>%
            estimate = pred_smoker)
 ```
 
-
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 What if we want to use more than one predictor?
 :::
 
@@ -265,7 +279,7 @@ lda_fit_2$fit$scaling
 
 $$\text{Score} = 0.001718 \times \text{charges} -0.0444 \times \text{age}$$
 
-Predict "smoker" if Score > 0
+Predict "smoker" if Score \> 0
 
 ## Finding our boundary
 
@@ -290,7 +304,7 @@ my_slope = coefficients[1] /
 
 . . .
 
-</br> 
+</br>
 
 ```{r}
 #| label: add-slope-to-plot
@@ -316,15 +330,14 @@ Compare the accuracy to your KNN and Logistic Regression models (from last class
 
 ## Quadratic Discriminant Analysis
 
-::: {.midi}
+::: midi
 One more time: wiggly style
 :::
 
-
 ## QDA
-  
+
 What if we allow the separating line to be non-linear?
-  
+
 ```{r}
 #| label: qda-model
 qda_mod <- discrim_regularized(frac_common_cov = 0) %>% 
@@ -332,8 +345,7 @@ qda_mod <- discrim_regularized(frac_common_cov = 0) %>%
   set_mode('classification')
 ```
 
-
-In this case, we allow the data in the different categories to have different variances. 
+In this case, we allow the data in the different categories to have different variances.
 
 ## An example scenario
 
@@ -355,7 +367,7 @@ ggplot(dat, aes(x = val, fill = Class)) +
 ```
 
 ## Let's visualize the relationship
-  
+
 ```{r}
 #| echo: false
 #| label: qda-scatterplot
@@ -372,7 +384,7 @@ dat %>%
 ```
 
 ## Visualizing the decision boundary
-  
+
 ```{r}
 #| echo: false
 #| eval: false
