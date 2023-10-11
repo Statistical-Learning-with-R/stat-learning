@@ -77,8 +77,6 @@ dat %>%
   count(Class, pred_class)
 ```
 
-. . .
-
 ::: incremental
 -   What's our sensitivity?
 -   What's our specificity?
@@ -97,7 +95,7 @@ ggplot(dat, mapping = aes(x = val, fill = Class)) +
 
 . . .
 
-Why would we choose an "uneven" cutoff?
+In what scenario would we choose an "uneven" cutoff?
 
 # How'd we do?
 
@@ -170,7 +168,7 @@ The fit?
 
 ```{r}
 #| label: lda-model
-#| code-line-numbers: "|2"
+#| code-line-numbers: "|1-2"
 
 lda_mod <- discrim_linear() %>%
   set_engine("MASS") %>%
@@ -202,7 +200,7 @@ lda_fit_1
 :::
 :::
 
-## Finding the decision boundary
+## Visualizing the decision boundary
 
 ```{r}
 #| echo: false
@@ -231,7 +229,6 @@ ggplot(data = ins,
        fill = "Smoking Status") + 
   geom_vline(xintercept = cut)
 ```
-
 
 ## Step 3: Make some predictions!
 
