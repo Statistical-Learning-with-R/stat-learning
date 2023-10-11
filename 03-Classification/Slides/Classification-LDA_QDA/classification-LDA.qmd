@@ -1,0 +1,396 @@
+---
+title: "Classification with Linear Discriminant Analysis (LDA)"
+format: 
+  revealjs:
+    theme: style.scss
+editor: visual
+execute: 
+  echo: true
+embed-resources: true
+---
+
+```{r}
+#| include: false
+#| label: packages
+
+library(tidyverse)
+library(tidymodels)
+library(kknn)
+library(glmnet)
+library(discrim)
+```
+
+# Our scenario
+
+We have existing observations
+
+$$(x_1, C_1), ... (x_n, C_n)$$
+
+where the $C_i$ are **categories**.
+
+Given a new observation $x_{new}$, how do we predict $C_{new}$?
+
+. . .
+
+</br>
+
+**LDA** Come up with a "cutoff":  if $x_{new} >$ cutoff, predict class A, if not, predict class B.
+
+## A simple example
+
+```{r}
+#| echo: false
+#| label: first-distributions
+
+dat <- tibble(
+  A = rnorm(1000, 10),
+  B = rnorm(1000, 12)
+) %>%
+  pivot_longer(everything(),
+               values_to = "val",
+               names_to = "Class")
+
+ggplot(dat, aes(x = val, fill = Class)) +
+  geom_density(alpha = 0.5) +
+  geom_vline(xintercept = 11) + 
+  labs(x = "Value", 
+       y = "Density") +
+  xlim(c(6, 16))
+```
+
+## How about cutting in the middle?
+
+```{r}
+#| output-location: column
+#| label: lda-first-cut
+
+dat %>%
+  mutate(
+    pred_class = if_else(
+      val > 11, 
+      "B",
+      "A"
+    )
+  ) %>%
+  count(Class, pred_class)
+```
+
+. . .
+
+::: {.incremental}
+- What's our sensitivity?
+- What's our specificity?
+:::
+
+
+## What if we move the cutoff?
+
+```{r}
+#| echo: false
+#| label: lda-second-distributions
+
+ggplot(dat, mapping = aes(x = val, fill = Class)) +
+  geom_density(alpha = 0.5) +
+  geom_vline(xintercept = 10)
+```
+
+. . .
+
+Why would we choose an "uneven" cutoff?
+
+# How'd we do?
+
+```{r}
+#| output-location: column
+#| label: lda-second-cut
+
+dat %>%
+  mutate(
+    pred_class = if_else(
+      val > 10, 
+      "B",
+      "A"
+    )
+  ) %>%
+  count(Class, pred_class)
+```
+
+## LDA, in General
+
+
+To perform **classification** with **Linear Discriminant Analysis**, we choose the *best dividing line* between the two classes.
+
+. . .
+
+</br>
+
+::: {.large}
+The Big Questions
+:::
+
+* What is our definition of **best**?
+
+* What if we allow the line to "wiggle"?
+
+
+## Example
+
+Let's keep hanging out with the insurance dataset.
+
+Suppose we want to use information about insurance charges to predict whether someone is a smoker or not.
+
+```{r, message = FALSE}
+ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
+
+ins <- ins %>%
+  mutate(
+    smoker = factor(smoker)
+  ) %>%
+  drop_na(smoker)
+```
+
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+Quick Quiz
+:::
+
+::: {.large}
+What do we have to change?
+:::
+
+The model?
+
+The recipe?
+
+The workflow?
+
+The fit?
+
+## Step 1: Change the model!
+
+```{r}
+#| label: lda-model
+#| code-line-numbers: "|2"
+
+lda_mod <- discrim_linear() %>%
+  set_engine("MASS") %>%
+  set_mode("classification")
+```
+
+
+## Step 2: Fit our model!
+
+::: columns
+::: {.column width="45%"}
+```{r}
+#| label: lda-fit-smoker
+
+lda_fit_1 <- lda_mod %>%
+  fit(smoker ~ charges, 
+      data = ins)
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+::: {.fragment}
+
+```{r}
+lda_fit_1 
+```
+
+:::
+:::
+:::
+
+## Finding the decision boundary
+
+```{r}
+#| echo: false
+ggplot(data = ins, 
+       mapping = aes(x = charges, fill = smoker)) +
+  geom_density(alpha = 0.5)
+```
+
+HOW DO YOU GET THE BOUNDARY FROM THE COEFFICIENTS????
+
+## Step 3: Make some predictions!
+
+```{r}
+#| label: lda-predict-charges
+preds <- predict(lda_fit_1, 
+                 new_data = ins)
+
+ins <- ins %>%
+  mutate(
+    pred_smoker = preds$.pred_class
+  )
+
+ins %>%
+  accuracy(truth = smoker,
+           estimate = pred_smoker)
+```
+
+
+##  {background-color="#B6CADA"}
+
+::: {.larger}
+What if we want to use more than one predictor?
+:::
+
+## Adding `age` as a predictor
+
+```{r}
+#| label: lda-fit-add-age
+
+lda_fit_2 <- lda_mod %>%
+  fit(smoker ~ charges + age, data = ins)
+
+lda_fit_2
+```
+
+## Finding classification equation
+
+```{r}
+lda_fit_2$fit$scaling
+```
+
+. . .
+
+</br>
+
+$$\text{Score} = 0.001718 \times \text{charges} -0.0444 \times \text{age}$$
+
+Predict "smoker" if Score > 0
+
+## Finding our boundary
+
+$$\text{Score} = 0.001718 \times \text{charges} -0.0444 \times \text{age}$$
+
+$$0 = 0.001718 \times \text{charges} -0.0444 \times \text{age}$$
+
+$$\text{age} = \frac{0.001718}{0.0444} \times \text{charges}$$
+
+$$\text{age} = 0.03869 \times charges$$
+
+## Let's Plot it!
+
+```{r}
+#| label: lda-slope
+coefficients <- lda_fit_2$fit$scaling
+
+my_slope = coefficients[1] / 
+              (-1 *coefficients[2])
+
+```
+
+. . .
+
+</br> 
+
+```{r}
+#| label: add-slope-to-plot
+#| output-location: slide
+ins %>%
+  ggplot(mapping = aes(x = charges, y = age, color = smoker)) +
+  geom_point() +
+  geom_abline(mapping = aes(slope = my_slope, intercept = 0), 
+              lwd = 1.5) +
+  scale_x_continuous(labels = label_dollar()) +
+  labs(x = "Medical Charges", 
+       y = "Age", 
+       color = "Smoking Status")
+```
+
+## Try it! (you know the drill...)
+
+Open [`Activity-Classification-LDA.qmd`](../../Classwork/Activity-Classification-LDA.qmd)
+
+Select the best LDA model for predicting smoker status.
+
+Compare the accuracy to your KNN and Logistic Regression models (from last class).
+
+## Quadratic Discriminant Analysis
+
+::: {.midi}
+One more time: wiggly style
+:::
+
+
+## QDA
+  
+What if we allow the separating line to be non-linear?
+  
+```{r}
+#| label: qda-model
+qda_mod <- discrim_regularized(frac_common_cov = 0) %>% 
+  set_engine('klaR') %>% 
+  set_mode('classification')
+```
+
+
+In this case, we allow the data in the different categories to have different variances. 
+
+## An example scenario
+
+```{r}
+#| echo: false
+#| label: qda-unequal-var
+
+dat <- tibble(
+  A = rnorm(1000, 10, 5),
+  B = rnorm(1000, 15, 1)
+) %>%
+  pivot_longer(everything(),
+               values_to = "val",
+               names_to = "Class")
+
+ggplot(dat, aes(x = val, fill = Class)) +
+  geom_density(alpha = 0.5) +
+  geom_vline(xintercept = 11)
+```
+
+## Let's visualize the relationship
+  
+```{r}
+#| echo: false
+#| label: qda-scatterplot
+
+dat <- tibble(
+  V1 = c(rnorm(100, 10, 5), rnorm(100, 37, 18)),
+  V2 = c(rnorm(100, 15, 1), rnorm(100, 30, 9)),
+  Class = factor(c(rep("A", 100), rep("B", 100)))
+) 
+
+dat %>%
+  ggplot(aes(x = V1, y = V2, col = Class)) +
+  geom_point()
+```
+
+## Visualizing the decision boundary
+  
+```{r}
+#| echo: false
+#| eval: false
+#| label: qda-boundary
+
+qda_wflow <- workflow() %>%
+  add_recipe(recipe(Class ~ V1 + V2, data = dat)) %>%
+  add_model(qda_mod) %>%
+  fit(dat)
+
+qda_wflow %>%
+  horus::viz_decision_boundary(dat)
+```
+
+## Try it!
+
+Open `Activity-Classification-LDA.qmd` again
+
+Select the best QDA model
+
+Compare to prior models
