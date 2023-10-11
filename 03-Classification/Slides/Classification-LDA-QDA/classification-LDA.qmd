@@ -387,7 +387,6 @@ dat %>%
 
 ```{r}
 #| echo: false
-#| eval: false
 #| label: qda-boundary
 
 qda_wflow <- workflow() %>%
