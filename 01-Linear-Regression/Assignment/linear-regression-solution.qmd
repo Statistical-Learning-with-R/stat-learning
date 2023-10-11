@@ -400,35 +400,13 @@ ins_new <- ins_new %>%
 24. Report the MSE for each model's **new** predictions. Based on this, which is the best model to use?
 
 ```{r}
-ins_new %>%
-  rmse(
-    truth = charges,
-    estimate = preds_1
-  )
 
-ins_new %>%
-  rmse(
-    truth = charges,
-    estimate = preds_2
-  )
-
-ins_new %>%
-  rmse(
-    truth = charges,
-    estimate = preds_3
-  )
-
-ins_new %>%
-  rmse(
-    truth = charges,
-    estimate = preds_4
-  )
-
-ins_new %>%
-  rmse(
-    truth = charges,
-    estimate = preds_5
-  )
+ins_new %>% 
+  pivot_longer(cols = starts_with("preds"), 
+               names_to = "model", 
+               values_to = "prediction") %>% 
+  group_by(model) %>% 
+  rmse(truth = charges, estimate = prediction)
 ```
 
 The last model had the best MSE, although the second to last was close. %%%
