@@ -35,6 +35,11 @@ Read pages 129 through 141, stopping after multinomial logistic regression. Also
 
 Here's a helpful video which explains how logistic regression works: <https://youtu.be/yIYKR4sgzI8?si=h_gs42mR6YJ033gW>
 
+## ROC Video
+
+Here's a helpful video which explains what an ROC curve is and how it is used to measure model accuracy:
+<https://youtu.be/4jRBRDbJemM?si=X7YyXji3DRjTc0t5>
+
 ## Concept Quiz -- Due Monday, October 9 at 2:10pm
 
 Suppose we collect data for a group of students in an introductory  statistics class with variables X1 = hours studied, X2 = undergrad GPA, and Y = receive an A. We fit a logistic regression and produce estimated coefficients: $\widehat{\beta_0} = -6$; $\widehat{\beta_1} = 0.05$; $\widehat{\beta_2} = 1$.
