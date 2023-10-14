@@ -1,0 +1,104 @@
+---
+title: "Tree-Based Methods"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: true
+    number-depth: 2
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: source
+execute: 
+  echo: true
+  eval: false
+  include: false
+---
+
+This week we will focus on learning about decision trees and various methods that can be used to build trees. Unlike previous weeks, we **are not** splitting the chapter into components. 
+
+# Textbook Reading
+
+📖 [**Required Reading:** *ISLR Chapter 8 -- Tree-Based Methods*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+::: callout-warning
+# Read the Entire Chapter!
+:::
+
+# Concept Quiz -- Due Monday, October 16 at 2:10pm
+
+::: columns
+::: {.column width="40%"}
+![](images/example-tree.png)
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+**Question 1** -- The decision tree on the left has how many nodes? 
+
+**Question 2** -- The decision tree on the left has how many branches?
+
+**Question 3** -- The decision tree on the left has how many leaves?
+
+:::
+:::
+
+</br>
+
+**Question 4** -- Recursive binary splitting is a "greedy" approach because it [does / does not] look ahead, meaning it considers [splits at a particular step / all possible splits]. 
+
+**Question 5** -- Which approach is a better way to prune decision trees?
+
+- Grow large trees and select a sub-tree that has the lowest test error rate
+- Only make a tree larger (more nodes) if the split decreases the RSS by a specified amount
+
+**Question 6** -- The value of $\alpha$ in cost complexity pruning controls the trade-off between a tree's complexity and its [testing error / fit to the training data].
+
+**Question 7** -- What value(s) should be used when evaluating the quality of a split? (select all that apply)
+
+- accuracy
+- Gini index
+- entropy
+- ROC
+
+**Question 8** -- A regression tree will typically outperform linear regression when there is a [linear / non-linear / additive / interactive] relationship between the predictors (features) and the response. 
+
+**Question 9** -- Which of the following are disadvantages to using decision trees? (select all that apply)
+
+- Trees are incredibly complex and difficult to explain to people
+- Trees tend to have lower predictive accuracy
+- Trees are sensitive to small changes in the data
+- Trees are difficult to tune
+
+**Question 10** -- Bagging reduces the error of a decision tree by using bootstrapping, which resamples [with / without] replacement from the original training dataset to create a new training dataset. 
+
+**Question 11** -- Using a large value of $B$ when bagging decision trees will result in overfitting.
+
+- True
+- False
+
+**Question 12** -- Suppose you are working with a dataset that contains 125 predictor variables and you are interested in using random forests to obtain your decision tree. When building a decision tree, how many of the predictor variables are considered at each split?
+
+- 125
+- 50
+- 25
+- a random sample of predictors from the 125
+
+**Question 13** -- A random forest decorrelates the decision trees because [strong predictors / moderate predictors / weak predictors] cannot dominate the structure of the trees, whereas, [boosting / bagging / BART] results in highly correlated trees
+
+**Question 14** -- Which method typically results in smaller trees?
+
+- bagging
+- random forests
+- boosting
+- BART
+
+**Question 15** -- In boosting, after an initial tree has been fit, a subsequent tree is fit to:
+
+- the response
+- the residuals 
+- the remaining predictor variables
