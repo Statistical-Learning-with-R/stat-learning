@@ -1,0 +1,106 @@
+---
+title: "Decision Trees"
+subtitle: "R Cheatsheet"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute: 
+  eval: false
+---
+
+# Decision Trees
+
+**Step 1**: Recipe
+
+```{r}
+cann_recipe <- recipe(Type ~ ., 
+                     data = cann_clean) %>%
+  step_rm(Strain, Effects, Flavor)
+```
+
+**Step 2**: Model
+```{r}
+tree_mod <- decision_tree() %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+```
+
+**Step 3**: Workflow
+
+```{r}
+tree_wflow <- workflow() %>%
+  add_model(tree_mod) %>% 
+  add_recipe(cann_recipe)
+```
+
+**Step 4**: CV & Fit Model
+
+```{r}
+cann_cvs <- vfold_cv(cann_clean, v = 5)
+
+tree_fit <- tree_wflow %>%
+  fit_resamples(cann_cvs,
+                metrics = metric_set(accuracy, roc_auc, precision, recall)
+                )
+```
+
+**Step 5**: Inspect Metrics
+
+```{r}
+tree_fit %>% collect_metrics()
+```
+
+**Step 6**: Decide on a Model
+
+**Step 7**: Fit the Model & Plot the Model
+
+```{r}
+tree_fitted <- tree_fit_1 %>% 
+  extract_fit_parsnip()
+
+rpart.plot(tree_fitted$fit)
+```
+
+# Tuning Trees
+
+```{r}
+tree_grid <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          min_n(), 
+                          levels = 2)
+```
+
+```{r}
+tree_mod <- decision_tree(cost_complexity = tune(),
+                          tree_depth = tune(),
+                          min_n = tune()) %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+
+tree_wflow <- workflow() %>%
+  add_model(tree_mod) %>% 
+  add_recipe(cann_recipe)
+
+tree_grid_search <-
+  tune_grid(
+    tree_wflow,
+    resamples = cann_cvs,
+    grid = tree_grid
+  )
+
+tuning_metrics <- tree_grid_search %>% 
+  collect_metrics()
+```
+
+# Bagging Trees
+
+More to come!
+
+# Boosting Trees
+
+More to come!
+
+# Random Forests
+
+More to come!
