@@ -8,6 +8,7 @@ title-slide-attributes:
     data-background-size: contain
     data-background-opacity: "0.5"
 editor: source
+embed-resources: true
 execute: 
   echo: true
   error: true
@@ -230,6 +231,9 @@ knn_fit %>% collect_metrics()
 ```
 
 . . .
+
+</br>
+</br>
 
 Woof!
 
@@ -495,7 +499,8 @@ tree_grid_search <-
     grid = tree_grid
   )
 
-tuning_metrics <- tree_grid_search %>% collect_metrics()
+tuning_metrics <- tree_grid_search %>% 
+  collect_metrics()
 ```
 
 ## Tuning
