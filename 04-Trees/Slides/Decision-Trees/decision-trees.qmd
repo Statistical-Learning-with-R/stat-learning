@@ -1,0 +1,538 @@
+---
+title: "Decision Trees"
+format: 
+  revealjs:
+    theme: style.scss
+title-slide-attributes:
+    data-background-image: images/example-tree.png
+    data-background-size: contain
+    data-background-opacity: "0.5"
+editor: source
+execute: 
+  echo: true
+  error: true
+  output: true
+---
+
+```{r}
+#| label: packages
+#| include: false
+library(tidymodels)
+library(kknn)
+library(glmnet)
+library(here)
+library(rpart.plot)
+library(discrim)
+library(tidyverse)
+```
+
+## Setup
+
+Today's data concerns strains of cannabis, which have the types of `sativa`, `indica`, or `hybrid`:
+
+```{r}
+#| label: data-read
+#| message: false
+#| echo: false
+
+cann <- read_csv(here::here("04-Trees", 
+                            "Slides", 
+                            "data",
+                            "cannabis_full.csv")
+                 )
+
+cann
+ 
+```
+
+## Data Cleaning
+
+```{r}
+cann_clean <- cann %>%
+  mutate(
+    Type = factor(Type)
+  ) %>%
+  drop_na(-Strain, -Effects, -Flavor)
+```
+
+::: {.callout-tip}
+# Removing ALL Missing Values
+
+Notice I'm using a `-` before the variables I **do not** want to remove missing values from. 
+:::
+
+
+## Setting-up CV & Declaring a Recipe 
+
+```{r}
+cann_cvs <- vfold_cv(cann_clean, v = 5)
+
+cann_recipe <- recipe(Type ~ ., 
+                     data = cann_clean) %>%
+  step_rm(Strain, Effects, Flavor)
+```
+
+::: {.panel-tabset}
+
+## Inclusing Every Variable
+
+You can use a `.` to stand in for the name of **every** variable in the dataset!
+
+## Removing Variables from Consideration
+
+You can remove variables you **do not** want to use as predictors using the `step_rm()` function. 
+:::
+
+## Previewing the Recipe
+
+```{r}
+#| label: cann-recipe
+#| eval: true
+#| echo: false
+cann_recipe
+```
+
+```
+── Recipe ───────────────────────────────────────────────────────────────────────────────────────────────────
+
+── Inputs 
+Number of variables by role
+outcome:    1
+predictor: 68
+
+── Operations 
+• Variables removed: Strain, Effects, Flavor
+```
+
+
+## Logistic Regression
+
+```{r}
+#| label: logistic-regression
+#| error: true
+#| output: true
+
+logit_mod <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+
+logit_wflow <- workflow() %>%
+  add_recipe(cann_recipe) %>%
+  add_model(logit_mod)
+
+logit_fit <- logit_wflow %>%
+  fit_resamples(cann_cvs)
+
+```
+
+</br>
+
+```
+→ A | warning: ! Logistic regression is intended for modeling binary outcomes, but there are 3 levels in the outcome.
+               ℹ If this is unintended, adjust outcome levels accordingly or see the `multinom_reg()` function.
+→ B | warning: prediction from rank-deficient fit; attr(*, "non-estim") has doubtful cases
+→ C | error:   Failed to compute `roc_auc()`. 
+```
+
+## What happened?
+
+</br>
+
+**Problem 1:** There are **three** categories in `Type`. How do we interpret the log-odds for multiple groups?
+
+</br>
+
+. . .
+
+**Problem 2:**  The model is trying to fit **65** predictor coefficients!  That's a LOT.
+
+## Discriminant Analysis
+
+```{r}
+#| label: lda
+#| error: true
+
+lda_mod <- discrim_linear() %>%
+  set_engine("MASS") %>%
+  set_mode("classification")
+
+lda_wflow <- workflow() %>%
+  add_recipe(cann_recipe) %>%
+  add_model(lda_mod)
+
+lda_fit <- lda_wflow %>%
+  fit_resamples(cann_cvs)
+
+```
+
+</br>
+
+```
+→ A | warning: variables are collinear
+→ B | warning: no non-missing arguments to min; returning Inf
+→ C | error:   variables 15 16 appear to be constant within groups
+```
+
+## What happened now?
+
+</br>
+
+**Problem 1:**  There are still **65** predictors, i.e., 65 dimensions!
+
+. . .
+
+**Problem 2:** Some of these predictors contain duplicate information.
+
+::: {.centered}
+```{r}
+dplyr::select(cann_clean, Dry, Mouth) %>%
+  arrange(desc(Dry))
+```
+:::
+
+## KNN
+
+```{r}
+#| label: knn
+#| error: true
+
+knn_mod <- nearest_neighbor(neighbors = 5) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+
+knn_wflow <- workflow() %>%
+  add_recipe(cann_recipe) %>%
+  add_model(knn_mod)
+
+knn_fit <- knn_wflow %>%
+  fit_resamples(cann_cvs)
+
+```
+
+. . .
+
+</br>
+</br>
+
+No errors!!!!
+
+## How'd we do?
+
+```{r}
+#| label: knn-fit
+knn_fit <- knn_wflow %>%
+  fit_resamples(cann_cvs,
+                metrics = metric_set(accuracy, roc_auc, precision, recall)
+                )
+
+
+knn_fit %>% collect_metrics()
+```
+
+. . .
+
+Woof!
+
+# Decision Trees
+
+## Let's play 20 questions
+
+Is this strain described as "Energetic"?
+
+```{r}
+#| echo: false
+#| label: energetic
+
+cann_clean %>%
+  ggplot(aes(x = factor(Energetic), fill = factor(Type))) +
+  geom_bar(position = "fill") + 
+  labs(x = "Energetic", 
+       y = "Proportion of Observations", 
+       fill = "Marijuana Type")
+```
+
+## Let's play 20 questions.
+
+Is this strain described as tasting like "Pineapple"?
+
+```{r}
+#| echo: false
+#| label: pineapple
+
+cann_clean %>%
+  ggplot(mapping = aes(x = factor(Pineapple), fill = Type)) +
+  geom_bar(position = "fill") + 
+    labs(x = "Pineapple Flavor", 
+       y = "Proportion of Observations", 
+       fill = "Marijuana Type")
+```
+
+## Akinator says...
+
+::: columns
+::: {.column width="40%"}
+![](https://pbs.twimg.com/profile_images/1206579384762679299/hbixlO64_400x400.jpg){fig-alt="An image of a genie putting their hands to their head and contemplating what to guess."}
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+::: {.fragment}
+![](images/akinator.jpg){fig-alt="A image of a genie guessing the type of marajuana as sativa."}
+:::
+:::
+:::
+
+## Declaring a Model 
+
+```{r}
+#| label: decision-model
+
+tree_mod <- decision_tree() %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+```
+
+</br>
+
+::: {.large}
+Specifying a Workflow
+:::
+
+```{r}
+#| label: decision-workflow
+
+tree_wflow <- workflow() %>%
+  add_model(tree_mod) %>% 
+  add_recipe(cann_recipe)
+```
+
+## Decision Trees
+
+```{r}
+#| error: true
+#| label: decision-metrics
+
+tree_fit <- tree_wflow %>%
+  fit_resamples(cann_cvs,
+                metrics = metric_set(accuracy, roc_auc, precision, recall)
+                )
+
+
+tree_fit %>% collect_metrics()
+```
+
+## Inspecting the Fit
+
+```{r}
+#| label: decision-fit
+
+tree_fit_1 <- tree_wflow %>%
+  fit(cann_clean)
+
+tree_fit_1$fit
+
+```
+
+## Decision Trees
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| warning: false
+#| label: rpart-code
+#| eval: false
+
+tree_fitted <- tree_fit_1 %>% 
+  extract_fit_parsnip()
+
+rpart.plot(tree_fitted$fit)
+```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+Note the `rpart.plot()` function lives in the **rpart.plot** package!
+:::
+:::
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: rpart-plot
+
+tree_fitted <- tree_fit_1 %>% 
+  extract_fit_parsnip()
+
+rpart.plot(tree_fitted$fit)
+```
+
+# What might we change?
+
+::: {.large}
+Hyperparameters!
+:::
+
+## Tree Depth
+
+`tree_depth`:  How many splits will we "allow" the tree to make?
+
+  - If we allowed infinite splits, we'd end up with only on observation in each "leaf". This will badly **overfit** the training data!
+  - If we allow only one split, our accuracy won't be that great.
+  - Default in `rpart`:  Up to **30**
+    
+## Minimum Observations
+
+`min_n`:  How many observations have to be in a "leaf" for us to be allowed to split it further?
+
+  - If `min_n` is too small, we're **overfitting**.
+  - If `min_n` is too big, we're not allowing enough **flexibility**.
+  - Default in `rpart`: **20**
+  
+
+## Tuning `min_n`
+
+Let's try varying the minimum number of observations in a leaf between 2 and 20.
+
+```{r}
+tree_grid <- grid_regular(min_n(c(2,20)),
+                          levels = 4)
+
+tree_grid
+```
+
+::: {.callout-caution}
+# Start wide!
+
+Tuning with cross-validation takes a long time!  Do yourself a favor and start with a small but wide grid.
+:::
+
+## Setting up the tuning
+
+```{r}
+#| cache: true
+#| label: tune-min-leaf
+
+tree_mod <- decision_tree(min_n = tune()) %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+
+tree_wflow <- workflow() %>%
+  add_recipe(cann_recipe) %>%
+  add_model(tree_mod)
+
+tree_grid_search <-
+  tune_grid(
+    tree_wflow,
+    resamples = cann_cvs,
+    grid = tree_grid
+  )
+
+tuning_metrics <- tree_grid_search %>% collect_metrics()
+```
+
+## Inspecting the fits
+
+```{r}
+#| label: tune-min-leaf-metrics
+tuning_metrics
+```
+
+::: {.large}
+What's the best choice of `min_n`?
+:::
+
+## What else can we change?
+
+How is `rpart` choosing to stop splitting?
+
+. . .
+
+**cost complexity** = how much metric gain is "worth it" to do another split?
+
+- Default:  Split must increase `accuracy` by at least 0.01.
+  
+
+## Cost complexity 
+
+```{r}
+#| cache: true
+#| label: cost-depth-min-leaf-grid
+
+tree_grid <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          min_n(), 
+                          levels = 2)
+
+tree_grid
+
+```
+
+## Cost Complexity
+
+```{r}
+#| cache: true
+#| label: tune-tree-complexity-depth-min-leaf
+
+tree_mod <- decision_tree(cost_complexity = tune(),
+                          tree_depth = tune(),
+                          min_n = tune()) %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+
+tree_wflow <- workflow() %>%
+  add_model(tree_mod) %>% 
+  add_recipe(cann_recipe)
+
+tree_grid_search <-
+  tune_grid(
+    tree_wflow,
+    resamples = cann_cvs,
+    grid = tree_grid
+  )
+
+tuning_metrics <- tree_grid_search %>% collect_metrics()
+```
+
+## Tuning
+
+```{r}
+#| label: tune-tree-complexity-depth-min-leaf-metrics
+tuning_metrics
+```
+
+## Tuning
+
+```{r}
+#| label: tune-tree-complexity-depth-min-leaf-accuracy
+
+tuning_metrics %>%
+  filter(.metric == "accuracy") %>%
+  slice_max(mean)
+```
+
+</br>
+
+```{r}
+#| label: tune-tree-complexity-depth-min-leaf-roc
+
+tuning_metrics %>%
+  filter(.metric == "roc_auc") %>%
+  slice_max(mean)
+```
+
+## Try it!
+
+Open [`Activity-Decision-Tree`](../../Classwork/Activity-Decision-Trees.qmd)
+
+1. Fit a final model with the selected hyperparameters
+
+2. Report some metrics for the final model
+
+3. Plot the tree (look at the previously provided code)
+
+4. Interpret the first two levels of splits in plain English.
