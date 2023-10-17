@@ -584,17 +584,23 @@ I would choose the linear model without the polynomial term, because transformed
 
 20. If your only goal were **prediction** on future data, which of the candidate models would you have chosen? Why?
 
-In this case, I would choose KNN with K = 14, since it had the lowest MSE on the validation set and in cross-validation studies.
+In this case, I would choose KNN with K = 12, since it had the lowest MSE on the validation set and in cross-validation studies.
 
 ## Standardization
 
 21. Consider your final best least-squares regression model from Q9. Suppose we fit this model again, but this time, we normalize **all** of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true.
 
-Absolutely!
+The coefficients will change, because when you normalize, you change the scale of the values of the predictors.
 
-In fact, ideally we should have normalized all the quantitative variables from the start.
+However, the significance of the coefficients and the performance of the model will not change, because you are not meaningfully changing the model assumptions in any way.
 
-KNN is based on distances between observations. If we do not normalize, variables measured on a large scale will weigh more heavily in the calculation.  Normalizing all the variables evens the playing field and changes the model assumptions, so the model performance will be different.
+<!-- 22. Consider your final best KNN model from Q9. Suppose we fit this model again, but this time, we normalize **all** of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true. -->
+
+<!-- Absolutely! -->
+
+<!-- (In fact, ideally we should have normalized all the quantitative variables from the start.) -->
+
+<!-- KNN is based on distances between observations. If we do not normalize, variables measured on a large scale will weigh more heavily in the calculation.  Normalizing all the variables evens the playing field and changes the model assumptions, so the model performance will be different. -->
 
 ## Quantitative or Categorical?
 

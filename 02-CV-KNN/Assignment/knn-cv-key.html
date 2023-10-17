@@ -3914,16 +3914,19 @@ dbl (7): log_gdp_per_capita, healthy_life_expectancy, social_support, freedo...
 <ol start="20" type="1">
 <li>If your only goal were <strong>prediction</strong> on future data, which of the candidate models would you have chosen? Why?</li>
 </ol>
-<p>In this case, I would choose KNN with K = 14, since it had the lowest MSE on the validation set and in cross-validation studies.</p>
+<p>In this case, I would choose KNN with K = 12, since it had the lowest MSE on the validation set and in cross-validation studies.</p>
 </section>
 <section id="standardization" class="level2">
 <h2 class="anchored" data-anchor-id="standardization">Standardization</h2>
 <ol start="21" type="1">
 <li>Consider your final best least-squares regression model from Q9. Suppose we fit this model again, but this time, we normalize <strong>all</strong> of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true.</li>
 </ol>
-<p>Absolutely!</p>
-<p>In fact, ideally we should have normalized all the quantitative variables from the start.</p>
-<p>KNN is based on distances between observations. If we do not normalize, variables measured on a large scale will weigh more heavily in the calculation. Normalizing all the variables evens the playing field and changes the model assumptions, so the model performance will be different.</p>
+<p>The coefficients will change, because when you normalize, you change the scale of the values of the predictors.</p>
+<p>However, the significance of the coefficients and the performance of the model will not change, because you are not meaningfully changing the model assumptions in any way.</p>
+<!-- 22. Consider your final best KNN model from Q9. Suppose we fit this model again, but this time, we normalize **all** of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true. -->
+<!-- Absolutely! -->
+<!-- (In fact, ideally we should have normalized all the quantitative variables from the start.) -->
+<!-- KNN is based on distances between observations. If we do not normalize, variables measured on a large scale will weigh more heavily in the calculation.  Normalizing all the variables evens the playing field and changes the model assumptions, so the model performance will be different. -->
 </section>
 <section id="quantitative-or-categorical" class="level2">
 <h2 class="anchored" data-anchor-id="quantitative-or-categorical">Quantitative or Categorical?</h2>
