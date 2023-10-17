@@ -1,0 +1,607 @@
+---
+title: "Assignment 2: Cross-Validation and K-Nearest-Neighbor"
+author: "Solution by Dr. Theobold"
+format: html
+editor: source
+embed-resources: true
+execute: 
+  echo: fenced
+---
+
+# The Data
+
+```{r}
+#| label: packages
+#| message: false
+#| warning: false
+#| echo: fenced
+
+library(tidyverse)
+library(tidymodels)
+
+set.seed(3849)
+```
+
+The dataset we will use for this assignment pertains to the [World Happiness Report](https://worldhappiness.report/).  The following dataset contains information about six measurements of well-being in a country:
+
+* The Gross Domestic Product (GDP) per capita  *(dollars; log scale)*
+
+* The life expectancy at birth of a healthy citizen *(years)*
+
+* The social support of friends and family *(scale of 0-1, based on surveys)*
+
+* The freedom to make life choices in the society *(scale of 0-1, based on surveys)*
+
+* The generosity of the society *(scale of -1 to 1, based on surveys)*
+
+* Perception of corruption in government of the country *(scale of 0-1, based on surveys)*
+
+The data also records the year of measurement and the region of the country.
+
+Although it is not a formal question on this assignment, you should begin by reading in the dataset and briefly exploring and summarizing the data, and by adjusting any variables that need cleaning.
+
+```{r}
+#| echo: fenced
+#| message: false
+#| label: data-read
+
+whr <- read_csv(here::here("02-CV-KNN", 
+                           "Assignment", 
+                           "data", 
+                           "whr_clean.csv")
+                )
+
+```
+
+```{r}
+#| label: data-clean
+
+whr <- whr %>%
+  mutate(
+    regional_indicator = factor(regional_indicator)
+  ) 
+```
+
+# Happiness Scores
+
+The World Happiness Report uses their own, privately-determined formula to combine the six measures of life quality into a "happiness score".  The dataset also contains this score, on a scale from 1 to 10.
+
+*Hint: The following two questions require you to fit only one model each.*
+
+## Part 1: Happiness Over Time
+
+1.  Is the happiness in the world changing linearly over time? Fit a simple linear model and interpret the results to address this question.
+
+```{r}
+#| label: year-lm
+
+lin_mod <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+
+whr_fit <- lin_mod %>%
+  fit(happiness_score ~ year, data = whr)
+
+whr_fit$fit %>% 
+  broom::tidy()
+
+```
+
+No, the linear regression with `year` as a predictor has a large p-value, indicating there is little to no evidence of a linear relationship between happiness and time. 
+
+2.  Was the happiness score approximately the same in all the years? Convert `year` to a factor variable, and fit a simple linear model to address this question.
+
+```{r}
+#| label: year-anova
+
+whr_fit_2 <- lin_mod %>%
+  fit(happiness_score ~ factor(year), data = whr)
+
+whr_fit_2$fit %>% 
+  broom::tidy()
+```
+
+Yes, the coefficients for every year have very small p-values ($p$ < .000185). This suggests the average happiness rating for each year is substantially different from the baseline (first) year (2005).  
+
+## Part 2: Happiness Equation
+
+3.  How is each of the six measures of life quality weighted in calculating this score? Fit a model to estimate the weights.
+
+*Hint: It is important to put all the metrics on the same scale first, since they are all in different units.*
+
+```{r}
+whr_rec <- recipe(happiness_score ~ log_gdp_per_capita + 
+                    healthy_life_expectancy + 
+                    social_support + 
+                    freedom_to_make_life_choices + 
+                    generosity + 
+                    perceptions_of_corruption,
+                  data = whr) %>%
+  step_normalize(all_numeric_predictors())
+
+whr_wflow <- workflow() %>%
+  add_model(lin_mod) %>% 
+  add_recipe(whr_rec)
+
+whr_fit <- whr_wflow %>%
+  fit(whr) %>%
+  extract_fit_parsnip() 
+```
+
+I first standardized all six variables, to make sure they are on the same scale regardless of how they are measured.
+
+```{r}
+#| label: variable-weights-glance
+
+whr_fit$fit %>%
+  broom::glance()
+```
+
+These six variables explain 74.86% of the variance in happiness scores; presumably the rest of the variability in happiness score is due to changes in the WHR's formula from year to year.
+
+4.  Which measures of life quality does the WHR consider to be most important to a country's happiness?
+
+```{r}
+#| label: variable-weights-tidy
+
+whr_fit$fit %>%
+  broom::tidy()
+```
+
+The (log) GDP per capita was the most important metric (coeff = 0.41) affecting happiness.  Next were social support (0.275) and life expectancy (0.225), followed by freedom of choice (0.149), and last generosity and perception of corruption (both 0.118, with corruption being a detractor from happiness).
+
+# Part Two:  Predicting life expectancy (linear model)
+
+Suppose we would like to know how various quality-of-life measurements impact a 
+country's life expectancy.  We plan to use the other five metrics, as well as the 
+region of the country, to try to predict the life expectancy.
+
+Explore many possible candidate models.  
+
+## Part 1: Summary of Approach
+
+6.  Write a short description (bullet points are fine) of your process in narrowing down your model.
+
+7.  How did you approach this problem, without spending hours upon hours fitting and cross-validating zillions of models?
+
+*(Answers will vary)*
+
+My approach is to visualize each variable against the response.  For example, in the plots below, it appears that `perceptions_of_corruption` has a very weak relationship with life expectancy, but it might benefit from a polynomial transformation to spread the data out a bit.  `social_support` appears to have a strong relationship with the response.
+
+```{r}
+#| label: exploratory-plots
+whr %>%
+  ggplot(mapping = aes(x = perceptions_of_corruption, y = healthy_life_expectancy)) +
+  geom_point() + 
+  labs(x = "Perceptions of Corruption", 
+       y = "Life Expectancy (Years)")
+
+whr %>%
+  ggplot(mapping = aes(x = perceptions_of_corruption^2, y = healthy_life_expectancy)) +
+  geom_point() +
+  labs(x = "Perceptions of Corruption (Polynomial)", 
+       y = "Life Expectancy (Years)")
+
+whr %>%
+  ggplot(mapping = aes(x = social_support, y = healthy_life_expectancy)) +
+  geom_point() +
+  labs(x = "Social Support", 
+       y = "Life Expectancy (Years)")
+
+```
+
+I then add variables to the model one by one, checking the R-squared at each fit.  When the R-squared changes hugely (e.g., over 5%), I keep the variable.  When it changes only a little, I use cross-validation to see if the improvement is overfitting or meaningful.
+
+## Part 2: Three Candidates
+
+8.  Choose the three best candidate models among those you tried.
+
+```{r}
+whr_rec_1 <- recipe(healthy_life_expectancy ~ 
+                      log_gdp_per_capita + 
+                      social_support + 
+                      freedom_to_make_life_choices +
+                      year + 
+                      perceptions_of_corruption,
+                    data = whr)
+
+whr_rec_2 <- whr_rec_1 %>%
+  step_naomit(perceptions_of_corruption, skip = TRUE) %>%
+  step_poly(perceptions_of_corruption, degree = 2)
+
+whr_rec_3 <- recipe(healthy_life_expectancy ~ 
+                      log_gdp_per_capita + 
+                      social_support + 
+                      freedom_to_make_life_choices +
+                      year,
+                    data = whr) 
+```
+
+Top 3 models:
+
+::: columns
+::: {.column width="30%"}
+Model 1: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year`, `perceptions_of_corruption` (all variables but `generosity` and `regional_indicator`)
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+Model 2: Same as model 1, but removing the missing values from `perceptions_of_corruption` and using a quadratic term for `perceptions_of_corruption`. 
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+Model 3: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year` (removing `perceptions_of_corruption`)
+:::
+:::
+ 
+9.  Supply your code and results for comparing these models, and discuss how you decided which *one* model was the best one.
+
+```{r}
+#| label: cv
+whr_cv <- vfold_cv(whr, v = 5)
+```
+
+Top 3 models:
+
+::: columns
+::: {.column width="30%"}
+Model 1: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year`, `perceptions_of_corruption` (all variables but `generosity` and `regional_indicator`)
+
+```{r}
+workflow() %>%
+  add_model(lin_mod) %>%
+  add_recipe(whr_rec_1) %>%
+  fit_resamples(whr_cv) %>%
+  collect_metrics()
+```
+
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+Model 2: Same as model 1, but removing the missing values from `perceptions_of_corruption` and using a quadratic term for `perceptions_of_corruption`. 
+
+```{r}
+workflow() %>%
+  add_model(lin_mod) %>%
+  add_recipe(whr_rec_2) %>%
+  fit_resamples(whr_cv) %>%
+  collect_metrics()
+```
+
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+Model 3: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year` (removing `perceptions_of_corruption`)
+
+```{r}
+workflow() %>%
+  add_model(lin_mod) %>%
+  add_recipe(whr_rec_3) %>%
+  fit_resamples(whr_cv) %>%
+  collect_metrics()
+```
+
+:::
+:::
+
+Based on the above, the best model is the one that **does** include perceptions of corruption.  It's almost exactly the same whether we square or not, so for simplicity, we'll use the non-polynomial model.
+
+## Part 3: Final Model
+
+10. Summarize the results from your final model. Don't forget to fit your final model on the **full** dataset, even if you used *test / training* data or *cross-validation* during the model selection process.
+
+```{r}
+#| label: final-model-fit
+
+whr_final <- workflow() %>%
+  add_model(lin_mod) %>%
+  add_recipe(whr_rec_1) %>%
+  fit(whr)
+
+pull_workflow_fit(whr_final) %>% 
+  broom::tidy()
+```
+
+We are able to explain about 75% of the variability in life expectancy with these five measures. 
+
+11. Include a plot of the residuals and discussion of what you see, and interpretations of the coefficients and metrics.
+
+```{r}
+#| label: residual-plot
+
+whr %>%
+  mutate(
+    preds = predict(whr_final, new_data = whr)$.pred,
+    resids = healthy_life_expectancy - preds
+  ) %>%
+  ggplot(mapping = aes(x = healthy_life_expectancy, y = resids)) +
+  geom_point() +
+  labs(x = "Life Expectancy (Years)", 
+       y = "Residuals (Years)")
+```
+
+The residuals are mostly a random cloud around zero, which is good. However, there are some residuals at the lower end that seem to have a bit of a pattern, which is concerning---perhaps our models is missing some important information for the countries with lower life expectancy.
+
+# Predicting Life Expectancy -- K-Nearest-Neighbors
+
+Now we will find the best KNN model for predicting life expectancy.
+
+Consider only the three top candidate models from **Q8**.
+
+## Part 1: Tuning K
+
+12. For **each** of your top three candidate models (from Q8), find the best choice of **K**. Show all your work, and provide a brief summary at the end (e.g., "For Model 1, we choose a K of [something] because [reasons]. For Model 2, ...")
+
+```{r}
+#| label: k-grid
+whr_clean <- whr %>%
+  drop_na()
+
+whr_cv_clean <- vfold_cv(whr_clean, v = 5)
+
+knn_spec_tune <- nearest_neighbor(neighbors = tune()) %>%
+  set_mode("regression") %>%
+  set_engine("kknn")
+
+k_grid <- grid_regular(neighbors(c(2, 20)), 
+                       levels = 5)
+```
+
+::: columns
+::: {.column width="30%"}
+**Model 1**
+
+```{r}
+tune_1 <- workflow() %>%
+  add_model(knn_spec_tune) %>%
+  add_recipe(whr_rec_1) %>%
+  tune_grid(
+    resamples = whr_cv_clean,
+    grid = k_grid
+  ) %>%
+  collect_metrics()
+
+tune_1 %>% 
+  group_by(.metric) %>% 
+  arrange(desc(mean))
+
+```
+
+Lowest RMSE and highest R-squared occurs at k = 11, but k = 15 is only 0.01 off of these values.
+
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+**Model 2**
+
+```{r}
+tune_2 <- workflow() %>%
+  add_model(knn_spec_tune) %>%
+  add_recipe(whr_rec_2) %>%
+  tune_grid(
+    resamples = whr_cv_clean,
+    grid = k_grid
+  ) %>%
+  collect_metrics()
+
+tune_2 %>% 
+  group_by(.metric) %>% 
+  arrange(desc(mean))
+```
+
+The lowest RMSE is tied at k = 11 and k = 15. While the highest R-squared occurs at k = 15, this is only 0.001 better than k = 11. 
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+**Model 3**
+
+```{r}
+tune_3 <- workflow() %>%
+  add_model(knn_spec_tune) %>%
+  add_recipe(whr_rec_3) %>%
+  tune_grid(
+    resamples = whr_cv_clean,
+    grid = k_grid
+  ) %>%
+  collect_metrics()
+
+tune_3 %>% 
+  group_by(.metric) %>% 
+  arrange(desc(mean))
+```
+
+Lowest RMSE and highest R-squared occurs at k = 15, but these values are practically tied with the RMSE and R-squared at k = 11 and k = 20.
+:::
+:::
+
+
+Among these three, Model 1 again has the best performance, but the closeness of the results from k = 11 and k = 15 warrant us checking the range of k more closely. 
+
+#### Q2: Best model
+
+Fit and report your single best model from Q1.
+
+You should include:
+
+* An argument for your choice of K, including a plot.
+
+* A plot of the residuals
+
+```{r}
+#| label: knn-finer-grid
+
+k_grid_finer <- grid_regular(neighbors(c(11, 19)), 
+                             levels = 8)
+
+tune_final <- workflow() %>%
+  add_model(knn_spec_tune) %>%
+  add_recipe(whr_rec_1) %>%
+  tune_grid(
+    resamples = whr_cv_clean,
+    grid = k_grid_finer
+  ) %>%
+  collect_metrics()
+
+tune_final %>% 
+  group_by(.metric) %>% 
+  arrange(desc(mean))
+
+tune_final %>%
+  mutate(.metric = if_else(.metric == "rsq", 
+                           "R-Squared", 
+                           "RMSE")
+         ) %>% 
+  ggplot(mapping = aes(x = neighbors, y = mean)) +
+  geom_line() +
+  scale_x_continuous(limits = c(11, 19), breaks = seq(11, 19, by = 1)) +
+  facet_wrap(~.metric, scales = "free") +
+  labs(x = "Number of Neighbors", 
+       y = "Mean")
+
+```
+
+Highest R-squared is at 12.  Lowest RMSE is at 12.  So, let's go with 12!
+
+```{r}
+
+knn_spec <- nearest_neighbor(neighbors = 12) %>%
+  set_mode("regression") %>%
+  set_engine("kknn")
+
+final_knn <- workflow() %>%
+  add_model(knn_spec) %>%
+  add_recipe(whr_rec_1) %>%
+  fit(whr_clean)
+
+whr_clean %>%
+  mutate(
+    preds = predict(final_knn, whr_clean)$.pred,
+    resids = healthy_life_expectancy - preds
+  ) %>%
+  ggplot(aes(x = preds, y = resids)) +
+  geom_point() + 
+  labs(x = "Predicted Life Expectancy (Years)", 
+       y = "Residual (Years)")
+```
+
+These residuals looks pretty good! They are around 0 and not strongly patterned.
+
+If we want to get fancy, there's some concern about heteroskedacisity, since it seems that the spread of the residuals gets smaller as the life expectancy gets larger. However, this only matters in linear models.
+
+# Predicting on New Data
+
+The following code will load up a dataset of the World Happiness Report from 2021, pertaining to happiness measurements in the year 2020. We sometimes call this new data - that was not involved in the **cross-validation** process or in the final model fitting - the **validation** set. It is the "Ultimate" test set, that only gets to be used once ever.
+
+```{r}
+whr_new <- read_csv(here::here("02-CV-KNN", 
+                               "Assignment", 
+                               "data", 
+                               "whr_2020.csv")
+                    )
+```
+
+14. Use your **one** best *least-squares regression* model (Q9) to predict the life expectancy of all countries.
+
+```{r}
+final_mod_ls <- workflow() %>%
+  add_model(lin_mod) %>%
+  add_recipe(whr_rec_1) %>%
+  fit(whr)
+
+whr_new <- whr_new %>%
+  mutate(
+    preds_ls = predict(final_mod_ls, new_data = whr_new)$.pred
+  )
+
+whr_new %>%
+  rmse(
+    truth = healthy_life_expectancy,
+    estimate = preds_ls
+  )
+```
+
+15. Use your **one** best *KNN* model (Q13) to predict the life expectancy of all countries.
+
+```{r}
+final_mod_knn <- workflow() %>%
+  add_model(knn_spec) %>%
+  add_recipe(whr_rec_1) %>%
+  fit(whr)
+
+whr_new <- whr_new %>%
+  mutate(
+    preds_knn = predict(final_mod_knn, new_data = whr_new)$.pred
+  )
+
+whr_new %>%
+  rmse(
+    truth = healthy_life_expectancy,
+    estimate = preds_knn
+  )
+```
+
+16. Which model did a better job predicting the true values in the new data?
+
+The KNN model k = 12 was the overall winner!
+
+# Part Five:  Discussion Questions
+
+For these questions, you do __not__ have to actually perform any of the computations described.
+However, if the conceptual answer is not obvious to you, it may help to do so!
+
+### Parametric and Non-Parametric
+
+17. Make an argument for why a **parametric** method, like least-squares regression, might be preferred in this task.
+
+If we are trying to understand what factors drive a country's life expectancy, so that we can implement policy to improve well-being, the parametric model will be better. We'll be able to interpret the coefficients as measures of the relationship between predictors and response.
+
+18. Then make an argument for why a **non-parametric** method, like K-Nearest-Neighbors, might be preferred.
+
+If we are trying to use current information to accurately predict the life expectancy next year in a particular country, it may be that a non-parametric method performs better.
+
+## Interpretation and Prediction
+
+19. If your only goal were **interpretation**, which of the candidate models (from *any* section of the assignment) would you have chosen? Why?
+
+I would choose the linear model without the polynomial term, because transformed variables are harder to interpret and parametric methods are better for interpretation.
+
+20. If your only goal were **prediction** on future data, which of the candidate models would you have chosen? Why?
+
+In this case, I would choose KNN with K = 14, since it had the lowest MSE on the validation set and in cross-validation studies.
+
+## Standardization
+
+21. Consider your final best least-squares regression model from Q9. Suppose we fit this model again, but this time, we normalize **all** of the quantitative variables. Will anything change? Give a (conceptual) argument for why this is true.
+
+Absolutely!
+
+In fact, ideally we should have normalized all the quantitative variables from the start.
+
+KNN is based on distances between observations. If we do not normalize, variables measured on a large scale will weigh more heavily in the calculation.  Normalizing all the variables evens the playing field and changes the model assumptions, so the model performance will be different.
+
+## Quantitative or Categorical?
+
+In Part One, Q1, you discovered that (spoiler alert!) the `year` variable did **not** have a linear relationship with the `happiness_score`, but that when we treated `year` as categorical, it did have some relationship.
+
+22. Suppose we add the predictor `year` to our final model as a **categorical variable** and fit the model on all the data. Then, we use this new model to predict on the 2020 data. What is wrong with this plan?
+
+If "year" is a categorical variable, we expect future data to be limited to the known categories.  But 2020 is not a category in the data up through 2019!
+
+

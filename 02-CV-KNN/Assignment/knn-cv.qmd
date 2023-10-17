@@ -3,7 +3,7 @@ title: "Assignment 2: Cross-Validation and K-Nearest-Neighbors"
 author: "Due Monday, October 9 at 5pm"
 format: html
 embed-resources: true
-editor: visual
+editor: source
 ---
 
 # Instructions
@@ -76,9 +76,9 @@ The World Happiness Report uses their own, privately-determined formula to combi
 
 ## Part 2: Happiness Equation
 
-3.  How is each of the six measures of life quality weighted in calculating this score? Fit a model to estimate the weights and interpret these values. 
+3.  How is each of the six measures of life quality weighted in calculating this score? Fit a model to estimate the weights.
 
-5.  Which measures of life quality does the WHR consider to be most important to a country's happiness?
+4.  Which measures of life quality does the WHR consider to be most important to a country's happiness?
 
 *Hint: It is important to put all the metrics on the SAME scale first, since they are all in different units.*
 
@@ -124,9 +124,7 @@ As I expect your analysis to be reproducible, your assignment should keep a reco
 
 ## Part 1: Summary of Approach
 
-6.  Write a short description (bullet points are fine) of your process in narrowing down your model.
-
-7.  How did you approach this problem, without spending hours upon hours fitting and cross-validating zillions of models?
+6.  Write a short description (bullet points are fine) of your process in narrowing down your model. In other words, how did you approach this problem without spending hours upon hours fitting and cross-validating zillions of models?
 
 ::: callout-tip
 # Example Summary
