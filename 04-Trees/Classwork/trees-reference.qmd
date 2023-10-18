@@ -20,6 +20,7 @@ cann_recipe <- recipe(Type ~ .,
 ```
 
 **Step 2**: Model
+
 ```{r}
 tree_mod <- decision_tree() %>%
   set_engine("rpart") %>%
@@ -95,12 +96,105 @@ tuning_metrics <- tree_grid_search %>%
 
 # Bagging Trees
 
-More to come!
+**Step 1**: Recipe (same as before)
 
-# Boosting Trees
+**Step 2**: Model
 
-More to come!
+```{r}
+bag_tree_mod <- bag_tree() %>%
+  set_engine("rpart", times = 5) %>%
+  set_mode("classification")
+```
+
+**Step 3**: Workflow
+
+```{r}
+bag_tree_wflow <- workflow() %>%
+  add_recipe(cann_recipe) %>%
+  add_model(bag_tree_spec)
+```
+
+**Step 4**: Fit Model 
+
+```{r}
+bag_tree_fit <- bag_tree_wflow %>%
+  fit(cann)
+```
+
+**Step 5**: Inspect Models
+
+```{r}
+bag_tree_fit %>% 
+  extract_fit_parsnip()
+```
 
 # Random Forests
 
-More to come!
+**Step 0**: Select a Subset of Predictors
+
+```{r}
+cann_reduced <- cann %>%
+  select(Type, 
+         sample(5:65, size = 30)
+         )
+```
+
+**Step 1**: Recipe on the Subset Data
+
+```{r}
+cann_recipe_2 <- recipe(Type ~ ., 
+                     data = cann_reduced)
+```
+
+**Step 2**: Model
+
+```{r}
+rf_mod <- rand_forest(mtry = 30) %>%
+  set_engine("ranger") %>%
+  set_mode("classification")
+```
+
+**Step 3**: Workflow (same as before)
+
+**Step 4**: Fit Model (same as before)
+
+**Step 5**: Inspect Model (same as before)
+
+# Tuning Forests
+
+```{r}
+mtry_grid <- grid_regular(mtry(c(1, 10)), 
+                          levels = 5)
+```
+
+::: {.callout-tip}
+# Choosing Variable Subsets
+
+`mtry` allows you to control how many variables are considered (out of the total). The code above allows between 1 and 10 variables to be included.
+:::
+
+```{r}
+rf_spec <- rand_forest(mtry = tune()) %>%
+  set_engine("ranger") %>%
+  set_mode("classification")
+
+rf_wflow <- workflow() %>%
+  add_model(rf_mod) %>%
+  add_recipe(cann_recipe)
+
+rf_fit <- rf_wflow %>%
+  tune_grid(
+    grid = mtry_grid,
+    resamples = cann_cvs
+    ) 
+
+rf_fit %>% 
+  collect_metrics()
+
+```
+
+::: {.callout-tip}
+# Tuning Other Hyperparameters
+
+You can also tune `min_n` and `trees` with random forests! 
+:::
