@@ -7,7 +7,7 @@ format:
     code-line-numbers: true
     code-tools: true
     self-contained: true
-editor: visual
+editor: source
 execute:
   message: false
 ---
@@ -29,7 +29,6 @@ library(baguette)
 library(janitor)
 ```
 
-
 # Dataset 1: Mushrooms
 
 The first dataset we will study today concerns mushrooms that grow in the wild. An expert mushroom forager can identify the species by its appearance, and determine if the mushroom is edible or poisonous.
@@ -49,7 +48,6 @@ mushrooms <- mushrooms %>%
 mushrooms <- mushrooms %>%
   dplyr::select(-veil_type)
 ```
-
 
 You can find further documentation of the dataset here: https://www.kaggle.com/uciml/mushroom-classification
 
@@ -90,7 +88,6 @@ The Sales division of the company wants to understand how customer demographics 
 ```{r}
 tele <- read_csv("https://www.dropbox.com/s/9dymy30v394ud8h/Telecust1.csv?dl=1")
 ```
-
 
 Further documentation of this data can be found here: https://www.kaggle.com/prathamtripathi/customersegmentation
 

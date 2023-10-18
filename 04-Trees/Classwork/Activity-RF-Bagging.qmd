@@ -7,7 +7,7 @@ format:
     code-line-numbers: true
     code-tools: true
     self-contained: true
-editor: visual
+editor: source
 execute:
   message: false
 ---

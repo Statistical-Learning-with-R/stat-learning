@@ -1,0 +1,220 @@
+---
+title: "Assignment 4: Decision Trees"
+author: "Solution by Dr. Theobold"
+format: html
+editor: visual
+---
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(tidymodels)
+library(rpart.plot)
+library(discrim)
+library(baguette)
+library(janitor)
+
+set.seed(87935)
+```
+
+
+# Dataset 1:  Mushrooms
+
+The first dataset we will study today concerns mushrooms that grow in the wild.
+An expert mushroom forager can identify the species by its appearance, and determine
+if the mushroom is edible or poisonous.  
+
+Can we train a model to do the same?
+
+Read the data in as follows.  (You do need the extra bit of code in the `read_csv` function, make sure you copy it over.)
+
+```{r}
+mushrooms <- read_csv("https://www.dropbox.com/s/jk5q3dq1u63ey1e/mushrooms.csv?dl=1",
+                      col_types = str_c(rep("c", 23), collapse = "")) 
+
+```
+
+You can find further documentation of the dataset here: https://www.kaggle.com/uciml/mushroom-classification
+
+```{r}
+
+# make all variables factors
+# clean up variable names
+
+mushrooms <- mushrooms %>%
+  mutate_all(factor) %>%
+  janitor::clean_names()
+
+# check variable counts
+
+mushrooms %>% summary()
+
+# drop veil type because it's pointless
+
+mushrooms <- mushrooms %>%
+  dplyr::select(-veil_type)
+```
+
+## Part One: A perfect tree
+
+Fit a single decision tree to the full mushroom data, and plot the resulting tree.
+
+You should find that almost all mushrooms are perfectly classified; that is, the resulting leaf nodes are very close to 100% pure.
+
+Based on the tree that results, suggest a "nature guide" that tells people which mushrooms are safe to eat and which aren't.
+
+```{r}
+tree_spec <- decision_tree() %>%
+  set_engine("rpart") %>%
+  set_mode("classification")
+
+mush_fit <- tree_spec %>%
+  fit(class ~ ., data = mushrooms)
+
+mush_fit$fit %>% rpart.plot()
+```
+
+
+First, check if your mushroom smells like creosote or smells fishy, foul, musty, pungent, or spicy.  If any of these scents are present, don't eat it, it's poisonous!
+
+Next, check the spore print color. If it's green or brown, don't eat it!
+
+If you've made it through those two checks, you only have a 1% chance of eating a poisonous mushroom.
+
+## Part Two: ... or is it?
+
+Before we send people off into the world to each poisonous mushrooms, we want to be confident of our guidelines.  The decision tree in Q1 may achieve perfection on the data it is fit to, but do we believe these guidelines will hold for future data?
+
+Apply each of the following resampling and/or ensemble techniques to this classification problem.  For each, make an argument from the results.
+
+You should either argue that 
+
+(a) The classification rules we learned in Part One probably apply to all mushrooms; or
+
+(b) The classification rules we learned in Part One are overfit to this particular sample of mushrooms and/or set off predictors.
+
+#### Q1: Cross-validation
+
+```{r}
+mush_wflow <- workflow() %>%
+  add_model(tree_spec) %>%
+  add_recipe(recipe(class ~ ., mushrooms))
+
+mush_cv <- vfold_cv(mushrooms, 5)
+
+mush_wflow %>%
+  fit_resamples(mush_cv) %>%
+  collect_metrics()
+```
+
+
+We're still getting over 99% accuracy even when we cross-validate.  This assures us that we haven't overfit our decision tree to this particular dataset.
+
+#### Q2: Bagging
+
+```{r}
+bag_spec <- bag_tree() %>%
+  set_engine("rpart", times = 10) %>%
+  set_mode("classification")
+
+mush_bag_wflow <- workflow() %>%
+  add_model(bag_spec) %>%
+  add_recipe(recipe(class ~ ., mushrooms))
+
+mush_bag_fit <- mush_bag_wflow %>%
+  fit(mushrooms) 
+
+mushrooms %>%
+  mutate(
+    preds = predict(mush_bag_fit, mushrooms)$.pred_class
+  ) %>%
+  metrics(truth = class,
+          estimate = preds)
+```
+
+
+We're now getting perfect accuracy from the bagged trees.  This is perhaps not surprising; if we have enough information to near-perfectly sort the full dataset, we can almost certainly also sort any subsample nicely.
+
+#### Q3: Random forests
+
+```{r}
+
+# There are 22 variables. Let's try up to 10 allowed per tree.
+mtry_grid <- grid_regular(mtry(c(1, 10)), levels = 5)
+
+rf_spec <- rand_forest(mtry = tune()) %>%
+  set_engine("ranger") %>%
+  set_mode("classification")
+
+mush_rf_wflow <- workflow() %>%
+  add_model(rf_spec) %>%
+  add_recipe(recipe(class ~ ., mushrooms))
+
+mush_rf_fit <- mush_rf_wflow %>%
+  tune_grid(
+    grid = mtry_grid,
+    resamples = mush_cv
+    ) 
+
+mush_rf_fit %>% collect_metrics()
+```
+
+
+We're getting perfect accuracy from the random forest as long as we allow more than one variable per tree in the forest.  This is by far our strongest argument for our mushroom-eating plan: we might be concerned that there are so many variables in the dataset, we had too many options to split the data.  But it appears that our good predictive power did not depend on any one or two specific variables, since the random forest still works great.
+
+
+## Part Three:  Logistic Regression
+
+Fit a logistic regression, including only the predictors that you deem most important based on your work in Parts One and Two.
+
+Interpret the results:  which features of a mushroom are most indicative of poisonness?
+
+```{r, warning = TRUE}
+lr_spec <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+
+lr_spec %>%
+  fit(class ~ odor + spore_print_color, mushrooms) %$%
+  fit %>% summary()
+```
+
+The output is a bit useless!
+
+In fact, we get a warning telling us that some probabilities were 0 or 1.  This is saying that we can't estimate "log-odds" of an event when we've already found a category (for example, brown-spored mushrooms that smell like almonds) that is 100% pure.
+
+
+# Dataset 2:  Telecom Customers
+
+Congratulations!  You have been hired by the Data Science division of a major telecommunication company.
+
+The Sales division of the company wants to understand how customer demographics - such as their age, income, marital status, employment status, etc - impact the customer's behavior.  They have identified four different types of customers, and labeled a dataset of existing customers with these categories.
+
+```{r, eval = FALSE}
+tele <- read_csv("https://www.dropbox.com/s/9dymy30v394ud8h/Telecust1.csv?dl=1")
+```
+
+Further documentation of this data can be found here: 
+https://www.kaggle.com/prathamtripathi/customersegmentation
+
+You've been tasked with studying the customer demographics and customer categories.  The company would like two results from you:
+
+1. A model that can be used to predict what category a new customer who signs up will likely fall into.
+
+2. Insight into what demographics are associated with these customer differences.
+
+#### Part Four:  Report to your manager
+
+Your manager, the head of the Data Science department, would like a summary of your work.  
+
+She does not need to see every single detail of every step of your process, but she does need to know a basic outline of what you tried, how you made your decisions, and why you settled on certain choices.
+
+You should share only as much of your code and results as you feel is necessary for her to get the "big picture" of your approach.  You can assume she has taken Stat 434, and you may use any "lingo" you want; for example, you can reference the Gini Index without having to explain what it is.
+
+#### Part Five: Report to Sales
+
+Now that your manager has approved your work, you're ready to present the results to Sales.
+
+The Sales team has zero Data Science training.  They have some understanding of things like percentages, means, and medians - but they do not know or care about modeling details.
+
+Summarize the results of your work in a way that is understandable to the Sales team, and only contains the level of technical detail that they might need to properly use the results in their job.  You should NOT use any lingo.  For example, instead of saying "We chose the model with highest precision", you should say, "We chose the model that was least likely to misclassify an A-type customer as B-type."
+
