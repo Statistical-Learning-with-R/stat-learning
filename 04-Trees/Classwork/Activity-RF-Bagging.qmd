@@ -6,7 +6,7 @@ format:
     code-fold: true
     code-line-numbers: true
     code-tools: true
-    self-contained: true
+    embed-resources: true
 editor: source
 execute:
   message: false
@@ -19,6 +19,7 @@ Declare your libraries:
 ```{r}
 #| label: libraries-r
 #| include: false
+
 library(tidyverse)
 library(tidymodels)
 library(glmnet)
@@ -31,6 +32,7 @@ library(baguette)
 # Setup
 
 ```{r}
+#| label: code-from-slides
 
 cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
 
@@ -63,12 +65,13 @@ tree_fit_1 <- tree_wflow %>%
 tree_fitted <- tree_fit_1 %>% 
   pull_workflow_fit()
 
-rpart.plot(tree_fitted$fit)
+rpart.plot(tree_fitted$fit, roundint = FALSE)
 ```
 
 ## Bagging
 
 ```{r}
+#| label: bagging
 
 bag_tree_spec <- bag_tree() %>%
   set_engine("rpart", times = 5) %>%
@@ -79,12 +82,18 @@ bag_tree_spec <- bag_tree() %>%
 ## Random Forests
 
 ```{r}
-rf_spec <- rand_forest(mtry = tune(), min_n = tune(), trees = 10) %>%
+#| label: random-forests
+
+rf_spec <- rand_forest(mtry = tune(), 
+                       min_n = tune(), 
+                       trees = 10) %>%
   set_engine("ranger") %>%
   set_mode("classification")
 
-rf_grid <- grid_regular(mtry(c(?????)),#decide the smallest and largest values you are willing to consider for how many random parameters to choose
-                        ?????)  
+#decide the smallest and largest values you are willing to consider for how many random parameters to choose ?????
+rf_grid <- grid_regular(mtry(c(????)),
+                        levels = ????
+                        )  
 ```
 
 # Your turn
