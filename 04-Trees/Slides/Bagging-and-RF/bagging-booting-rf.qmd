@@ -5,6 +5,8 @@ format:
     theme: style.scss
 embed-resources: true
 editor: visual
+execute: 
+  echo: true
 ---
 
 ```{r setup}
@@ -13,7 +15,6 @@ editor: visual
 
 library(tidyverse)
 library(tidymodels)
-library(flair)
 library(kknn)
 library(glmnet)
 library(here)
@@ -26,29 +27,28 @@ set.seed(98249)
 
 # Measuring Success
 
-## Gini Index and Cost Complexity
+::: {.large}
+Gini Index and Cost Complexity
+:::
 
 ## Recall: Our simplest cannabis tree
 
-.pull-left[
+::: columns
+::: {.column width="40%"}
 * Which of the **final nodes** (or **leaves**) is **most pure**?
 
 * Which is **least pure**?
+:::
 
-. . .
+::: {.column width="5%"}
+:::
 
-* Could we split a node further for better purity?
-
-* **almost certainly, yes!** It's highly unlikely that *all* of the unused variable have *exactly* the same prevalance across categories.
-
---
-
-* Should we do it, or is that overfitting?
-]
-
-.pull-right[
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+::: {.column width="55%"}
+```{r}
+#| label: simple-tree
+#| echo: false
+#| message: false
+#| warning: false
 
 cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
 
@@ -93,115 +93,165 @@ tree_fit_1 <- tree_wflow %>%
 tree_fitted <- tree_fit_1 %>% 
   pull_workflow_fit()
 
-rpart.plot(tree_fitted$fit)
+rpart.plot(tree_fitted$fit, roundint = FALSE, cex = 1.25)
 ```
-]
+:::
+:::
 
----
-## Cost Complexity revisted
+::: {.incremental}
+* Could we split a node further for better purity?
 
-.pull-left[
+  - **Almost certainly, yes!** It's highly unlikely that *all* of the unused variable have *exactly* the same prevalence across categories.
 
+  - Should we do it, or is that overfitting?
+
+:::
+
+## Classification Error
+
+::: columns
+::: {.column width="40%"}
 * What is the **classification error** of each leaf?
 
---
-
 * (Left to right)
+  - 0.35
+  - 0.37
+  - 0.46
+  - 0.36
+:::
 
-    + 0.35
-    + 0.37
-    + 0.46
-    + 0.36
-    
---
+::: {.column width="5%"}
+:::
 
-* The **Gini Index** for a particular node is the average of errors in each class:
-
-$(0.35*0.65) + (0.21*0.79) + (0.14*0.86) = 0.5138$
-
-    + small values if the classification errors are close to 0, i.e., high node purity
-    + large values (near 1) if the errors are high
-    + this is related to the *variance* of the node
-
-]
-
-.pull-right[
+::: {.column width="55%"}
 ```{r}
-rpart.plot(tree_fitted$fit)
+#| label: simple-tree-error
+rpart.plot(tree_fitted$fit, 
+           roundint = FALSE, 
+           cex = 1.25)
 ```
-]
-
----
+:::
+:::
 
 ## Gini Index
 
-To calculate the Gini Index average across all leaves:
+The **Gini Index** [for a particular leaf]{.underline} (not overall) is the average of errors in each class:
+
+</br>
+
+$(0.35*0.65) + (0.21*0.79) + (0.14*0.86) = 0.5138$
+
+</br>
+
+. . .
+
+- small values if the classification errors are close to 0, i.e., high leaf purity
+- large values (near 1) if the errors are high
+- this is related to the *variance* of the leaf
+
+## Calculating the Gini Index
+
+To calculate the Gini Index average across all leaves (:
 
 ```{r}
+#| echo: true
+#| label: gini-index
+
 cann %>%
   bind_cols(
-    predict(tree_fitted, cann, type = "prob")
+    predict(tree_fitted, new_data = cann, type = "prob")
   ) %>%
   gain_capture(truth = Type,
                .pred_hybrid, .pred_indica, .pred_sativa)
 ```
 
----
+## Cost Complexity Revisited
 
-## Cost Complexity revisited
-
+::: columns
+::: {.column width="45%"}
 So, when should we split the tree further?
 
---
-
+::: {.fragment}
 Only if the new splits improve the Gini Index by a certain amount.
+:::
 
---
-
+::: {.fragment}
 This is the `cost_complexity` parameter!
+:::
 
--- 
-
+::: {.fragment}
 But wait!  This is a **penalized** metric, using an arbitrary penalty $\alpha$ to avoid overfitting.
 
 Don't we like cross-validation better?
+:::
+:::
 
---
+::: {.column width="5%"}
+:::
 
+::: {.column width="45%"}
+::: {.fragment}
 Well... yes.
 
 But imagine fitting *every possible tree* and cross-validating.... yikes.
 
 We have to limit our options and cut our losses somehow!
+:::
+:::
+:::
 
----
-class: center, middle, inverse
+##  {background-color="#B6CADA"}
 
-# Bagging
+::: {.larger}
+Bagging
+:::
 
----
-## Tree variability
+## Tree Variability
 
 Suppose I took two random subsamples of my cannabis dataset:
 
 ```{r}
+#| echo: true
+#| label: random-sample-cann
+
 set.seed(9374534)
+
 splits <- cann %>% 
   initial_split(0.5, strata = Type)
 
 cann_1 <- splits %>% training()
 cann_2 <- splits %>% testing()
 
-dim(cann_1)
-dim(cann_2)
 ```
 
----
-## Tree variability
+</br>
+</br>
+
+::: columns
+::: {.column width="40%"}
+```{r}
+dim(cann_1)
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+```{r}
+dim(cann_2)
+```
+:::
+:::
+
+## Tree Variability
 
 Then I fit a **decision tree** to each:
 
 ```{r}
+#| echo: true
+#| label: cann-split-tree
+
 tree_1 <- tree_wflow %>%
   fit(cann_1)
 
@@ -211,57 +261,52 @@ tree_2 <- tree_wflow %>%
 
 How similar will the results be?
 
----
-## Tree variability
+## Tree 1
 
 ```{r}
 tree_1 %>% 
   pull_workflow_fit() %$%
   fit %>%
-  rpart.plot()
+  rpart.plot(roundint = FALSE)
 ```
 
----
-## Tree variability
+## Tree 2
 
 ```{r}
 tree_2 %>% 
   pull_workflow_fit() %$%
   fit %>%
-  rpart.plot()
+  rpart.plot(roundint = FALSE)
 ```
 
----
-## Tree variability
+## Tree Variability
 
-So... which should we believe?
+So... which tree should we believe?
 
---
+. . .
 
 ![](https://i.imgur.com/jA2kQwE.gif)
 
----
-
-## Tree variability
+## More Subsamples!
 
 Let's take several **subsamples** of the data, and make trees from each.
 
---
+. . .
 
 Then, to classify a new observation, we run it through *all* the trees and let them vote!
 
---
-
 (It's a bit like a KNN for trees!)
 
---
+. . .
 
-This is called **bagging**
+This is called **bagging**.
 
----
-## Bagging
+## Bagging -- Setup
 
-```{r baguette, include = FALSE}
+```{r}
+#| label: bagging-setup
+#| code-line-numbers: "|4"
+
 library(baguette)
 
 bag_tree_spec <- bag_tree() %>%
@@ -270,112 +315,104 @@ bag_tree_spec <- bag_tree() %>%
 
 ```
 
-```{r, echo = FALSE}
-decorate("baguette") %>%
-  flair("times = 5")
-```
+## Bagging -- Fitting
 
----
-## Bagging
+```{r}
+#| label: bagging-process
 
-```{r, eval = FALSE}
 bag_tree_wflow <- workflow() %>%
   add_recipe(cann_recipe) %>%
   add_model(bag_tree_spec)
 
 bag_tree_fit <- bag_tree_wflow %>%
   fit(cann)
-
-## (this code may take a while!)
 ```
 
+::: {.callout-caution}
+This step can take awhile! Be patient!
+:::
 
----
 ## Bagging
 
 What variables were most important to the trees?
 
-```{r, eval = FALSE}
-bag_tree_fit %>% pull_workflow_fit()
+```{r}
+#| label: bagged-fits
+
+bag_tree_fit %>% 
+  extract_fit_parsnip()
 ```
 
----
-class: center, middle, inverse
+##  {background-color="#B6CADA"}
 
-# Random Forests
-
----
+::: {.larger}
+Random Forests
+:::
 
 ## Random Forests
 
-What if some important variables are being masked by *more important* variables?
+What if some important variables are being masked by ***more important*** variables?
 
---
+. . .
 
-Remember, we have **65** predictors - yikes!
+Remember, we have **65** predictors - yikes! So, let's give some of the other predictors a chance to shine.
 
---
 
-Let's give some of the other predictors a chance to shine.
+## Randomly Choosing Predictors
 
----
-## Random Forests
-
-Randomly choose a few of the predictors to include in the data:
+Randomly choose a set of the predictors to include in the data:
 
 ```{r}
+#| label: reduced-predictors
+#| code-line-numbers: "|3"
+
 cann_reduced <- cann %>%
-  select(1,2, sample(5:65, 30))
+  select(Type, 
+         sample(5:65, size = 30)
+         )
 
 cann_reduced
 ```
 
----
+## A New Decision Tree
 
-## Random Forests
-
-```{r, echo = FALSE}
+```{r}
 cann_recipe_2 <- recipe(Type ~ ., 
-                     data = cann_reduced) %>%
-  step_rm(Strain)
+                     data = cann_reduced)
 
 tree_fit_reduced <- workflow() %>%
   add_recipe(cann_recipe_2) %>%
   add_model(tree_mod) %>%
   fit(cann_reduced)
 
-rpart.plot(tree_fit_reduced %>% pull_workflow_fit() %$% fit)
+tree_fit_reduced %>% 
+  extract_fit_parsnip() %$% 
+  fit %>% 
+  rpart.plot(roundint = FALSE)
 ```
 
----
-## Random Forests
+## Random Forests -- Final Model
 
 After making many random reduced trees, we then **bag** the results to end up with a **random forest**.
 
---
+. . .
 
 The advantage of this is that more unique variables are involved in the process.
 
---
+. . .
 
 This way, we don't accidentally overfit to a variable that *happens* to be extremely relevant to our particular dataset.
 
---
+## Your turn
 
-Model spec: `rand_forest()`
+Open the [`Activity-RF-Bagging.qmd`](../../Classwork/Activity-RF-Bagging.qmd) activity file
 
----
-class: center, middle
+1. Find the best *bagged* model for the cannabis data
+2. Find the best *random forest* model for the cannabis data
+3. Report some metrics on your models
 
-![](https://media1.tenor.com/images/0c023e42945dc5d1210508deb4141b77/tenor.gif?itemid=13935227)
+::: {.callout-tip}
+# Reference for Fitting Trees
 
----
-class: center, middle, inverse
-
-# Your turn
-
-## Open the activity file
-
-## Find the best *bagged* model for the cannabis data
-## Find the best *random forest* model for the cannabis data
-## Report some metrics on your models
+Don't forget you can use the reference guide (in the R References Module on Canvas) for guidance on how to fit these models!
+:::
