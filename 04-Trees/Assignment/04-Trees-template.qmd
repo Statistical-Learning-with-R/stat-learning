@@ -78,8 +78,6 @@ Apply each of the following resampling and / or ensemble techniques to this clas
 
 5. Random forests
 
-## Part Three: Logistic Regression
-
 # Dataset 2: Telecom Customers
 
 Congratulations! You have been hired by the Data Science division of a major telecommunication company.
