@@ -101,7 +101,15 @@ whr_fit_2$fit %>%
   broom::tidy()
 ```
 
-Yes, the coefficients for every year have very small p-values ($p$ < .000185). This suggests the average happiness rating for each year is substantially different from the baseline (first) year (2005).  
+Yes, the coefficients for every year have very small p-values ($p$ < .000185), but keep in mind that these p-values are comparing each year with the baseline year (2005). However, if you look at the relative scale of the adjustments (between -0.9 and -1.1), they are all fairly similar. This leads me to believe that most of the years are fairly similar and 2005 is the the one year that is substantially different. This stance is corroborated by the plot below:
+
+```{r}
+whr %>% 
+  ggplot(mapping = aes(x = year, y = happiness_score)) +
+  geom_point() +
+  labs(x = "Year", y = "Happiness Score") 
+```
+
 
 ## Part 2: Happiness Equation
 
