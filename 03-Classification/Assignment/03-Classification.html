@@ -3043,7 +3043,7 @@ vertical-align: -.125em;
 <p>You will submit an HTML document to Canvas as your final version.</p>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<p><a href="classification-template.qmd">Download starter .qmd file</a></p>
+<p><a href="03-Classification-template.qmd">Download starter .qmd file</a></p>
 <p>You’ll notice in the template’s YAML there are specifications for how the code should be included (i.e., <code>code-fold: true</code>, <code>code-line-numbers: true</code>, <code>code-tools: true</code>). <strong>Do not change these specifications.</strong></p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -3614,7 +3614,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-17"><a href="#cb5-17"></a></span>
 <span id="cb5-18"><a href="#cb5-18"></a><span class="fu">## Getting Started</span></span>
 <span id="cb5-19"><a href="#cb5-19"></a></span>
-<span id="cb5-20"><a href="#cb5-20"></a><span class="co">[</span><span class="ot">Download starter .qmd file</span><span class="co">](classification-template.qmd)</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">[</span><span class="ot">Download starter .qmd file</span><span class="co">](03-Classification-template.qmd)</span></span>
 <span id="cb5-21"><a href="#cb5-21"></a></span>
 <span id="cb5-22"><a href="#cb5-22"></a>You&#39;ll notice in the template&#39;s YAML there are specifications for how the code should be included (i.e., <span class="in">`code-fold: true`</span>, <span class="in">`code-line-numbers: true`</span>, <span class="in">`code-tools: true`</span>). **Do not change these specifications.**</span>
 <span id="cb5-23"><a href="#cb5-23"></a></span>
@@ -3685,197 +3685,193 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-92"><a href="#cb5-92"></a>               )</span>
 <span id="cb5-93"><a href="#cb5-93"></a><span class="in">```</span></span>
 <span id="cb5-94"><a href="#cb5-94"></a></span>
-<span id="cb5-95"><a href="#cb5-95"></a></span>
-<span id="cb5-96"><a href="#cb5-96"></a>Download the <span class="co">[</span><span class="ot">`heart_attack.csv`</span><span class="co">](data/heart_attack.csv)</span> and read in the data. Perform any data cleaning you believe is necessary.  </span>
-<span id="cb5-97"><a href="#cb5-97"></a></span>
-<span id="cb5-98"><a href="#cb5-98"></a>::: {.callout-tip}</span>
-<span id="cb5-99"><a href="#cb5-99"></a><span class="fu"># Setting Primary Target</span></span>
+<span id="cb5-95"><a href="#cb5-95"></a>Download the <span class="co">[</span><span class="ot">`heart_attack.csv`</span><span class="co">](data/heart_attack.csv)</span> and read in the data. Perform any data cleaning you believe is necessary.</span>
+<span id="cb5-96"><a href="#cb5-96"></a></span>
+<span id="cb5-97"><a href="#cb5-97"></a>::: {.callout-tip} <span class="sc">\#</span> Setting Primary Target</span>
+<span id="cb5-98"><a href="#cb5-98"></a></span>
+<span id="cb5-99"><a href="#cb5-99"></a>You will find it helpful to reorder the <span class="in">`output`</span> variable, so that the &quot;at risk&quot; group (e.g., level <span class="in">`1`</span>) is the first level.</span>
 <span id="cb5-100"><a href="#cb5-100"></a></span>
-<span id="cb5-101"><a href="#cb5-101"></a>You will find it helpful to reorder the <span class="in">`output`</span> variable, so that the &quot;at risk&quot; group (e.g., level <span class="in">`1`</span>) is the first level.</span>
+<span id="cb5-101"><a href="#cb5-101"></a>Here&#39;s some example code that you might find helpful:</span>
 <span id="cb5-102"><a href="#cb5-102"></a></span>
-<span id="cb5-103"><a href="#cb5-103"></a>Here&#39;s some example code that you might find helpful:</span>
-<span id="cb5-104"><a href="#cb5-104"></a></span>
-<span id="cb5-107"><a href="#cb5-107"></a><span class="in">```{r}</span></span>
-<span id="cb5-108"><a href="#cb5-108"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-109"><a href="#cb5-109"></a></span>
-<span id="cb5-110"><a href="#cb5-110"></a>ha <span class="ot">&lt;-</span> ha <span class="sc">%&gt;%</span></span>
-<span id="cb5-111"><a href="#cb5-111"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-112"><a href="#cb5-112"></a>    <span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(sex, cp, restecg), </span>
-<span id="cb5-113"><a href="#cb5-113"></a>           <span class="at">.fns =</span> <span class="sc">~</span><span class="fu">as.factor</span>(.x)</span>
-<span id="cb5-114"><a href="#cb5-114"></a>           ), </span>
-<span id="cb5-115"><a href="#cb5-115"></a>    <span class="at">output =</span> <span class="fu">factor</span>(output, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb5-116"><a href="#cb5-116"></a>                    ) <span class="co"># make &quot;at-risk&quot; the primary target</span></span>
-<span id="cb5-117"><a href="#cb5-117"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-118"><a href="#cb5-118"></a>  <span class="fu">drop_na</span>(output)</span>
-<span id="cb5-119"><a href="#cb5-119"></a><span class="in">```</span></span>
+<span id="cb5-105"><a href="#cb5-105"></a><span class="in">```{r}</span></span>
+<span id="cb5-106"><a href="#cb5-106"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-107"><a href="#cb5-107"></a></span>
+<span id="cb5-108"><a href="#cb5-108"></a>ha <span class="ot">&lt;-</span> ha <span class="sc">%&gt;%</span></span>
+<span id="cb5-109"><a href="#cb5-109"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-110"><a href="#cb5-110"></a>    <span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(sex, cp, restecg), </span>
+<span id="cb5-111"><a href="#cb5-111"></a>           <span class="at">.fns =</span> <span class="sc">~</span><span class="fu">as.factor</span>(.x)</span>
+<span id="cb5-112"><a href="#cb5-112"></a>           ), </span>
+<span id="cb5-113"><a href="#cb5-113"></a>    <span class="at">output =</span> <span class="fu">factor</span>(output, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb5-114"><a href="#cb5-114"></a>                    ) <span class="co"># make &quot;at-risk&quot; the primary target</span></span>
+<span id="cb5-115"><a href="#cb5-115"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-116"><a href="#cb5-116"></a>  <span class="fu">drop_na</span>(output)</span>
+<span id="cb5-117"><a href="#cb5-117"></a><span class="in">```</span></span>
+<span id="cb5-118"><a href="#cb5-118"></a></span>
+<span id="cb5-119"><a href="#cb5-119"></a><span class="fu"># Part One: Fitting Models</span></span>
 <span id="cb5-120"><a href="#cb5-120"></a></span>
-<span id="cb5-121"><a href="#cb5-121"></a><span class="fu"># Part One: Fitting Models</span></span>
+<span id="cb5-121"><a href="#cb5-121"></a>This section asks you to create a final best model for each of the model types studied this week. For each, you should:</span>
 <span id="cb5-122"><a href="#cb5-122"></a></span>
-<span id="cb5-123"><a href="#cb5-123"></a>This section asks you to create a final best model for each of the model types studied this week. For each, you should:</span>
+<span id="cb5-123"><a href="#cb5-123"></a><span class="ss">-   </span>Find the best model based on <span class="in">`roc.auc`</span> for predicting the <span class="in">`output`</span> variable.</span>
 <span id="cb5-124"><a href="#cb5-124"></a></span>
-<span id="cb5-125"><a href="#cb5-125"></a><span class="ss">-   </span>Find the best model based on <span class="in">`roc.auc`</span> for predicting the <span class="in">`output`</span> variable.</span>
+<span id="cb5-125"><a href="#cb5-125"></a><span class="ss">-   </span>Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class.</span>
 <span id="cb5-126"><a href="#cb5-126"></a></span>
-<span id="cb5-127"><a href="#cb5-127"></a><span class="ss">-   </span>Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class. </span>
-<span id="cb5-128"><a href="#cb5-128"></a></span>
-<span id="cb5-129"><a href="#cb5-129"></a>::: {.callout-tip}</span>
-<span id="cb5-130"><a href="#cb5-130"></a><span class="fu"># Look over past code</span></span>
-<span id="cb5-131"><a href="#cb5-131"></a></span>
-<span id="cb5-132"><a href="#cb5-132"></a>Code is provided from lecture; alternatively, <span class="in">`conf_mat()`</span> is a nice shortcut function for this task.)</span>
-<span id="cb5-133"><a href="#cb5-133"></a>:::</span>
+<span id="cb5-127"><a href="#cb5-127"></a>::: callout-tip</span>
+<span id="cb5-128"><a href="#cb5-128"></a><span class="fu"># Look over past code</span></span>
+<span id="cb5-129"><a href="#cb5-129"></a></span>
+<span id="cb5-130"><a href="#cb5-130"></a>Code is provided from lecture; alternatively, <span class="in">`conf_mat()`</span> is a nice shortcut function for this task.)</span>
+<span id="cb5-131"><a href="#cb5-131"></a>:::</span>
+<span id="cb5-132"><a href="#cb5-132"></a></span>
+<span id="cb5-133"><a href="#cb5-133"></a><span class="ss">-   </span>Report the (cross-validated!) <span class="in">`roc.auc`</span> metric.</span>
 <span id="cb5-134"><a href="#cb5-134"></a></span>
-<span id="cb5-135"><a href="#cb5-135"></a><span class="ss">-   </span>Report the (cross-validated!) <span class="in">`roc.auc`</span> metric.</span>
+<span id="cb5-135"><a href="#cb5-135"></a><span class="ss">-   </span>Fit the final model.</span>
 <span id="cb5-136"><a href="#cb5-136"></a></span>
-<span id="cb5-137"><a href="#cb5-137"></a><span class="ss">-   </span>Fit the final model.</span>
-<span id="cb5-138"><a href="#cb5-138"></a></span>
-<span id="cb5-139"><a href="#cb5-139"></a>::: callout-caution</span>
-<span id="cb5-140"><a href="#cb5-140"></a><span class="fu"># Include All the Code!</span></span>
-<span id="cb5-141"><a href="#cb5-141"></a></span>
-<span id="cb5-142"><a href="#cb5-142"></a>As I expect your analysis to be reproducible, your assignment should keep a record of **every** model you fit during your exploration.</span>
-<span id="cb5-143"><a href="#cb5-143"></a>:::</span>
+<span id="cb5-137"><a href="#cb5-137"></a>::: callout-caution</span>
+<span id="cb5-138"><a href="#cb5-138"></a><span class="fu"># Include All the Code!</span></span>
+<span id="cb5-139"><a href="#cb5-139"></a></span>
+<span id="cb5-140"><a href="#cb5-140"></a>As I expect your analysis to be reproducible, your assignment should keep a record of **every** model you fit during your exploration.</span>
+<span id="cb5-141"><a href="#cb5-141"></a>:::</span>
+<span id="cb5-142"><a href="#cb5-142"></a></span>
+<span id="cb5-143"><a href="#cb5-143"></a><span class="fu">#### Q1: KNN</span></span>
 <span id="cb5-144"><a href="#cb5-144"></a></span>
-<span id="cb5-145"><a href="#cb5-145"></a><span class="fu">#### Q1: KNN</span></span>
-<span id="cb5-146"><a href="#cb5-146"></a></span>
-<span id="cb5-147"><a href="#cb5-147"></a>::: {.callout-tip}</span>
-<span id="cb5-148"><a href="#cb5-148"></a><span class="fu"># Tuning</span></span>
-<span id="cb5-149"><a href="#cb5-149"></a></span>
-<span id="cb5-150"><a href="#cb5-150"></a>You *should* include a discussion of your hyperparameter tuning steps in your write-up.</span>
-<span id="cb5-151"><a href="#cb5-151"></a>:::</span>
+<span id="cb5-145"><a href="#cb5-145"></a>::: callout-tip</span>
+<span id="cb5-146"><a href="#cb5-146"></a><span class="fu"># Tuning</span></span>
+<span id="cb5-147"><a href="#cb5-147"></a></span>
+<span id="cb5-148"><a href="#cb5-148"></a>You *should* include a discussion of your hyperparameter tuning steps in your write-up.</span>
+<span id="cb5-149"><a href="#cb5-149"></a>:::</span>
+<span id="cb5-150"><a href="#cb5-150"></a></span>
+<span id="cb5-151"><a href="#cb5-151"></a><span class="fu">#### Q2: Logistic Regression</span></span>
 <span id="cb5-152"><a href="#cb5-152"></a></span>
-<span id="cb5-153"><a href="#cb5-153"></a><span class="fu">#### Q2: Logistic Regression</span></span>
+<span id="cb5-153"><a href="#cb5-153"></a><span class="fu">#### Q3: LDA</span></span>
 <span id="cb5-154"><a href="#cb5-154"></a></span>
-<span id="cb5-155"><a href="#cb5-155"></a><span class="fu">#### Q3: LDA</span></span>
+<span id="cb5-155"><a href="#cb5-155"></a><span class="fu">#### Q4: QDA</span></span>
 <span id="cb5-156"><a href="#cb5-156"></a></span>
-<span id="cb5-157"><a href="#cb5-157"></a><span class="fu">#### Q4: QDA</span></span>
+<span id="cb5-157"><a href="#cb5-157"></a><span class="fu"># Part Two: Interpreting Models</span></span>
 <span id="cb5-158"><a href="#cb5-158"></a></span>
-<span id="cb5-159"><a href="#cb5-159"></a></span>
-<span id="cb5-160"><a href="#cb5-160"></a><span class="fu"># Part Two: Interpreting Models</span></span>
-<span id="cb5-161"><a href="#cb5-161"></a></span>
-<span id="cb5-162"><a href="#cb5-162"></a><span class="fu">#### Q5: Interpretation</span></span>
-<span id="cb5-163"><a href="#cb5-163"></a></span>
-<span id="cb5-164"><a href="#cb5-164"></a>Which predictors were most important to predicting heart attack risk? Were these predictors consistent across the different types of models you fit?</span>
-<span id="cb5-165"><a href="#cb5-165"></a></span>
-<span id="cb5-166"><a href="#cb5-166"></a><span class="fu">#### Q6: ROC Curve</span></span>
-<span id="cb5-167"><a href="#cb5-167"></a></span>
-<span id="cb5-168"><a href="#cb5-168"></a>Plot the ROC for your favorite model from Q1-4.</span>
+<span id="cb5-159"><a href="#cb5-159"></a><span class="fu">#### Q5: Interpretation</span></span>
+<span id="cb5-160"><a href="#cb5-160"></a></span>
+<span id="cb5-161"><a href="#cb5-161"></a>Which predictors were most important to predicting heart attack risk? Were these predictors consistent across the different types of models you fit?</span>
+<span id="cb5-162"><a href="#cb5-162"></a></span>
+<span id="cb5-163"><a href="#cb5-163"></a><span class="fu">#### Q6: ROC Curve</span></span>
+<span id="cb5-164"><a href="#cb5-164"></a></span>
+<span id="cb5-165"><a href="#cb5-165"></a>Plot the ROC for your favorite model from Q1-4.</span>
+<span id="cb5-166"><a href="#cb5-166"></a></span>
+<span id="cb5-167"><a href="#cb5-167"></a>::: callout-tip</span>
+<span id="cb5-168"><a href="#cb5-168"></a><span class="fu"># Making an ROC Curve</span></span>
 <span id="cb5-169"><a href="#cb5-169"></a></span>
-<span id="cb5-170"><a href="#cb5-170"></a>::: {.callout-tip}</span>
-<span id="cb5-171"><a href="#cb5-171"></a><span class="fu"># Making an ROC Curve</span></span>
-<span id="cb5-172"><a href="#cb5-172"></a></span>
-<span id="cb5-173"><a href="#cb5-173"></a>Here&#39;s some code to help you plot your favorite model&#39;s ROC:</span>
-<span id="cb5-174"><a href="#cb5-174"></a></span>
-<span id="cb5-177"><a href="#cb5-177"></a><span class="in">```{r}</span></span>
-<span id="cb5-178"><a href="#cb5-178"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-179"><a href="#cb5-179"></a><span class="co">#| echo: true</span></span>
-<span id="cb5-180"><a href="#cb5-180"></a></span>
-<span id="cb5-181"><a href="#cb5-181"></a>ha <span class="sc">%&gt;%</span></span>
-<span id="cb5-182"><a href="#cb5-182"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-183"><a href="#cb5-183"></a>    <span class="at">preds =</span> <span class="fu">predict</span>(model_final, ha, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)<span class="sc">$</span>.pred_1</span>
-<span id="cb5-184"><a href="#cb5-184"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-185"><a href="#cb5-185"></a>  <span class="fu">roc_curve</span>(</span>
-<span id="cb5-186"><a href="#cb5-186"></a>    <span class="at">truth =</span> output,</span>
-<span id="cb5-187"><a href="#cb5-187"></a>    preds</span>
-<span id="cb5-188"><a href="#cb5-188"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-189"><a href="#cb5-189"></a>  <span class="fu">autoplot</span>()</span>
-<span id="cb5-190"><a href="#cb5-190"></a><span class="in">```</span></span>
+<span id="cb5-170"><a href="#cb5-170"></a>Here&#39;s some code to help you plot your favorite model&#39;s ROC:</span>
+<span id="cb5-171"><a href="#cb5-171"></a></span>
+<span id="cb5-174"><a href="#cb5-174"></a><span class="in">```{r}</span></span>
+<span id="cb5-175"><a href="#cb5-175"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-176"><a href="#cb5-176"></a><span class="co">#| echo: true</span></span>
+<span id="cb5-177"><a href="#cb5-177"></a></span>
+<span id="cb5-178"><a href="#cb5-178"></a>ha <span class="sc">%&gt;%</span></span>
+<span id="cb5-179"><a href="#cb5-179"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-180"><a href="#cb5-180"></a>    <span class="at">preds =</span> <span class="fu">predict</span>(model_final, ha, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)<span class="sc">$</span>.pred_1</span>
+<span id="cb5-181"><a href="#cb5-181"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-182"><a href="#cb5-182"></a>  <span class="fu">roc_curve</span>(</span>
+<span id="cb5-183"><a href="#cb5-183"></a>    <span class="at">truth =</span> output,</span>
+<span id="cb5-184"><a href="#cb5-184"></a>    preds</span>
+<span id="cb5-185"><a href="#cb5-185"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-186"><a href="#cb5-186"></a>  <span class="fu">autoplot</span>()</span>
+<span id="cb5-187"><a href="#cb5-187"></a><span class="in">```</span></span>
+<span id="cb5-188"><a href="#cb5-188"></a>:::</span>
+<span id="cb5-189"><a href="#cb5-189"></a></span>
+<span id="cb5-190"><a href="#cb5-190"></a><span class="fu"># Part Three: Metrics</span></span>
 <span id="cb5-191"><a href="#cb5-191"></a></span>
-<span id="cb5-192"><a href="#cb5-192"></a>:::</span>
+<span id="cb5-192"><a href="#cb5-192"></a>Consider the following metrics:</span>
 <span id="cb5-193"><a href="#cb5-193"></a></span>
-<span id="cb5-194"><a href="#cb5-194"></a><span class="fu"># Part Three: Metrics</span></span>
+<span id="cb5-194"><a href="#cb5-194"></a><span class="ss">-   </span>**True Positive Rate** or **Sensitivity** = Of the observations that are truly Class A, how many were predicted to be Class A?</span>
 <span id="cb5-195"><a href="#cb5-195"></a></span>
-<span id="cb5-196"><a href="#cb5-196"></a>Consider the following metrics:</span>
+<span id="cb5-196"><a href="#cb5-196"></a><span class="ss">-   </span>**Precision** or **Positive Predictive Value** = Of all the observations classified as Class A, how many of them were truly from Class A?</span>
 <span id="cb5-197"><a href="#cb5-197"></a></span>
-<span id="cb5-198"><a href="#cb5-198"></a><span class="ss">-   </span>**True Positive Rate** or **Sensitivity** = Of the observations that are truly Class A, how many were predicted to be Class A?</span>
+<span id="cb5-198"><a href="#cb5-198"></a><span class="ss">-   </span>**True Negative Rate** or **Specificity** = Of all the observations classified as NOT Class A, how many were truly NOT Class A?</span>
 <span id="cb5-199"><a href="#cb5-199"></a></span>
-<span id="cb5-200"><a href="#cb5-200"></a><span class="ss">-   </span>**Precision** or **Positive Predictive Value** = Of all the observations classified as Class A, how many of them were truly from Class A?</span>
+<span id="cb5-200"><a href="#cb5-200"></a>Compute each of these metrics (cross-validated) for your four models in Part One.</span>
 <span id="cb5-201"><a href="#cb5-201"></a></span>
-<span id="cb5-202"><a href="#cb5-202"></a><span class="ss">-   </span>**True Negative Rate** or **Specificity** = Of all the observations classified as NOT Class A, how many were truly NOT Class A?</span>
-<span id="cb5-203"><a href="#cb5-203"></a></span>
-<span id="cb5-204"><a href="#cb5-204"></a>Compute each of these metrics (cross-validated) for your four models in Part One.</span>
-<span id="cb5-205"><a href="#cb5-205"></a></span>
-<span id="cb5-206"><a href="#cb5-206"></a>::: {.callout-tip}</span>
-<span id="cb5-207"><a href="#cb5-207"></a><span class="fu"># Specifying Metrics</span></span>
-<span id="cb5-208"><a href="#cb5-208"></a></span>
-<span id="cb5-209"><a href="#cb5-209"></a>You can specify which metrics you want to calculate as follows:</span>
-<span id="cb5-210"><a href="#cb5-210"></a></span>
-<span id="cb5-213"><a href="#cb5-213"></a><span class="in">```{r}</span></span>
-<span id="cb5-214"><a href="#cb5-214"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-215"><a href="#cb5-215"></a></span>
-<span id="cb5-216"><a href="#cb5-216"></a>my_workflow <span class="sc">%&gt;%</span></span>
-<span id="cb5-217"><a href="#cb5-217"></a>  <span class="fu">fit_resamples</span>(cvs,</span>
-<span id="cb5-218"><a href="#cb5-218"></a>                <span class="at">metrics =</span> <span class="fu">metric_set</span>(accuracy, roc_auc)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-219"><a href="#cb5-219"></a>  <span class="fu">collect_metrics</span>()</span>
-<span id="cb5-220"><a href="#cb5-220"></a><span class="in">```</span></span>
-<span id="cb5-221"><a href="#cb5-221"></a></span>
-<span id="cb5-222"><a href="#cb5-222"></a>For a list of all available metrics here: <span class="ot">&lt;https://yardstick.tidymodels.org/articles/metric-types.html&gt;</span></span>
-<span id="cb5-223"><a href="#cb5-223"></a>:::</span>
+<span id="cb5-202"><a href="#cb5-202"></a>::: callout-tip</span>
+<span id="cb5-203"><a href="#cb5-203"></a><span class="fu"># Specifying Metrics</span></span>
+<span id="cb5-204"><a href="#cb5-204"></a></span>
+<span id="cb5-205"><a href="#cb5-205"></a>You can specify which metrics you want to calculate as follows:</span>
+<span id="cb5-206"><a href="#cb5-206"></a></span>
+<span id="cb5-209"><a href="#cb5-209"></a><span class="in">```{r}</span></span>
+<span id="cb5-210"><a href="#cb5-210"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-211"><a href="#cb5-211"></a></span>
+<span id="cb5-212"><a href="#cb5-212"></a>my_workflow <span class="sc">%&gt;%</span></span>
+<span id="cb5-213"><a href="#cb5-213"></a>  <span class="fu">fit_resamples</span>(cvs,</span>
+<span id="cb5-214"><a href="#cb5-214"></a>                <span class="at">metrics =</span> <span class="fu">metric_set</span>(accuracy, roc_auc)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-215"><a href="#cb5-215"></a>  <span class="fu">collect_metrics</span>()</span>
+<span id="cb5-216"><a href="#cb5-216"></a><span class="in">```</span></span>
+<span id="cb5-217"><a href="#cb5-217"></a></span>
+<span id="cb5-218"><a href="#cb5-218"></a>For a list of all available metrics here: <span class="ot">&lt;https://yardstick.tidymodels.org/articles/metric-types.html&gt;</span></span>
+<span id="cb5-219"><a href="#cb5-219"></a>:::</span>
+<span id="cb5-220"><a href="#cb5-220"></a></span>
+<span id="cb5-221"><a href="#cb5-221"></a><span class="fu"># Part Four: Validation</span></span>
+<span id="cb5-222"><a href="#cb5-222"></a></span>
+<span id="cb5-223"><a href="#cb5-223"></a>Before sharing the dataset with you, I set aside a random 10% of the observations to serve as a final validation set.</span>
 <span id="cb5-224"><a href="#cb5-224"></a></span>
-<span id="cb5-225"><a href="#cb5-225"></a><span class="fu"># Part Four: Validation</span></span>
+<span id="cb5-225"><a href="#cb5-225"></a>Download the <span class="co">[</span><span class="ot">`heart_attack_validation.csv`</span><span class="co">](daheart_attack_validation.csv)</span> and read in the data. Remember to clean these data the **same** way you cleaned the training data.</span>
 <span id="cb5-226"><a href="#cb5-226"></a></span>
-<span id="cb5-227"><a href="#cb5-227"></a>Before sharing the dataset with you, I set aside a random 10% of the observations to serve as a final validation set.</span>
-<span id="cb5-228"><a href="#cb5-228"></a></span>
-<span id="cb5-229"><a href="#cb5-229"></a>Download the <span class="co">[</span><span class="ot">`heart_attack_validation.csv`</span><span class="co">](daheart_attack_validation.csv)</span> and read in the data. Remember to clean these data the **same** way you cleaned the training data. </span>
-<span id="cb5-230"><a href="#cb5-230"></a></span>
-<span id="cb5-233"><a href="#cb5-233"></a><span class="in">```{r}</span></span>
-<span id="cb5-234"><a href="#cb5-234"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-235"><a href="#cb5-235"></a><span class="co">#| echo: false</span></span>
-<span id="cb5-236"><a href="#cb5-236"></a></span>
-<span id="cb5-237"><a href="#cb5-237"></a>ha_validation <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;03-Classification&quot;</span>, </span>
-<span id="cb5-238"><a href="#cb5-238"></a>                          <span class="st">&quot;Assignment&quot;</span>, </span>
-<span id="cb5-239"><a href="#cb5-239"></a>                          <span class="st">&quot;data&quot;</span>, </span>
-<span id="cb5-240"><a href="#cb5-240"></a>                          <span class="st">&quot;heart_attack_validation.csv&quot;</span>)</span>
-<span id="cb5-241"><a href="#cb5-241"></a>               )</span>
-<span id="cb5-242"><a href="#cb5-242"></a><span class="in">```</span></span>
-<span id="cb5-243"><a href="#cb5-243"></a></span>
-<span id="cb5-246"><a href="#cb5-246"></a><span class="in">```{r}</span></span>
-<span id="cb5-247"><a href="#cb5-247"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-248"><a href="#cb5-248"></a><span class="co">#| echo: false</span></span>
-<span id="cb5-249"><a href="#cb5-249"></a></span>
-<span id="cb5-250"><a href="#cb5-250"></a>ha_validation <span class="ot">&lt;-</span> ha_validation <span class="sc">%&gt;%</span></span>
-<span id="cb5-251"><a href="#cb5-251"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-252"><a href="#cb5-252"></a>    <span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(sex, cp, restecg), </span>
-<span id="cb5-253"><a href="#cb5-253"></a>           <span class="at">.fns =</span> <span class="sc">~</span><span class="fu">as.factor</span>(.x)</span>
-<span id="cb5-254"><a href="#cb5-254"></a>           ), </span>
-<span id="cb5-255"><a href="#cb5-255"></a>    <span class="at">output =</span> <span class="fu">factor</span>(output, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb5-256"><a href="#cb5-256"></a>                    ) <span class="co"># make &quot;at-risk&quot; the primary target</span></span>
-<span id="cb5-257"><a href="#cb5-257"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-258"><a href="#cb5-258"></a>  <span class="fu">drop_na</span>(output)</span>
-<span id="cb5-259"><a href="#cb5-259"></a><span class="in">```</span></span>
-<span id="cb5-260"><a href="#cb5-260"></a></span>
-<span id="cb5-261"><a href="#cb5-261"></a>Use each of your final models in Part One Q1-4 to:</span>
+<span id="cb5-229"><a href="#cb5-229"></a><span class="in">```{r}</span></span>
+<span id="cb5-230"><a href="#cb5-230"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-231"><a href="#cb5-231"></a><span class="co">#| echo: false</span></span>
+<span id="cb5-232"><a href="#cb5-232"></a></span>
+<span id="cb5-233"><a href="#cb5-233"></a>ha_validation <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;03-Classification&quot;</span>, </span>
+<span id="cb5-234"><a href="#cb5-234"></a>                          <span class="st">&quot;Assignment&quot;</span>, </span>
+<span id="cb5-235"><a href="#cb5-235"></a>                          <span class="st">&quot;data&quot;</span>, </span>
+<span id="cb5-236"><a href="#cb5-236"></a>                          <span class="st">&quot;heart_attack_validation.csv&quot;</span>)</span>
+<span id="cb5-237"><a href="#cb5-237"></a>               )</span>
+<span id="cb5-238"><a href="#cb5-238"></a><span class="in">```</span></span>
+<span id="cb5-239"><a href="#cb5-239"></a></span>
+<span id="cb5-242"><a href="#cb5-242"></a><span class="in">```{r}</span></span>
+<span id="cb5-243"><a href="#cb5-243"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-244"><a href="#cb5-244"></a><span class="co">#| echo: false</span></span>
+<span id="cb5-245"><a href="#cb5-245"></a></span>
+<span id="cb5-246"><a href="#cb5-246"></a>ha_validation <span class="ot">&lt;-</span> ha_validation <span class="sc">%&gt;%</span></span>
+<span id="cb5-247"><a href="#cb5-247"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-248"><a href="#cb5-248"></a>    <span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(sex, cp, restecg), </span>
+<span id="cb5-249"><a href="#cb5-249"></a>           <span class="at">.fns =</span> <span class="sc">~</span><span class="fu">as.factor</span>(.x)</span>
+<span id="cb5-250"><a href="#cb5-250"></a>           ), </span>
+<span id="cb5-251"><a href="#cb5-251"></a>    <span class="at">output =</span> <span class="fu">factor</span>(output, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb5-252"><a href="#cb5-252"></a>                    ) <span class="co"># make &quot;at-risk&quot; the primary target</span></span>
+<span id="cb5-253"><a href="#cb5-253"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-254"><a href="#cb5-254"></a>  <span class="fu">drop_na</span>(output)</span>
+<span id="cb5-255"><a href="#cb5-255"></a><span class="in">```</span></span>
+<span id="cb5-256"><a href="#cb5-256"></a></span>
+<span id="cb5-257"><a href="#cb5-257"></a>Use each of your final models in Part One Q1-4 to:</span>
+<span id="cb5-258"><a href="#cb5-258"></a></span>
+<span id="cb5-259"><a href="#cb5-259"></a><span class="ss">-   </span>predict the <span class="in">`output`</span> variable in the validation dataset</span>
+<span id="cb5-260"><a href="#cb5-260"></a><span class="ss">-   </span>output a confusion matrix</span>
+<span id="cb5-261"><a href="#cb5-261"></a><span class="ss">-   </span>report the <span class="in">`roc.auc`</span>, the <span class="in">`precision`</span>, and the <span class="in">`recall`</span></span>
 <span id="cb5-262"><a href="#cb5-262"></a></span>
-<span id="cb5-263"><a href="#cb5-263"></a><span class="ss">- </span>predict the <span class="in">`output`</span> variable in the validation dataset</span>
-<span id="cb5-264"><a href="#cb5-264"></a><span class="ss">- </span>output a confusion matrix</span>
-<span id="cb5-265"><a href="#cb5-265"></a><span class="ss">- </span>report the <span class="in">`roc.auc`</span>, the <span class="in">`precision`</span>, and the <span class="in">`recall`</span></span>
+<span id="cb5-263"><a href="#cb5-263"></a>Compare these values to the cross-validated estimates you reported in Part One. Did our measure of model success turn out to be approximately correct for the validation data?</span>
+<span id="cb5-264"><a href="#cb5-264"></a></span>
+<span id="cb5-265"><a href="#cb5-265"></a><span class="fu"># Part Four: Discussion</span></span>
 <span id="cb5-266"><a href="#cb5-266"></a></span>
-<span id="cb5-267"><a href="#cb5-267"></a>Compare these values to the cross-validated estimates you reported in Part One. Did our measure of model success turn out to be approximately correct for the validation data?</span>
+<span id="cb5-267"><a href="#cb5-267"></a>Suppose you have been hired by a hospital to create classification models for heart attack risk.</span>
 <span id="cb5-268"><a href="#cb5-268"></a></span>
-<span id="cb5-269"><a href="#cb5-269"></a><span class="fu"># Part Four: Discussion</span></span>
+<span id="cb5-269"><a href="#cb5-269"></a>The following questions give a possible scenario for why the hospital is interested in these models. For each one, discuss:</span>
 <span id="cb5-270"><a href="#cb5-270"></a></span>
-<span id="cb5-271"><a href="#cb5-271"></a>Suppose you have been hired by a hospital to create classification models for heart attack risk.</span>
+<span id="cb5-271"><a href="#cb5-271"></a><span class="ss">-   </span>Which metric(s) you would use for model selection and why.</span>
 <span id="cb5-272"><a href="#cb5-272"></a></span>
-<span id="cb5-273"><a href="#cb5-273"></a>The following questions give a possible scenario for why the hospital is interested in these models. For each one, discuss:</span>
+<span id="cb5-273"><a href="#cb5-273"></a><span class="ss">-   </span>Which of your final models (Part One Q1-4) you would recommend to the hospital, and why.</span>
 <span id="cb5-274"><a href="#cb5-274"></a></span>
-<span id="cb5-275"><a href="#cb5-275"></a><span class="ss">-   </span>Which metric(s) you would use for model selection and why.</span>
+<span id="cb5-275"><a href="#cb5-275"></a><span class="ss">-   </span>What score you should expect for your chosen metric(s) using your chosen model to predict future observations.</span>
 <span id="cb5-276"><a href="#cb5-276"></a></span>
-<span id="cb5-277"><a href="#cb5-277"></a><span class="ss">-   </span>Which of your final models (Part One Q1-4) you would recommend to the hospital, and why.</span>
+<span id="cb5-277"><a href="#cb5-277"></a><span class="fu">#### Q1</span></span>
 <span id="cb5-278"><a href="#cb5-278"></a></span>
-<span id="cb5-279"><a href="#cb5-279"></a><span class="ss">-   </span>What score you should expect for your chosen metric(s) using your chosen model to predict future observations.</span>
+<span id="cb5-279"><a href="#cb5-279"></a>The hospital faces severe lawsuits if they deem a patient to be low risk, and that patient later experiences a heart attack.</span>
 <span id="cb5-280"><a href="#cb5-280"></a></span>
-<span id="cb5-281"><a href="#cb5-281"></a><span class="fu">#### Q1</span></span>
+<span id="cb5-281"><a href="#cb5-281"></a><span class="fu">#### Q2</span></span>
 <span id="cb5-282"><a href="#cb5-282"></a></span>
-<span id="cb5-283"><a href="#cb5-283"></a>The hospital faces severe lawsuits if they deem a patient to be low risk, and that patient later experiences a heart attack.</span>
+<span id="cb5-283"><a href="#cb5-283"></a>The hospital is overfull, and wants to only use bed space for patients most in need of monitoring due to heart attack risk.</span>
 <span id="cb5-284"><a href="#cb5-284"></a></span>
-<span id="cb5-285"><a href="#cb5-285"></a><span class="fu">#### Q2</span></span>
+<span id="cb5-285"><a href="#cb5-285"></a><span class="fu">#### Q3</span></span>
 <span id="cb5-286"><a href="#cb5-286"></a></span>
-<span id="cb5-287"><a href="#cb5-287"></a>The hospital is overfull, and wants to only use bed space for patients most in need of monitoring due to heart attack risk.</span>
+<span id="cb5-287"><a href="#cb5-287"></a>The hospital is studying root causes of heart attacks, and would like to understand which biological measures are associated with heart attack risk.</span>
 <span id="cb5-288"><a href="#cb5-288"></a></span>
-<span id="cb5-289"><a href="#cb5-289"></a><span class="fu">#### Q3</span></span>
+<span id="cb5-289"><a href="#cb5-289"></a><span class="fu">#### Q4</span></span>
 <span id="cb5-290"><a href="#cb5-290"></a></span>
-<span id="cb5-291"><a href="#cb5-291"></a>The hospital is studying root causes of heart attacks, and would like to understand which biological measures are associated with heart attack risk.</span>
-<span id="cb5-292"><a href="#cb5-292"></a></span>
-<span id="cb5-293"><a href="#cb5-293"></a><span class="fu">#### Q4</span></span>
-<span id="cb5-294"><a href="#cb5-294"></a></span>
-<span id="cb5-295"><a href="#cb5-295"></a>The hospital is training a new batch of doctors, and they would like to compare the diagnoses of these doctors to the predictions given by the algorithm to measure the ability of new doctors to diagnose patients.</span>
+<span id="cb5-291"><a href="#cb5-291"></a>The hospital is training a new batch of doctors, and they would like to compare the diagnoses of these doctors to the predictions given by the algorithm to measure the ability of new doctors to diagnose patients.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
