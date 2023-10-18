@@ -17,7 +17,7 @@ You will submit an HTML document to Canvas as your final version.
 
 ## Getting Started
 
-[Download starter .qmd file](classification-template.qmd)
+[Download starter .qmd file](03-Classification-template.qmd)
 
 You'll notice in the template's YAML there are specifications for how the code should be included (i.e., `code-fold: true`, `code-line-numbers: true`, `code-tools: true`). **Do not change these specifications.**
 
@@ -88,11 +88,9 @@ ha <- read_csv(here::here("03-Classification",
                )
 ```
 
+Download the [`heart_attack.csv`](data/heart_attack.csv) and read in the data. Perform any data cleaning you believe is necessary.
 
-Download the [`heart_attack.csv`](data/heart_attack.csv) and read in the data. Perform any data cleaning you believe is necessary.  
-
-::: {.callout-tip}
-# Setting Primary Target
+::: {.callout-tip} \# Setting Primary Target
 
 You will find it helpful to reorder the `output` variable, so that the "at risk" group (e.g., level `1`) is the first level.
 
@@ -118,9 +116,9 @@ This section asks you to create a final best model for each of the model types s
 
 -   Find the best model based on `roc.auc` for predicting the `output` variable.
 
--   Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class. 
+-   Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class.
 
-::: {.callout-tip}
+::: callout-tip
 # Look over past code
 
 Code is provided from lecture; alternatively, `conf_mat()` is a nice shortcut function for this task.)
@@ -138,7 +136,7 @@ As I expect your analysis to be reproducible, your assignment should keep a reco
 
 #### Q1: KNN
 
-::: {.callout-tip}
+::: callout-tip
 # Tuning
 
 You *should* include a discussion of your hyperparameter tuning steps in your write-up.
@@ -150,7 +148,6 @@ You *should* include a discussion of your hyperparameter tuning steps in your wr
 
 #### Q4: QDA
 
-
 # Part Two: Interpreting Models
 
 #### Q5: Interpretation
@@ -161,7 +158,7 @@ Which predictors were most important to predicting heart attack risk? Were these
 
 Plot the ROC for your favorite model from Q1-4.
 
-::: {.callout-tip}
+::: callout-tip
 # Making an ROC Curve
 
 Here's some code to help you plot your favorite model's ROC:
@@ -180,7 +177,6 @@ ha %>%
   ) %>%
   autoplot()
 ```
-
 :::
 
 # Part Three: Metrics
@@ -195,7 +191,7 @@ Consider the following metrics:
 
 Compute each of these metrics (cross-validated) for your four models in Part One.
 
-::: {.callout-tip}
+::: callout-tip
 # Specifying Metrics
 
 You can specify which metrics you want to calculate as follows:
@@ -216,7 +212,7 @@ For a list of all available metrics here: <https://yardstick.tidymodels.org/arti
 
 Before sharing the dataset with you, I set aside a random 10% of the observations to serve as a final validation set.
 
-Download the [`heart_attack_validation.csv`](daheart_attack_validation.csv) and read in the data. Remember to clean these data the **same** way you cleaned the training data. 
+Download the [`heart_attack_validation.csv`](daheart_attack_validation.csv) and read in the data. Remember to clean these data the **same** way you cleaned the training data.
 
 ```{r}
 #| eval: false
@@ -246,9 +242,9 @@ ha_validation <- ha_validation %>%
 
 Use each of your final models in Part One Q1-4 to:
 
-- predict the `output` variable in the validation dataset
-- output a confusion matrix
-- report the `roc.auc`, the `precision`, and the `recall`
+-   predict the `output` variable in the validation dataset
+-   output a confusion matrix
+-   report the `roc.auc`, the `precision`, and the `recall`
 
 Compare these values to the cross-validated estimates you reported in Part One. Did our measure of model success turn out to be approximately correct for the validation data?
 
