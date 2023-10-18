@@ -1,0 +1,113 @@
+---
+title: "Variable Selection and Regularization"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+execute:
+  message: false
+---
+
+## Setup
+
+Declare your libraries:
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(baguette)
+```
+
+
+## Code from Lecture
+
+```{r}
+cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
+
+cann <- cann %>%
+  select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>%
+  drop_na()
+
+head(cann)
+```
+
+
+```{r}
+models <- regsubsets(Rating ~ Creative + Energetic + Tingly, 
+                     data = cann, method = "exhaustive")
+
+summary(models)
+```
+
+```{r}
+summary(models)$adjr2  # bigger is better
+summary(models)$cp     # smaller is better
+summary(models)$bic    # more negative is better
+```
+
+
+```{r}
+
+models <- regsubsets(Rating ~ ., 
+                     data = cann, method = "forward",
+                     nvmax = 61)
+
+summary(models)
+```
+
+```{r}
+bic_scores <- summary(models)$bic
+bic_scores
+```
+
+```{r}
+ggplot(, aes(x = 1:61, y = bic_scores)) +
+  geom_point()
+```
+
+```{r}
+which.min(bic_scores)
+summary(models)$outmat[13,]
+```
+
+
+## Try it!
+
+#### Determine the best model via **backwards selection**. Fit that model to the data and report results.
+
+#### Determine the best model via **forwards selection**. Fit that model to the data and report results.
+
+## Regularization Code from Lecture
+
+```{r}
+lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+```
+
+```{r}
+ridge_spec <- linear_reg(penalty = 0.1, mixture = 0) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+```
+
+
+## Try it!
+
+#### Fit a **LASSO** model to the cannabis data with lambda = 0.1. Then fit one with lambda = 0.5. What is different?
+
+#### Fit a **Ridge Regression** model to the cannabis data with lambda = 0.1. Then fit one with lambda = 0.5. What is different?
+
+#### Which model do you prefer?
+
+#### (Bonus) What is the best choice of lambda?

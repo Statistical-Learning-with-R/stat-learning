@@ -1,0 +1,97 @@
+---
+title: "Support Vector Machines"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+execute:
+  message: false
+---
+
+## Setup
+
+Declare your libraries:
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(baguette)
+```
+
+
+## Data Prep
+
+```{r}
+# Read data
+fed <- read.csv("https://www.dropbox.com/s/9t8sxr1sg0monih/federalist.txt?dl=1")
+fed <- fed[,-1]
+
+# Data from papers with known authors
+fed_known <- fed %>%
+  filter(Author != "DIS")
+
+# Data from papers with unknown authors
+fed_unknown <- fed %>%
+  filter(Author == "DIS")
+
+```
+
+
+## PCA projected dataset prep
+
+```{r}
+
+fed_matrix <- fed_known %>% 
+  select(-Author) %>% 
+  as.matrix()
+
+pc <- prcomp(fed_matrix, center = TRUE, scale = TRUE)
+
+fed_pca_df <- pc$x %>%
+  as.data.frame() %>%
+  mutate(
+    Author = fed_known$Author
+  )
+
+fed_pca_df_unknown <- fed_unknown %>%
+  select(-Author) %>%
+  as.matrix() %>%
+  scale() %>% 
+  replace_na(0) %*% 
+  pc$rotation %>%
+  as_tibble() %>%
+  mutate(
+    Author = "Unknown"
+  )
+
+fed_pca_df %>%
+  ggplot(aes(x = PC1, y = PC2, color = Author)) +
+  geom_point()
+```
+
+
+## Try it!
+
+#### Fit a support vector classifier, tuning the **cost** parameter
+#### Use it to predict the unknown authors
+
+```{r}
+svm_spec <- svm_poly(cost = 2, degree = 1) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+```
+
+
+#### Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
+#### Use it to predict the unknown authors
+

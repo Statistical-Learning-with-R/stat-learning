@@ -1,0 +1,149 @@
+---
+title: "Clustering"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+execute:
+  message: false
+---
+
+## Setup
+
+Declare your libraries:
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(baguette)
+```
+
+
+## Data Prep
+
+```{r}
+cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
+
+cann <- cann %>% drop_na()
+
+cann_matrix <- cann %>%
+  select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>%
+  as.matrix()
+
+cann_types <- cann %>% pull(Type)
+```
+
+
+## Code from Lecture
+
+```{r}
+fed_km <- kmeans(fed_matrix, 3)
+fed_km
+
+fed_km$centers
+
+fed_km$totss
+fed_km$withinss
+fed_km$betweenss
+
+res <- tibble(
+  clust = fed_km$cluster, 
+  auth = auths_known)
+
+res
+
+res %>% count(clust, auth)
+```
+
+
+```{r}
+pc <- prcomp(fed_matrix, center = TRUE, scale = TRUE)
+
+fed_reduced <- pc$x[, 1:2]
+
+fed_pca_km <- kmeans(fed_reduced, 3)
+
+res <- tibble(
+  clust = fed_pca_km$cluster, 
+  auth = auths_known)
+
+res %>% count(clust, auth)
+```
+
+```{r}
+
+fed_pca_km <- kmeans(fed_reduced, 4)
+
+res <- tibble(
+  clust = fed_pca_km$cluster, 
+  auth = auths_known)
+
+res %>% count(clust, auth)
+```
+
+
+
+## Try it!
+
+#### Apply k-means clustering to the cannabis data using *all* the word predictors.
+#### What was the within and between sum of squares?
+#### Did the clusters match up with the Type?
+
+#### Refer back to your PCA analysis of the cannabis data.
+#### Apply k-means clustering to the **second and third** PC only
+#### Plot these clusters.  What do you think they capture?
+
+## More code from class
+
+```{r}
+fed_hc <- fed_matrix %>% 
+  scale() %>% 
+  dist() %>% 
+  hclust()
+
+plot(fed_hc, labels = fed_known$auths)
+```
+
+
+
+```{r}
+res_hc <- cutree(fed_hc, k = 3)
+
+res_hc
+```
+
+```{r}
+tibble(
+  clust = res_hc,
+  auth = fed_known$auths
+) %>%
+  count(clust, auth)
+```
+
+```{r}
+res_hc_2 <- cutree(fed_hc, h = 0.05)
+res_hc_2
+```
+
+```{r}
+tibble(
+  clust = res_hc_2,
+  auth = auths_known
+) %>%
+  count(clust, auth)
+```
+
+## Try it!
+
+#### Apply hierarchical clustering to the cannabis data
+#### Compare your results to k-means. Which do you prefer?  Why?
