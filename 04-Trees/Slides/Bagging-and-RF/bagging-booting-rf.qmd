@@ -1,22 +1,15 @@
 ---
 title: "Decision Trees: Next Level"
-resource_files:
-- appforthat.jpg
-output:
-  xaringan::moon_reader:
-    css: xaringan-themer.css
-    lib_dir: libs
-    nature:
-      highlightLines: yes
-      highlightStyle: github
-      countIncrementalSlides: FALSE
-      ratio: '16:9'
-
+format: 
+  revealjs:
+    theme: style.scss
+embed-resources: true
+editor: visual
 ---
 
-```{r setup, include=FALSE}
-
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, error = TRUE, echo = TRUE)
+```{r setup}
+#| label: setup
+#| include: false
 
 library(tidyverse)
 library(tidymodels)
@@ -31,40 +24,10 @@ library(magrittr)
 set.seed(98249)
 ```
 
-```{r xaringan-themer, include=FALSE}
-library(xaringanthemer)
-library(xaringanExtra)
-style_mono_light(
-  base_color = "#26116c",
-  text_bold_color = "#fd5e53",
-  title_slide_text_color = "#fff8e7",
-  background_color = "#fff8e7",
-  header_font_google = google_font("Roboto"),
-  text_font_google   = google_font("Roboto Condensed"),
-  code_font_google   = google_font("Droid Mono")
-)
-```
-
-```{css, echo = FALSE}
-.red{ color: red; }
-.blue{ color: blue; }
-.huge {
-  font-size: 200%;
-}
-.large {
-  font-size: 150%;
-}
-.tiny {
-  font-size: 50%;
-}
-```
----
-class: center, middle, inverse
-
 # Measuring Success
+
 ## Gini Index and Cost Complexity
 
----
 ## Recall: Our simplest cannabis tree
 
 .pull-left[
@@ -72,7 +35,7 @@ class: center, middle, inverse
 
 * Which is **least pure**?
 
---
+. . .
 
 * Could we split a node further for better purity?
 
