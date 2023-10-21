@@ -39,5 +39,55 @@ Unlike previous weeks, we **are not** splitting the chapter into components.
 
 [Statquest Comparison of Lasso and Ridge Regression](https://youtu.be/Xm2C_gTAl8c?si=ts6mC0UYH6uLrCGw)
 
-# Concept Quiz -- Will be posted by Saturday at 8am
+# Concept Quiz
 
+**Question 1** -- Suppose we have 20 variables in a dataset which can be used as pedictors ($p = 20$). Best subset will fit ____ models and stepwise selection (forward and backward) will fit ____ models.  
+*Input the number of models without commas!*
+
+**Question 2** -- When the number of samples ($n$) is less than the number of variables ($n < p$), which of the following model selection methods can be used?
+
+- Forward selection
+- Backward selection
+- Best subset
+
+**Suppose we perform best subset, forward stepwise, and backward stepwise selection on a single data set. For each approach, we obtain $p + 1$ models, containing $0, 1, 2, ..., p$ predictors.**
+
+For each question answer whether the statement is true or false.
+
+**Question 3** -- The predictors in the k-variable model identified by forward stepwise are a subset of the predictors in the (k + 1)-variable model identified by forward stepwise selection.
+
+**Question 4** -- The predictors in the k-variable model identified by backward stepwise are a subset of the predictors in the (k + 1)- variable model identified by backward stepwise selection.
+
+**Question 5** -- The predictors in the k-variable model identified by backward stepwise are a subset of the predictors in the (k + 1)- variable model identified by forward stepwise selection.
+
+**Question 6** -- The predictors in the k-variable model identified by forward stepwise are a subset of the predictors in the (k + 1)-variable model identified by backward stepwise selection.
+
+**Question 7** -- The predictors in the k-variable model identified by best subset are a subset of the predictors in the (k + 1)-variable model identified by best subset selection.
+
+**Question 8** -- The lasso regression, relative to least squares, is:
+
+- More flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in
+variance.
+- More flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease
+in bias.
+- Less flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in
+variance.
+- Less flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease
+in bias.
+
+**Question 9** -- The ridge regression, relative to least squares, is:
+
+- More flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in
+variance.
+- More flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease
+in bias.
+- Less flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in
+variance.
+- Less flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease
+in bias.
+
+**Question 10** -- When least squares estimates have high variance, [ridge / lasso] regression works best.
+
+**Question 11** -- With [ridge / lasso] regression, the coefficients of non-important predictors are set to 0. 
+
+**Question 12** -- True or False: When using ridge regression, it is critical to standardize every predictor before fitting a model. 
