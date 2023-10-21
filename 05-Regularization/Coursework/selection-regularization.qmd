@@ -1,0 +1,41 @@
+---
+title: "Variable Selection and Regularization"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: true
+    number-depth: 2
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: source
+execute: 
+  echo: true
+  eval: false
+  include: false
+---
+
+This week we will focus on variable selection and regularization. 
+
+Unlike previous weeks, we **are not** splitting the chapter into components. 
+
+# Textbook Reading
+
+📖 [**Required Reading:** *ISLR Chapter 6 -- Linear Model Selection and Regularization*](https://drive.google.com/file/d/106d-rN7cXpyAkgrUqjcPONNCyO-rX7MQ/view)
+
+::: callout-warning
+# Read Sections 6.1 to 6.3 (pg. 225 - 261)
+:::
+
+# Tutorial Videos
+
+[Statquest Review of Ridge Regression](https://youtu.be/Q81RR3yKn30?si=Z52w6tUl5zkPahK_)
+
+[Statquest Review of Lasso Regression](https://youtu.be/NGf0voTMlcs?si=pUdcZYYjUkmNSINA)
+
+[Statquest Comparison of Lasso and Ridge Regression](https://youtu.be/Xm2C_gTAl8c?si=ts6mC0UYH6uLrCGw)
+
+# Concept Quiz -- Will be posted by Saturday at 8am
+
