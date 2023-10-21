@@ -26,7 +26,7 @@ Unlike previous weeks, we **are not** splitting the chapter into components.
 📖 [**Required Reading:** *ISLR Chapter 6 -- Linear Model Selection and Regularization*](https://drive.google.com/file/d/106d-rN7cXpyAkgrUqjcPONNCyO-rX7MQ/view)
 
 ::: callout-warning
-# Read Sections 6.1 to 6.3 (pg. 225 - 261)
+# Read Sections 6.1 and 6.2 (pg. 225 - 251)
 
 (Ignore the mathy parts; focus on concepts)
 :::
