@@ -27,6 +27,8 @@ Unlike previous weeks, we **are not** splitting the chapter into components.
 
 ::: callout-warning
 # Read Sections 6.1 to 6.3 (pg. 225 - 261)
+
+(Ignore the mathy parts; focus on concepts)
 :::
 
 # Tutorial Videos
