@@ -1,0 +1,59 @@
+---
+title: "Dimension Reduction & Clustering"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: true
+    number-depth: 2
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: source
+execute: 
+  echo: true
+  eval: false
+  include: false
+---
+
+This week we will have **two** topics we are focusing on---dimension reduction and clustering. We will break these topics into two installments, first covering dimension reduction (since it is related to last week's reading on regularization) and then moving to clustering. 
+
+# Dimension Reduction
+
+## Textbook Reading
+
+📖 [**Required Reading:** *ISLR -- Chapter 6, Section 6.3* AND *Chapter 12, Section 12.2*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+::: callout-warning
+# Dimension Reduction Methods Across Two Chapters
+
+Read pages 252 through 261 **and** pages 496 through 508! 
+:::
+
+## Tutorial Videos
+
+Here's a helpful video which explains how PCA works: <https://youtu.be/FgakZw6K1QQ?si=n9f_d4lM1AGjFNg_>
+
+## Concept Quiz 
+
+# Clustering
+
+## Textbook Reading
+
+📖 [**Required Reading:** *ISLR -- Chapter 12, Section 12.4*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+### Reading Guide -- Due Wednesday, October 4 at 2:10pm
+
+📝 [Download the Word Document](reading-guide/week-3.docx)
+
+## Tutorial Videos
+
+Here's a helpful video which explains how K-means clustering works:
+<https://youtu.be/4b5d3muPQmA?si=wZbMLsFq7UAO9RKe>
+
+Here's a helpful video which explains how hierarchical clustering works:
+<https://youtu.be/7xHsRkOdVwo?si=8q8X1fjpiW5BiBCQ>
+
+
+
