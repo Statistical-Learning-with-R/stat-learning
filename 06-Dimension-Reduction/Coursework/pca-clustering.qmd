@@ -43,10 +43,6 @@ Here's a helpful video which explains how PCA works: <https://youtu.be/FgakZw6K1
 
 📖 [**Required Reading:** *ISLR -- Chapter 12, Section 12.4*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
 
-### Reading Guide -- Due Wednesday, October 4 at 2:10pm
-
-📝 [Download the Word Document](reading-guide/week-3.docx)
-
 ## Tutorial Videos
 
 Here's a helpful video which explains how K-means clustering works:
@@ -55,5 +51,5 @@ Here's a helpful video which explains how K-means clustering works:
 Here's a helpful video which explains how hierarchical clustering works:
 <https://youtu.be/7xHsRkOdVwo?si=8q8X1fjpiW5BiBCQ>
 
-
+## Concept Quiz 
 
