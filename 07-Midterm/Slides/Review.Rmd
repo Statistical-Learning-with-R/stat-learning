@@ -1,0 +1,368 @@
+---
+title: "Midterm Review"
+resource_files:
+- appforthat.jpg
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightLines: yes
+      highlightStyle: github
+      countIncrementalSlides: false
+      ratio: '16:9'
+
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(tidymodels)
+library(flair)
+library(emo)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+library(xaringanExtra)
+style_mono_light(
+  base_color = "#26116c",
+  text_bold_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  background_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+```{css, echo = FALSE}
+.red{ color: red; }
+.blue{ color: blue; }
+.huge {
+  font-size: 200%;
+}
+.large {
+  font-size: 150%;
+}
+.tiny {
+  font-size: 50%;
+}
+```
+
+---
+class: center, middle
+
+# Week 1: Linear Regression
+
+---
+# Hands-on skills
+
+
+`r emo::ji("check")` How to **specify** a linear regression model.
+
+`r emo::ji("check")` How to **fit** a linear regression model (possibly with polynomial terms)
+
+`r emo::ji("check")` How to use the model to **predict** on a new dataset.
+
+`r emo::ji("check")` How to calculate **metrics** like RMSE.
+
+`r emo::ji("check")` How to calculate and plot **residuals**.
+
+---
+# Concepts
+
+`r emo::ji("check")` How to **interpret** the **coefficient estimates**
+
+`r emo::ji("check")` How to **select a model** based on theoretical measures and/or cross-validated metrics
+
+`r emo::ji("check")` How to report and interpret the **R-squared** value.
+
+`r emo::ji("check")` How to interpret the **MSE**
+
+`r emo::ji("check")` How to check **residuals** for model fit.
+
+---
+# Quick Quiz
+
+Interpret the coefficients and the R-squared value of the model below:
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(palmerpenguins)
+library(tidyverse)
+library(tidymodels)
+
+lm(body_mass_g ~ (bill_length_mm + bill_depth_mm)*sex, data = penguins) %>% summary()
+```
+
+
+---
+class: center, middle, inverse
+
+# Week 2: K-Nearest-Neighbors Regression
+
+---
+# Hands-on skills
+
+
+`r emo::ji("check")` How to **specify** a KNN model.
+
+`r emo::ji("check")` How to **transform variables**
+
+`r emo::ji("check")` How to **fit** a KNN model
+
+`r emo::ji("check")` How to use the model to **predict** on a new dataset.
+
+`r emo::ji("check")` How to calculate **metrics** like RMSE.
+
+`r emo::ji("check")` How to calculate and plot **residuals**.
+
+---
+# Concepts
+
+`r emo::ji("check")` Be able to **describe** the KNN process.
+
+`r emo::ji("check")` Discuss **why** we might transform variables, and how that changes the model.
+
+`r emo::ji("check")` Discuss the pros and cons of different choices of **K**.
+
+`r emo::ji("check")` Discuss the pros and cons of KNN compared to **linear regression**
+
+---
+# Quick Quiz
+
+In which of the following scenarios would *standardizing the predictors* be important for a KNN model? Defend your answer.
+
+* Our predictors are all **categorical**.
+
+* We only have one predictor
+
+* Our predictors are *height in inches* and *weight in pounds*
+
+* Our predictors are *height in inches* and *sex*
+
+* Our predictors are *bill length in mm* and *bill depth in mm*
+
+---
+# Quick Quiz
+
+Suppose we fit a KNN model with K = the number of observations in the dataset, minus one.
+
+What are the pros and cons of this choice?
+
+---
+class: center, middle, inverse
+
+# Week 2 and beyond: Cross-Validation
+
+---
+# Hands-on Skills
+
+`r emo::ji("check")` Perform **v-fold cross-validation** on a model.
+
+`r emo::ji("check")` Collect **metrics** from cross-validation, possibly including metrics that aren't the default in `collect_metrics`.
+
+`r emo::ji("check")` Reference CV results for **model selection** and **tuning**
+
+`r emo::ji("check")` Reference CV results for **model assessment**
+
+---
+# Concepts
+
+`r emo::ji("check")` Understand **which situations** require cross-validation and which do not.
+
+`r emo::ji("check")` Discuss **how** and **why** cross-validation addresses the problem of overfitting
+
+`r emo::ji("check")` Be able to describe where **randomness** occurs in the cross-validation process.
+
+`r emo::ji("check")` Figure out the sample sizes of the **test** and **training** sets from the choice of **v**
+
+`r emo::ji("check")` Choose a **tuning parameter** value from cross-validated results.
+
+--
+
+`r emo::ji("x")` What is the "correct" choice of v
+
+---
+# Quick Quiz
+
+In which of the following situations would you need to use cross-validation? Defend your answer.
+
+* Deciding whether to use a KNN regression or linear regression
+
+* Deciding between a simple linear regression with `bill_length_mm` as the only predictor, or a simple linear regression with `bill_depth_mm` as a predictor.
+
+* Fitting a **final model**
+
+* Reporting the metrics of your **final model**
+
+* Tuning **K** in a KNN model.
+
+* Calculating metrics of prediction on a **new dataset**.
+
+
+---
+class: center, middle, inverse
+
+# Week 3: Classification
+
+---
+# Hands-on Skills
+
+`r emo::ji("check")` Be able to **specify** and **fit** a KNN model for classification.
+
+`r emo::ji("check")` Be able to **specify** and **fit** a Logistic Regression model for classification.
+
+`r emo::ji("check")` Be able to **specify** and **fit** a LDA or QDA model for classification.
+
+`r emo::ji("check")` Produce **predictions** from a classification model, including a **confusion matrix**
+
+`r emo::ji("check")` Compute the following **metrics** for classification:  *accuracy*, *precision*, *recall*, *ROC-AUC*, *Gini Index*.
+
+--
+
+`r emo::ji("x")` Logistic regression with more than two categories.
+
+`r emo::ji("x")` Deep math behind ROC-AUC and Gini Index
+
+`r emo::ji("x")` F1 score and other metrics
+
+---
+# Concepts
+
+`r emo::ji("check")` **Interpret** the coefficients of a Logistic Regression model
+
+`r emo::ji("check")` **Interpret** the discriminant loadings of a LDA model.
+
+`r emo::ji("check")` Discuss a **confusion matrix**.
+
+`r emo::ji("check")` Explain the **idea** of the following metrics: *accuracy*, *precision*, *recall*, *ROC-AUC*, *Gini Index*.
+
+`r emo::ji("check")` Make an argument for why one metric might be a better choice than another for **model assessment** in various scenarios.
+
+--
+
+`r emo::ji("x")` Interpret a QDA model.
+
+---
+# Quick Quiz
+
+Suppose we are trying to predict if a customer is likely to buy a particular product.  In the following descriptions, what metric is being referenced?
+
+* "The chances that my model classifies a non-buyer as a buyer is 20%"
+
+* "My model is not very sensitive to our choice of decision boundary."
+
+* "The nodes of my decision tree are very pure."
+
+* "My model correctly identifies about 75% of buyers."
+
+* "The predictions from my model are correct 60% of the time."
+
+---
+# Quick Quiz
+
+Discuss the following confusion matrix.  How good is our  model at classifying penguin species?
+
+```{r, echo = FALSE}
+knn <- nearest_neighbor(neighbors = 5) %>%
+  set_mode("classification") %>%
+  set_engine("kknn")
+
+penguins <- penguins %>%
+  mutate(
+    species = factor(species)
+  ) %>%
+  drop_na(species, bill_length_mm)
+
+knn_fit <- knn %>% fit(species ~ bill_length_mm, data = penguins)
+
+penguins %>%
+  mutate(
+    preds = predict(knn_fit, penguins)$.pred_class
+  ) %>%
+  count(species, preds)
+```
+
+
+
+---
+class: center, middle, inverse
+
+# Week 4: Decision Trees
+
+---
+# Hands-on Skills
+
+
+`r emo::ji("check")` Be able to **specify** and **fit** a single decision tree, a bagged tree model, and a random forest model.
+
+`r emo::ji("check")` Produce **predictions** and **metrics** from any of these models.
+
+`r emo::ji("check")` Make a **visualization** of a single decision tree.
+
+---
+# Concepts
+
+`r emo::ji("check")` **Interpret** the visualization and/or output of a single decision tree fit.
+
+`r emo::ji("check")` **Interpret** the output of a bagged tree (don't need to explain the numbers, just the idea of "most important variables")
+
+`r emo::ji("check")` **Interpret** the output of a random forest (don't need to explain the numbers, just the idea of "most important variables")
+
+`r emo::ji("check")` Explain the reasons for choosing a **bagged tree** or **random forest** model.
+
+--
+`r emo::ji("x")` Examine a single tree from a bagged tree or random forest fit.
+
+---
+# Quick Quiz
+
+Interpret the following decision tree:
+
+```{r, echo = FALSE}
+library(rpart.plot)
+
+tree <- decision_tree() %>%
+  set_mode("classification") %>%
+  set_engine("rpart")
+
+tree_fit <- tree %>% fit(species ~ ., data = penguins)
+
+rpart.plot(tree_fit$fit)
+```
+
+---
+# Quick Quiz
+
+Why might we prefer a **random forest** in the previous analysis?
+
+---
+class: center, middle, inverse
+
+# Week 5:  Bootstrapping
+
+---
+## Hands-on
+
+`r emo::ji("check")` Manually perform a reasonable number of **bootstrapped resamples**
+
+## Concepts
+
+`r emo::ji("check")` **Explain** the advantages and reasons for bootstrapping.
+
+
+`r emo::ji("check")` **Discuss** the results of a bootstrapped process.
+
+---
+# Quick Quiz
+
+What is a reason we might want to **bootstrap** a Logistic Regression?
+
+---
+class: center, middle, inverse
+
+# Your turn
+## As a group, use the **palmer penguins** dataset to create a question for the exam
+
+(**library(palmerpenguins)**, then the dataset *penguins* will be auto-loaded)

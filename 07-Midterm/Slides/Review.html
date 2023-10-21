@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Midterm Review</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Midterm Review
+
+---
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.red{ color: red; }
+.blue{ color: blue; }
+.huge {
+  font-size: 200%;
+}
+.large {
+  font-size: 150%;
+}
+.tiny {
+  font-size: 50%;
+}
+&lt;/style&gt;
+
+---
+class: center, middle
+
+# Week 1: Linear Regression
+
+---
+# Hands-on skills
+
+
+✅ How to **specify** a linear regression model.
+
+✅ How to **fit** a linear regression model (possibly with polynomial terms)
+
+✅ How to use the model to **predict** on a new dataset.
+
+✅ How to calculate **metrics** like RMSE.
+
+✅ How to calculate and plot **residuals**.
+
+---
+# Concepts
+
+✅ How to **interpret** the **coefficient estimates**
+
+✅ How to **select a model** based on theoretical measures and/or cross-validated metrics
+
+✅ How to report and interpret the **R-squared** value.
+
+✅ How to interpret the **MSE**
+
+✅ How to check **residuals** for model fit.
+
+---
+# Quick Quiz
+
+Interpret the coefficients and the R-squared value of the model below:
+
+
+```
+## 
+## Call:
+## lm(formula = body_mass_g ~ (bill_length_mm + bill_depth_mm) * 
+##     sex, data = penguins)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1338.73  -299.18   -10.02   302.98  1115.46 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)            5750.862    584.286   9.843  &lt; 2e-16 ***
+## bill_length_mm           43.580      7.941   5.488 8.17e-08 ***
+## bill_depth_mm          -226.671     21.685 -10.453  &lt; 2e-16 ***
+## sexmale                2456.476    821.444   2.990   0.0030 ** 
+## bill_length_mm:sexmale  -12.599     10.639  -1.184   0.2372    
+## bill_depth_mm:sexmale   -57.398     29.767  -1.928   0.0547 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 451.1 on 327 degrees of freedom
+##   (11 observations deleted due to missingness)
+## Multiple R-squared:  0.6909,	Adjusted R-squared:  0.6862 
+## F-statistic: 146.2 on 5 and 327 DF,  p-value: &lt; 2.2e-16
+```
+
+
+---
+class: center, middle, inverse
+
+# Week 2: K-Nearest-Neighbors Regression
+
+---
+# Hands-on skills
+
+
+✅ How to **specify** a KNN model.
+
+✅ How to **transform variables**
+
+✅ How to **fit** a KNN model
+
+✅ How to use the model to **predict** on a new dataset.
+
+✅ How to calculate **metrics** like RMSE.
+
+✅ How to calculate and plot **residuals**.
+
+---
+# Concepts
+
+✅ Be able to **describe** the KNN process.
+
+✅ Discuss **why** we might transform variables, and how that changes the model.
+
+✅ Discuss the pros and cons of different choices of **K**.
+
+✅ Discuss the pros and cons of KNN compared to **linear regression**
+
+---
+# Quick Quiz
+
+In which of the following scenarios would *standardizing the predictors* be important for a KNN model? Defend your answer.
+
+* Our predictors are all **categorical**.
+
+* We only have one predictor
+
+* Our predictors are *height in inches* and *weight in pounds*
+
+* Our predictors are *height in inches* and *sex*
+
+* Our predictors are *bill length in mm* and *bill depth in mm*
+
+---
+# Quick Quiz
+
+Suppose we fit a KNN model with K = the number of observations in the dataset, minus one.
+
+What are the pros and cons of this choice?
+
+---
+class: center, middle, inverse
+
+# Week 2 and beyond: Cross-Validation
+
+---
+# Hands-on Skills
+
+✅ Perform **v-fold cross-validation** on a model.
+
+✅ Collect **metrics** from cross-validation, possibly including metrics that aren't the default in `collect_metrics`.
+
+✅ Reference CV results for **model selection** and **tuning**
+
+✅ Reference CV results for **model assessment**
+
+---
+# Concepts
+
+✅ Understand **which situations** require cross-validation and which do not.
+
+✅ Discuss **how** and **why** cross-validation addresses the problem of overfitting
+
+✅ Be able to describe where **randomness** occurs in the cross-validation process.
+
+✅ Figure out the sample sizes of the **test** and **training** sets from the choice of **v**
+
+✅ Choose a **tuning parameter** value from cross-validated results.
+
+--
+
+❌ What is the "correct" choice of v
+
+---
+# Quick Quiz
+
+In which of the following situations would you need to use cross-validation? Defend your answer.
+
+* Deciding whether to use a KNN regression or linear regression
+
+* Deciding between a simple linear regression with `bill_length_mm` as the only predictor, or a simple linear regression with `bill_depth_mm` as a predictor.
+
+* Fitting a **final model**
+
+* Reporting the metrics of your **final model**
+
+* Tuning **K** in a KNN model.
+
+* Calculating metrics of prediction on a **new dataset**.
+
+
+---
+class: center, middle, inverse
+
+# Week 3: Classification
+
+---
+# Hands-on Skills
+
+✅ Be able to **specify** and **fit** a KNN model for classification.
+
+✅ Be able to **specify** and **fit** a Logistic Regression model for classification.
+
+✅ Be able to **specify** and **fit** a LDA or QDA model for classification.
+
+✅ Produce **predictions** from a classification model, including a **confusion matrix**
+
+✅ Compute the following **metrics** for classification:  *accuracy*, *precision*, *recall*, *ROC-AUC*, *Gini Index*.
+
+--
+
+❌ Logistic regression with more than two categories.
+
+❌ Deep math behind ROC-AUC and Gini Index
+
+❌ F1 score and other metrics
+
+---
+# Concepts
+
+✅ **Interpret** the coefficients of a Logistic Regression model
+
+✅ **Interpret** the discriminant loadings of a LDA model.
+
+✅ Discuss a **confusion matrix**.
+
+✅ Explain the **idea** of the following metrics: *accuracy*, *precision*, *recall*, *ROC-AUC*, *Gini Index*.
+
+✅ Make an argument for why one metric might be a better choice than another for **model assessment** in various scenarios.
+
+--
+
+❌ Interpret a QDA model.
+
+---
+# Quick Quiz
+
+Suppose we are trying to predict if a customer is likely to buy a particular product.  In the following descriptions, what metric is being referenced?
+
+* "The chances that my model classifies a non-buyer as a buyer is 20%"
+
+* "My model is not very sensitive to our choice of decision boundary."
+
+* "The nodes of my decision tree are very pure."
+
+* "My model correctly identifies about 75% of buyers."
+
+* "The predictions from my model are correct 60% of the time."
+
+---
+# Quick Quiz
+
+Discuss the following confusion matrix.  How good is our  model at classifying penguin species?
+
+
+```
+## # A tibble: 9 x 3
+##   species   preds         n
+##   &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;
+## 1 Adelie    Adelie      146
+## 2 Adelie    Chinstrap     2
+## 3 Adelie    Gentoo        3
+## 4 Chinstrap Adelie        2
+## 5 Chinstrap Chinstrap    29
+## 6 Chinstrap Gentoo       37
+## 7 Gentoo    Adelie        6
+## 8 Gentoo    Chinstrap     6
+## 9 Gentoo    Gentoo      111
+```
+
+
+
+---
+class: center, middle, inverse
+
+# Week 4: Decision Trees
+
+---
+# Hands-on Skills
+
+
+✅ Be able to **specify** and **fit** a single decision tree, a bagged tree model, and a random forest model.
+
+✅ Produce **predictions** and **metrics** from any of these models.
+
+✅ Make a **visualization** of a single decision tree.
+
+---
+# Concepts
+
+✅ **Interpret** the visualization and/or output of a single decision tree fit.
+
+✅ **Interpret** the output of a bagged tree (don't need to explain the numbers, just the idea of "most important variables")
+
+✅ **Interpret** the output of a random forest (don't need to explain the numbers, just the idea of "most important variables")
+
+✅ Explain the reasons for choosing a **bagged tree** or **random forest** model.
+
+--
+❌ Examine a single tree from a bagged tree or random forest fit.
+
+---
+# Quick Quiz
+
+Interpret the following decision tree:
+
+
+```
+## Warning: package 'rpart.plot' was built under R version 4.0.5
+```
+
+```
+## Loading required package: rpart
+```
+
+```
+## Warning: package 'rpart' was built under R version 4.0.5
+```
+
+```
+## 
+## Attaching package: 'rpart'
+```
+
+```
+## The following object is masked from 'package:dials':
+## 
+##     prune
+```
+
+```
+## Warning: Cannot retrieve the data used to build the model (so cannot determine roundint and is.binary for the variables).
+## To silence this warning:
+##     Call rpart.plot with roundint=FALSE,
+##     or rebuild the rpart model with model=TRUE.
+```
+
+![](Review_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+# Quick Quiz
+
+Why might we prefer a **random forest** in the previous analysis?
+
+---
+class: center, middle, inverse
+
+# Week 5:  Bootstrapping
+
+---
+## Hands-on
+
+✅ Manually perform a reasonable number of **bootstrapped resamples**
+
+## Concepts
+
+✅ **Explain** the advantages and reasons for bootstrapping.
+
+
+✅ **Discuss** the results of a bootstrapped process.
+
+---
+# Quick Quiz
+
+What is a reason we might want to **bootstrap** a Logistic Regression?
+
+---
+class: center, middle, inverse
+
+# Your turn
+## As a group, use the **palmer penguins** dataset to create a question for the exam
+
+(**library(palmerpenguins)**, then the dataset *penguins* will be auto-loaded)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

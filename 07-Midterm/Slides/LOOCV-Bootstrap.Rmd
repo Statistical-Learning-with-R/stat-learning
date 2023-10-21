@@ -1,0 +1,237 @@
+---
+title: "Cross Validation and Bootstrapping"
+resource_files:
+- appforthat.jpg
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightLines: yes
+      highlightStyle: github
+      countIncrementalSlides: false
+      ratio: '16:9'
+
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(tidymodels)
+library(flair)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+library(xaringanExtra)
+style_mono_light(
+  base_color = "#26116c",
+  text_bold_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  background_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+```{css, echo = FALSE}
+.red{ color: red; }
+.blue{ color: blue; }
+.huge {
+  font-size: 200%;
+}
+.large {
+  font-size: 150%;
+}
+.tiny {
+  font-size: 50%;
+}
+```
+
+---
+class: center, middle
+
+# Cross-Validation: Recap
+
+---
+# Review
+
+A **training set** is a random subset of the data that we use to **estimate the model**.
+
+--
+
+A **test set** is a random subset we use to measure the **success of the model**
+
+--
+
+A **validation set** or **hold-out** set is a random subset we set aside and *never touch* until we have *one final model*; we use it to report future success.
+
+---
+# Review
+
+```{r}
+cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
+```
+
+
+---
+# Review
+
+**v-fold cross-validation** is when you create **v** different training/testing splits
+
+--
+
+By choosing the number of folds, you are choosing the size of the splits:
+
+$(v-1)/v \cross n$ in the training set
+$1/v \cross n$ in the test set
+
+--
+
+(Basically, doing only one **testing/training** split is like doing 1-fold cross-validation.)
+
+---
+# Review
+
+We use cross-validation for...
+
+--
+
+* **model selection:** 
+
+    + Comparing two very different model specifications
+    + Determining the right level of flexibility for the model (e.g. tuning parameters, predictor selection)
+    
+--
+
+* **model assessment:** "fairly" evaluating the performance of a final chosen model
+
+---
+# Leave-One-Out Cross-Validation (LOOCV)
+
+What if we choose **v** = **n** for our cross-validation?
+
+--
+
+Each split has *all but one* of the observations in the training set, and one in the test set.
+
+--
+
+Pros:  We are using *almost* all the data to *fit* the model, so our **fitted models** will be very consistent.
+
+--
+
+Cons: You can't calculate metrics from one observation!
+
+--
+
+... or can you?
+
+---
+# LOOCV
+
+Process:
+
+1. For observation $i$, we fit a model to all the remaining data except the $i$-th one.
+
+2. Use the model to predict $\hat{y}_i$.
+
+3. Repeat (1) and (2) for **every** observation.
+
+4. Gather the true responses ($y_i$) and the predicted ones ($\hat{y}_i$)
+
+5. Compute metrics based on the collection of all predictions.
+
+---
+# LOOCV
+
+How do we do it in **R**?
+
+--
+
+We don't.  It's bad.
+
+--
+
+**LOOCV** has 
+
+* high computing demands (fitting a ton of models)
+* bad statistical properties
+
+--
+
+But you need to know what it is. :)
+
+---
+class: center, middle, inverse
+
+# Bootstrapping
+
+---
+
+## Bootstrapping
+
+Recall:  In **bagged tree** fitting, we *subsampled* our observations and then averaged results.
+
+--
+
+In general, this method is called **bootstrapping**
+
+--
+
+![](https://img.huffingtonpost.com/asset/5b6b3f1f2000002d00349e9d.jpeg?cache=92vfjlaeaf&ops=1778_1000)
+
+---
+
+## Bootstrapping
+
+
+In **cross-validation**, we get an estimate of *variance* of our **metrics**.
+
+--
+
+With **bootstrapping**, we get an estimate of *variance* of our *parameter estimates*.
+
+---
+class: center, middle, inverse
+
+## Your Turn
+
+Revisit the **insurance charges** dataset from weeks 1 and 2.
+
+1. Use the `initial_split` trick to take a random subsample of half the data.
+
+2. Fit a linear model to this subsample, and record the coefficient estimates.
+
+3. As a group, repeat 1 and 2 a total of 20 times.  Report some summaries of your resulting coefficient estimates.
+
+---
+
+## Shortcut for metrics:
+
+```{r}
+ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
+
+ins_bs <- ins %>% bootstraps(times = 20)
+
+lin_mod <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+
+ins_wflow <- workflow() %>%
+  add_model(lin_mod) %>%
+  add_recipe(recipe(charges ~ age, data = ins))
+
+ins_bs_fits <- ins_wflow %>%
+  fit_resamples(ins_bs)
+
+ins_bs_fits %>% collect_metrics()
+
+
+```
+
+
+
+
+
