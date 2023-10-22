@@ -18,6 +18,7 @@ execute:
 
 library(tidyverse)
 library(tidymodels)
+library(ggridges)
 
 set.seed(3849)
 ```
@@ -58,7 +59,8 @@ whr <- read_csv(here::here("02-CV-KNN",
 
 whr <- whr %>%
   mutate(
-    regional_indicator = factor(regional_indicator)
+    regional_indicator = factor(regional_indicator), 
+    year_f = factor(year)
   ) 
 ```
 
@@ -95,7 +97,7 @@ No, the linear regression with `year` as a predictor has a large p-value, indica
 #| label: year-anova
 
 whr_fit_2 <- lin_mod %>%
-  fit(happiness_score ~ factor(year), data = whr)
+  fit(happiness_score ~ year_f, data = whr)
 
 whr_fit_2$fit %>% 
   broom::tidy()
@@ -104,10 +106,14 @@ whr_fit_2$fit %>%
 Yes, the coefficients for every year have very small p-values ($p$ < .000185), but keep in mind that these p-values are comparing each year with the baseline year (2005). However, if you look at the relative scale of the adjustments (between -0.9 and -1.1), they are all fairly similar. This leads me to believe that most of the years are fairly similar and 2005 is the the one year that is substantially different. This stance is corroborated by the plot below:
 
 ```{r}
+#| message: false
+#| label: year-density
+
 whr %>% 
-  ggplot(mapping = aes(x = year, y = happiness_score)) +
-  geom_point() +
-  labs(x = "Year", y = "Happiness Score") 
+  ggplot(mapping = aes(y = year_f, x = happiness_score)) +
+  geom_density_ridges(fill = "cornflowerblue", 
+                      color = "white") +
+  labs(y = "Year", x = "Happiness Score") 
 ```
 
 
@@ -118,6 +124,8 @@ whr %>%
 *Hint: It is important to put all the metrics on the same scale first, since they are all in different units.*
 
 ```{r}
+#| label: happiness-recipe-workflow
+
 whr_rec <- recipe(happiness_score ~ log_gdp_per_capita + 
                     healthy_life_expectancy + 
                     social_support + 
@@ -160,8 +168,7 @@ The (log) GDP per capita was the most important metric (coeff = 0.41) affecting 
 
 # Part Two:  Predicting life expectancy (linear model)
 
-Suppose we would like to know how various quality-of-life measurements impact a 
-country's life expectancy.  We plan to use the other five metrics, as well as the 
+Suppose we would like to know how various quality-of-life measurements impact a country's life expectancy.  We plan to use the other five metrics, as well as the 
 region of the country, to try to predict the life expectancy.
 
 Explore many possible candidate models.  
@@ -178,6 +185,9 @@ My approach is to visualize each variable against the response.  For example, in
 
 ```{r}
 #| label: exploratory-plots
+#| warning: false
+#| layout-nrow: 1
+
 whr %>%
   ggplot(mapping = aes(x = perceptions_of_corruption, y = healthy_life_expectancy)) +
   geom_point() + 
@@ -198,13 +208,15 @@ whr %>%
 
 ```
 
-I then add variables to the model one by one, checking the R-squared at each fit.  When the R-squared changes hugely (e.g., over 5%), I keep the variable.  When it changes only a little, I use cross-validation to see if the improvement is overfitting or meaningful.
+I then add variables to the model one by one, checking the R-squared at each fit.  When the R-squared changes hugely (e.g., over 5%), I keep the variable.  When it changes only a little (e.g., 1%), I use cross-validation to see if the improvement is just overfitting or if it is actually meaningful.
 
 ## Part 2: Three Candidates
 
 8.  Choose the three best candidate models among those you tried.
 
 ```{r}
+#| label: top-candidates
+
 whr_rec_1 <- recipe(healthy_life_expectancy ~ 
                       log_gdp_per_capita + 
                       social_support + 
@@ -229,21 +241,21 @@ Top 3 models:
 
 ::: columns
 ::: {.column width="30%"}
-Model 1: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year`, `perceptions_of_corruption` (all variables but `generosity` and `regional_indicator`)
+**Model 1:** `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year`, `perceptions_of_corruption` (all variables except `generosity` and `regional_indicator`)
 :::
 
 ::: {.column width="3%"}
 :::
 
 ::: {.column width="30%"}
-Model 2: Same as model 1, but removing the missing values from `perceptions_of_corruption` and using a quadratic term for `perceptions_of_corruption`. 
+**Model 2:** Same as model 1, but removing the missing values from `perceptions_of_corruption` and using a quadratic term for `perceptions_of_corruption`. 
 :::
 
 ::: {.column width="3%"}
 :::
 
 ::: {.column width="30%"}
-Model 3: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year` (removing `perceptions_of_corruption`)
+**Model 3:** `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year` (removing `perceptions_of_corruption`)
 :::
 :::
  
@@ -258,9 +270,11 @@ Top 3 models:
 
 ::: columns
 ::: {.column width="30%"}
-Model 1: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year`, `perceptions_of_corruption` (all variables but `generosity` and `regional_indicator`)
+**Model 1:** `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year`, `perceptions_of_corruption` (all variables but `generosity` and `regional_indicator`)
 
 ```{r}
+#| label: model1-metrics
+
 workflow() %>%
   add_model(lin_mod) %>%
   add_recipe(whr_rec_1) %>%
@@ -274,9 +288,11 @@ workflow() %>%
 :::
 
 ::: {.column width="30%"}
-Model 2: Same as model 1, but removing the missing values from `perceptions_of_corruption` and using a quadratic term for `perceptions_of_corruption`. 
+**Model 2:** Same as model 1, but removing the missing values from `perceptions_of_corruption` and using a quadratic term for `perceptions_of_corruption`. 
 
 ```{r}
+#| label: model2-metrics
+
 workflow() %>%
   add_model(lin_mod) %>%
   add_recipe(whr_rec_2) %>%
@@ -290,9 +306,11 @@ workflow() %>%
 :::
 
 ::: {.column width="30%"}
-Model 3: `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year` (removing `perceptions_of_corruption`)
+**Model 3:** `log_gdp_per_capita`, `social_support`, `freedom_to_make_life_choices`, `year` (removing `perceptions_of_corruption`)
 
 ```{r}
+#| label: model3-metrics
+
 workflow() %>%
   add_model(lin_mod) %>%
   add_recipe(whr_rec_3) %>%
@@ -317,8 +335,8 @@ whr_final <- workflow() %>%
   add_recipe(whr_rec_1) %>%
   fit(whr)
 
-pull_workflow_fit(whr_final) %>% 
-  broom::tidy()
+extract_fit_parsnip(whr_final) %>% 
+  broom::glance()
 ```
 
 We are able to explain about 75% of the variability in life expectancy with these five measures. 
@@ -327,6 +345,7 @@ We are able to explain about 75% of the variability in life expectancy with thes
 
 ```{r}
 #| label: residual-plot
+#| warning: false
 
 whr %>%
   mutate(
@@ -371,6 +390,8 @@ k_grid <- grid_regular(neighbors(c(2, 20)),
 **Model 1**
 
 ```{r}
+#| label: tune-model1
+
 tune_1 <- workflow() %>%
   add_model(knn_spec_tune) %>%
   add_recipe(whr_rec_1) %>%
@@ -397,6 +418,8 @@ Lowest RMSE and highest R-squared occurs at k = 11, but k = 15 is only 0.01 off 
 **Model 2**
 
 ```{r}
+#| label: tune-model2
+
 tune_2 <- workflow() %>%
   add_model(knn_spec_tune) %>%
   add_recipe(whr_rec_2) %>%
@@ -421,6 +444,8 @@ The lowest RMSE is tied at k = 11 and k = 15. While the highest R-squared occurs
 **Model 3**
 
 ```{r}
+#| label: tune-model3
+
 tune_3 <- workflow() %>%
   add_model(knn_spec_tune) %>%
   add_recipe(whr_rec_3) %>%
@@ -439,6 +464,7 @@ Lowest RMSE and highest R-squared occurs at k = 15, but these values are practic
 :::
 :::
 
+</br>
 
 Among these three, Model 1 again has the best performance, but the closeness of the results from k = 11 and k = 15 warrant us checking the range of k more closely. 
 
@@ -518,6 +544,9 @@ If we want to get fancy, there's some concern about heteroskedacisity, since it 
 The following code will load up a dataset of the World Happiness Report from 2021, pertaining to happiness measurements in the year 2020. We sometimes call this new data - that was not involved in the **cross-validation** process or in the final model fitting - the **validation** set. It is the "Ultimate" test set, that only gets to be used once ever.
 
 ```{r}
+#| label: load-validation-data
+#| message: false
+
 whr_new <- read_csv(here::here("02-CV-KNN", 
                                "Assignment", 
                                "data", 
@@ -528,6 +557,8 @@ whr_new <- read_csv(here::here("02-CV-KNN",
 14. Use your **one** best *least-squares regression* model (Q9) to predict the life expectancy of all countries.
 
 ```{r}
+#| label: predict-ls-on-validation
+
 final_mod_ls <- workflow() %>%
   add_model(lin_mod) %>%
   add_recipe(whr_rec_1) %>%
@@ -548,6 +579,8 @@ whr_new %>%
 15. Use your **one** best *KNN* model (Q13) to predict the life expectancy of all countries.
 
 ```{r}
+#| label: predict-knn-on-validation
+
 final_mod_knn <- workflow() %>%
   add_model(knn_spec) %>%
   add_recipe(whr_rec_1) %>%
