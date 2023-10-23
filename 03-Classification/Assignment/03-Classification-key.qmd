@@ -1,0 +1,469 @@
+---
+title: "Classification: LDA and QDA"
+author: "Solutions by Dr. Theobold"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+execute:
+  message: false
+  echo: fenced
+---
+
+# The Data
+
+```{r}
+#| label: set-up
+#| message: false
+#| warning: false
+
+set.seed(492)
+
+library(tidyverse)
+library(tidymodels)
+library(discrim)
+```
+
+In this lab, we will use medical data to predict the likelihood of a person experiencing an exercise-induced heart attack.  
+
+Our dataset consists of clinical data from patients who entered the hospital complaining of chest pain ("angina") during exercise.  The information collected includes:
+
+* `age` : Age of the patient
+
+* `sex` : Sex of the patient
+
+* `cp` : Chest Pain type
+
+    + Value 1: typical angina
+    + Value 2: atypical angina
+    + Value 3: non-anginal pain
+    + Value 4: asymptomatic
+    
+* `trtbps` : resting blood pressure (in mm Hg)
+
+* `chol` : cholesteral in mg/dl fetched via BMI sensor
+
+* `restecg` : resting electrocardiographic results
+
+    + Value 0: normal
+    + Value 1: having ST-T wave abnormality (T wave inversions and/or ST elevation or depression of > 0.05 mV)
+    + Value 2: showing probable or definite left ventricular hypertrophy by Estes' criteria
+
+* `thalach` : maximum heart rate achieved during exercise
+
+* `output` : the doctor's diagnosis of whether the patient is at risk for a heart attack
+    + 0 = not at risk of heart attack 
+    + 1 = at risk of heart attack
+
+Although it is not a formal question on this assignment, you should begin by reading in the dataset and briefly exploring and summarizing the data, and by adjusting any variables that need cleaning.
+
+```{r}
+#| label: data-load
+#| message: false
+
+ha <- read_csv(here::here("03-Classification", 
+                          "Assignment", 
+                          "data", 
+                          "heart_attack.csv")
+               )
+```
+
+```{r}
+#| label: data-cleaning
+
+ha <- ha %>%
+  mutate(
+    across(.cols = c(sex, cp, restecg), 
+           .fns = ~as.factor(.x)
+           ), 
+    output = factor(output, levels = c(1, 0)
+                    ) # make "at-risk" the primary target
+  ) %>%
+  drop_na(output)
+```
+
+# Part One: Fitting Models
+
+This section asks you to create a final best model for each of the model types studied this week. For each, you should:
+
+-   Find the best model based on `roc.auc` for predicting the `output` variable.
+
+-   Output a **confusion matrix**; that is, the counts of how many observations fell into each predicted class for each true class.
+
+::: callout-tip
+# Look over past code
+
+Code is provided from lecture; alternatively, `conf_mat()` is a nice shortcut function for this task.)
+:::
+
+-   Report the (cross-validated!) `roc.auc` metric.
+
+-   Fit the final model.
+
+::: callout-caution
+# Include All the Code!
+
+As I expect your analysis to be reproducible, your assignment should keep a record of **every** model you fit during your exploration.
+:::
+
+**In the answers below, I have not compared many models or used any extra variables beyond those mentioned in the description above. You may have arrived at a better model!**
+
+
+```{r}
+#| label: cv-and-recipe
+
+ha_cv <- vfold_cv(ha, v = 5)
+
+ha_recipe <- recipe(output ~ sex + cp + trtbps + thalach, data = ha) %>%
+  step_normalize(all_numeric_predictors()) %>%
+  step_dummy(all_nominal_predictors())
+```
+
+#### Q1: KNN
+
+```{r}
+#| label: knn-tune
+
+knn_spec <- nearest_neighbor(neighbors = tune()) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+
+k_grid <- grid_regular(neighbors(c(2, 40)), 
+                       levels = 10)
+
+knn_wflow <- workflow() %>%
+  add_model(knn_spec) %>%
+  add_recipe(ha_recipe) 
+
+knn_wflow %>%
+  tune_grid(
+    grid = k_grid,
+    resamples = ha_cv
+  ) %>%
+  collect_metrics() %>%
+  filter(.metric == "roc_auc") %>%
+  arrange(desc(mean))
+
+```
+
+The best roc_auc was found to be at K = 40, with a value of 0.8422. However, values of K = 35, 27, 31, 23, and 18 are all within 1% from the "best" value, so are arguably not discernibly better. To reduce the risk of potentially overfitting, I'm going to go with K = 18, slightly better than the lower values of K and just about as good as the higher values of K. 
+
+
+```{r}
+#| label: knn-final-model
+
+knn_spec_final <- nearest_neighbor(neighbors = 18) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+
+knn_wflow <- workflow() %>%
+  add_model(knn_spec_final) %>%
+  add_recipe(ha_recipe) 
+
+knn_final <- knn_wflow %>% 
+  fit(ha)
+
+knn_preds <- predict(knn_final, new_data = ha)
+
+ha %>%
+  mutate(
+   preds = knn_preds$.pred_class 
+  ) %>%
+  count(preds, output)
+```
+
+#### Q2: Logistic Regression
+
+```{r}
+#| label: logistic-model
+
+lr_spec <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+
+lr_wflow <- workflow() %>%
+  add_model(lr_spec) %>%
+  add_recipe(ha_recipe) 
+
+lr_wflow %>%
+  fit_resamples(ha_cv) %>%
+  collect_metrics()
+
+```
+
+The cross-validated roc_auc was found to be 0.8622.
+
+```{r}
+#| label: logistic-confusion
+
+lr_final <- lr_wflow %>% 
+  fit(ha)
+
+lr_preds <- predict(lr_final, new_data = ha)
+
+ha %>%
+  mutate(
+   preds = lr_preds$.pred_class 
+  ) %>%
+  count(preds, output)
+```
+
+
+#### Q3: LDA
+
+```{r}
+#| label: lda-model
+
+lda_spec <- discrim_linear() %>%
+  set_engine("MASS") %>%
+  set_mode("classification")
+
+lda_wflow <- workflow() %>%
+  add_model(lda_spec) %>%
+  add_recipe(ha_recipe) 
+
+lda_wflow %>%
+  fit_resamples(ha_cv) %>%
+  collect_metrics()
+
+```
+
+The cross-validated roc_auc was found to be 0.8586.
+
+```{r}
+#| label: lda-confusion
+
+lda_final <- lda_wflow %>% 
+  fit(ha)
+
+lda_preds <- predict(lda_final, new_data = ha)
+
+ha %>%
+  mutate(
+   preds = lda_preds$.pred_class 
+  ) %>%
+  count(preds, output)
+```
+
+#### Q4: QDA
+
+```{r}
+#| label: qda-model
+
+qda_spec <- discrim_regularized(frac_common_cov = 0) %>% 
+             set_engine('klaR') %>% 
+             set_mode('classification')
+
+qda_wflow <- workflow() %>%
+  add_model(qda_spec) %>%
+  add_recipe(ha_recipe) 
+
+qda_wflow %>%
+  fit_resamples(ha_cv) %>%
+  collect_metrics()
+
+```
+
+The cross-validated roc_auc was found to be 0.8434.
+
+
+```{r}
+#| label: qda-confusion
+
+qda_final <- qda_wflow %>% 
+  fit(ha)
+
+qda_preds <- predict(qda_final, new_data = ha)
+
+ha %>%
+  mutate(
+   preds = qda_preds$.pred_class 
+  ) %>%
+  count(preds, output)
+```
+
+#### Q5: Interpretation
+
+Which predictors were most important to predicting heart attack risk?
+
+Overall, `cp` seems to be the most important predictor, followed by `sex`.
+
+#### Q6:  ROC Curve
+
+Plot the ROC Curve for your favorite model from Q1-4.
+
+```{r}
+ha %>%
+  mutate(
+    preds = predict(lr_final, ha, type = "prob")$.pred_1
+  ) %>%
+  roc_curve(
+    truth = output,
+    preds
+  ) %>%
+  autoplot()
+```
+
+# Part Two: Metrics
+
+Consider the following metrics:
+
+* **True Positive Rate** or **Recall** or **Sensitivity** = Of the observations that are truly Class A, how many were predicted to be Class A?
+
+* **Precision** or **Positive Predictive Value** = Of all the observations classified as Class A, how many of them were truly from Class A?
+
+* **True Negative Rate** or **Specificity** or **Negative Predictive Value** = Of all the observations classified as NOT Class A, how many were truly NOT Class A?
+
+Compute each of these metrics (cross-validated) for your four models in Part One.
+
+```{r}
+#| label: cv-metrics-all-models
+
+metrics_list <- metric_set(precision, recall, specificity)
+
+knn_wflow %>%
+  fit_resamples(ha_cv,
+                metrics = metrics_list) %>%
+  collect_metrics()
+
+lr_wflow %>%
+  fit_resamples(ha_cv,
+                metrics = metrics_list) %>%
+  collect_metrics()
+
+lda_wflow %>%
+  fit_resamples(ha_cv,
+                metrics = metrics_list) %>%
+  collect_metrics()
+
+qda_wflow %>%
+  fit_resamples(ha_cv,
+                metrics = metrics_list) %>%
+  collect_metrics()
+
+```
+
+# Part Three: Validation
+
+Before sharing the dataset with you, I set aside a random 10% of the observations to serve as a final validation set.
+
+Download the [`heart_attack_validation.csv`](daheart_attack_validation.csv) and read in the data. Remember to clean these data the **same** way you cleaned the training data.
+
+```{r}
+#| label: load-validation-data
+#| message: false
+
+ha_validation <- read_csv(here::here("03-Classification", 
+                          "Assignment", 
+                          "data", 
+                          "heart_attack_validation.csv")
+               )
+```
+
+```{r}
+#| label: clean-validation-data
+
+ha_validation <- ha_validation %>%
+  mutate(
+    across(.cols = c(sex, cp, restecg), 
+           .fns = ~as.factor(.x)
+           ), 
+    output = factor(output, levels = c(1, 0)
+                    ) # make "at-risk" the primary target
+  ) %>%
+  drop_na(output)
+```
+
+Use each of your final models in Part One Q1-4, predict the `target` variable in the validation dataset.
+
+For each, output a confusion matrix, and report the `roc.auc`, the `precision`, and the `recall`.
+
+```{r}
+ha_validation <- ha_validation %>%
+  mutate(
+    knn_pred = predict(knn_final, 
+                       new_data = ha_validation)$.pred_class,
+    knn_pred_prob = predict(knn_final, 
+                            new_data = ha_validation, type = "prob")$.pred_1,
+    lr_pred = predict(lr_final, 
+                      new_data = ha_validation)$.pred_class,
+    lr_pred_prob = predict(lr_final, 
+                           new_data = ha_validation, type = "prob")$.pred_1,
+    lda_pred = predict(lda_final, 
+                       new_data = ha_validation)$.pred_class,
+    lda_pred_prob = predict(lda_final, 
+                            new_data = ha_validation, type = "prob")$.pred_1,
+    qda_pred = predict(qda_final, 
+                       new_data = ha_validation)$.pred_class,
+    qda_pred_prob = predict(qda_final, 
+                            new_data = ha_validation, type = "prob")$.pred_1,
+  )
+
+my_metrics <- metric_set(roc_auc, precision, recall)
+
+ha_validation %>%
+  my_metrics(truth = output, 
+             knn_pred_prob, estimate = knn_pred) 
+
+ha_validation %>%
+  my_metrics(truth = output, lr_pred_prob, estimate = lr_pred) 
+
+ha_validation %>%
+  my_metrics(truth = output, lda_pred_prob, estimate = lda_pred) 
+
+ha_validation %>%
+  my_metrics(truth = output, qda_pred_prob, estimate = qda_pred) 
+```
+
+Compare these values to the cross-validated estimates you reported in Part One and Part Two.  Did our measure of model success turn out to be approximately correct for the validation data?
+
+Pretty darn similar values!
+
+# Part Four:  Discussion
+
+Suppose you have been hired by a hospital to create classification models for heart attack risk.
+
+The following questions give a possible scenario for why the hospital is interested in these models.  For each one, discuss:
+
+* Which metric(s) you would use for model selection and why.
+
+* Which of your final models (Part One Q1-4) you would recommend to the hospital, and why.
+
+#### Q1
+
+The hospital faces severe lawsuits if they deem a patient to be low risk, and that patient later experiences a heart attack.
+
+I would choose **sensitivity** or **recall**, because those prioritize successfully finding as many of the at-risk patients as possible.
+
+I would recommend the **KNN model** because it had the highest recall.
+
+#### Q2
+
+The hospital is overfull, and wants to only use bed space for patients most in need of monitoring due to heart attack risk.
+
+
+I would choose **precision** or **specificity**, because this prioritizes not accidentally identifying a not-at-risk patient as at-risk
+
+I would again recommend the **KNN model** because it had the highest precision/specificity, although the LDA and QDA models were very similar.
+
+
+#### Q3
+
+The hospital is studying root causes of heart attacks, and would like to understand which biological measures are associated with heart attack risk.
+
+Since no specific metric is called for, I would probably use **ROC-AUC** since it balances all the priorities.
+
+I would recommend the **logistic regression** because it is the most interpretable.
+
+#### Q4
+
+The hospital is training a new batch of doctors, and they would like to compare the diagnoses of these doctors to the predictions given by the algorithm to measure the ability of new doctors to diagnose patients.
+
+I would use the **accuracy** because it is a plain measure of how often the model was "right".
+
+I would recommend the **KNN model** because it had the highest accuracy.
+
+
