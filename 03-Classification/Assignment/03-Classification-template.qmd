@@ -7,7 +7,7 @@ format:
     code-line-numbers: true
     code-tools: true
     self-contained: true
-editor: visual
+editor: source
 embed-resources: true
 ---
 
@@ -27,7 +27,6 @@ library(discrim)
 
 ```
 
-
 # Part One: Fitting Models
 
 #### KNN
@@ -38,13 +37,11 @@ library(discrim)
 
 #### QDA
 
-
 # Part Two: Interpreting Models
 
 #### Interpretation
 
 #### ROC Curve
-
 
 # Part Three: Metrics
 
@@ -66,7 +63,6 @@ Compute each of these metrics (cross-validated) for your four models in Part One
 
 #### QDA
 
-
 # Part Four: Validation
 
 ```{r}
@@ -76,9 +72,9 @@ Compute each of these metrics (cross-validated) for your four models in Part One
 
 Use each of your final models in Part One to:
 
-- predict the `output` variable in the validation dataset
-- output a confusion matrix
-- report the `roc.auc`, the `precision`, and the `recall`
+-   predict the `output` variable in the validation dataset
+-   output a confusion matrix
+-   report the `roc.auc`, the `precision`, and the `recall`
 
 Compare these values to the cross-validated estimates you reported in Part One. Did our measure of model success turn out to be approximately correct for the validation data?
 
