@@ -1,5 +1,5 @@
 ---
-title: "Decision Trees"
+title: "Regularization"
 subtitle: "R Cheatsheet"
 format: 
   html:
@@ -35,7 +35,6 @@ models <- regsubsets(Rating ~ .,
                      method = "forward",
                      nvmax = 62)
 ```
-
 
 # Lasso Regression (with `tidymodels`)
 
@@ -78,4 +77,3 @@ tune_res <- wflow_lasso %>%
     grid = lam_grid
   )
 ```
-
