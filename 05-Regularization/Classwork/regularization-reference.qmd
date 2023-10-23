@@ -1,0 +1,81 @@
+---
+title: "Decision Trees"
+subtitle: "R Cheatsheet"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute: 
+  eval: false
+---
+
+# Model Selection (using the `leaps` package)
+
+**Best Subsets**
+
+```{r}
+models <- regsubsets(Rating ~ Creative + Energetic + Tingly, 
+                     data = cann, method = "exhaustive")
+```
+
+**Backward Selection**
+
+```{r}
+models <- regsubsets(Rating ~ ., 
+                     data = cann, 
+                     method = "backward",
+                     nvmax = 62)
+```
+
+**Forward Selection**
+
+```{r}
+models <- regsubsets(Rating ~ ., 
+                     data = cann, 
+                     method = "forward",
+                     nvmax = 62)
+```
+
+
+# Lasso Regression (with `tidymodels`)
+
+```{r}
+lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+```
+
+# Ridge Regression (with `tidymodels`)
+
+```{r}
+ridge_spec <- linear_reg(penalty = 0.1, mixture = 0) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+```
+
+# Tuning $\lambda$
+
+```{r}
+lam_grid <- grid_regular(penalty(), 
+                         levels = 10)
+
+cann_cvs <- vfold_cv(cann, v = 5)
+
+lasso_spec <- linear_reg(penalty = tune(), 
+                         mixture = 1) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+
+wflow_lasso <- workflow() %>%
+  add_model(lasso_spec) %>%
+  add_recipe(
+    recipe(Rating ~ ., data = cann)
+  )
+
+tune_res <- wflow_lasso %>%
+  tune_grid(
+    resamples = cann_cvs,
+    grid = lam_grid
+  )
+```
+

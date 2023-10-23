@@ -6,8 +6,8 @@ format:
     code-fold: true
     code-line-numbers: true
     code-tools: true
-    self-contained: true
-editor: visual
+embed-resources: true
+editor: source
 execute:
   message: false
 ---
@@ -17,8 +17,9 @@ execute:
 Declare your libraries:
 
 ```{r}
-#| label: libraries-r
+#| label: packages
 #| include: false
+
 library(tidyverse)
 library(tidymodels)
 library(glmnet)
@@ -28,16 +29,15 @@ library(rpart.plot)
 library(baguette)
 ```
 
+# Try it!
 
-# **Try it!**
+Recall: We wanted to predict the `Type` of cannabis from the descriptor words.
 
-## **Recall: We wanted to predict the Type of cannabis from the descriptor words.**
+Consider only Indica vs. Sativa  (remove Hybrid)
 
-## **Consider only Indica vs. Sativa (no Hybrid)**
+Can you combine **logistic regression** with **LASSO** to tell me which words best separate Indica and Sativa?
 
-## **Can you combine logistic regression with LASSO to tell me which words best separate Indica and Sativa?**
-
-## **How does this compare to what you find with a decision tree?**
+How does this compare to what you find with a decision tree?
 
 ```{r}
 
@@ -46,9 +46,7 @@ cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl
 cann <- cann %>%
   select(-Strain, -Effects, -Flavor, -Dry, -Mouth)
 
-cann_is <- cann %>%
+cann_no_hybrid <- cann %>%
   filter(Type != "Hybrid")
 
-head(cann_is)
 ```
-
