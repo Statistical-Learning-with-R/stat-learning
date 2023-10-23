@@ -1,0 +1,261 @@
+---
+title: "Model Selection in Regression"
+format: 
+  revealjs:
+    theme: ../../../style.scss
+editor: source
+embed-resources: true
+execute: 
+  echo: true
+  message: false
+  warning: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(tidymodels)
+library(kknn)
+library(glmnet)
+library(here)
+library(rpart.plot)
+library(discrim)
+
+set.seed(98249)
+```
+
+## Variable Selection
+
+Why might we **not** want to include all the variables available to us?
+
+::: {.incremental}
+
+:::{.smaller}
+* **Overfitting:**  Using many extra variables gives the model more flexibility; it might be to tailored to the training data.
+    + Recall:  Polynomials in Week 1
+
+</br>
+
+* **Interpretability:** We'd like to know which variables "matter most" to the response, and have accurate coefficient estimates.
+    + What if two variables measure the same information?
+    + What if the variables are *linearly dependent*?
+
+:::
+:::
+
+## Data
+
+Recall:  62 unique variables describing Cannabis strains   
+New Response variable: `Rating` 
+
+```{r}
+#| label: data-read-clean
+
+cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
+
+cann <- cann %>%
+  dplyr::select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>% 
+  drop_na(Rating)
+```
+
+## Option 1: Best Subset Selection
+
+Let's try **every possible subset** of variables and pick the best one.
+
+. . .
+
+What do we mean by **best**?
+
+. . .
+
+Penalized metrics:
+
+* BIC
+* AIC
+* Mallow's Cp
+* Adjusted R-squared
+
+. . .
+
+Where does cross-validation come in???
+
+## Option 1: Best Subset Selection
+
+The problem:
+
+```
+Rating ~ Creative
+Rating ~ Creative + Energetic
+Rating ~ Creative + Tingly
+Rating ~ Creative + Energetic + Tingly
+```
+$\vdots$
+
+. . .
+
+62 variables = $2^{62}$ models = 4.6 quintillion models
+
+. . .
+
+</br>
+
+Plus cross-validation????
+
+##  {background-color="#B6CADA"}
+
+![](https://media0.giphy.com/media/LSQcHeCzIxfmUoV2mj/200.gif)
+
+## Option 1: Best Subset Selection
+
+If you have only a few variables, go for it.
+
+In realistic settings, it's not practical.
+
+We're going to try it anyway, using the `leaps` package.
+
+## Best Subset Selection with `leaps`
+
+Best model of each size, based on R-squared:
+
+```{r}
+#| label: best-subset-selection
+
+library(leaps)
+models <- regsubsets(Rating ~ Creative + Energetic + Tingly, 
+                     data = cann, method = "exhaustive")
+
+summary(models)
+```
+
+##  {background-color="#B6CADA"}
+
+::: {.large}
+Why can we automatically determine the best model *within* each size but we need to do another step to choose the best model *across* sizes?
+:::
+
+## Best Subset Selection with `leaps`
+
+Now compare models:
+
+```{r}
+#| label: best-subset-model-summary
+#| echo: false
+
+model_stats <- tibble(`Adj-R-Squared` = summary(models)$adjr2,
+                      `CP` = summary(models)$cp, 
+                      `BIC` = summary(models)$bic, 
+                      `model` = c("Creative", 
+                                  "Creative, Energetic", 
+                                  "Creative, Energetic, Tingly"
+                                  )
+                      ) %>% 
+  column_to_rownames(var = "model")
+
+model_stats
+```
+
+</br>
+
+What model would we choose?
+
+
+## Option 2: Backwards Selection
+
+Start with **all** candidate variables in the model.
+
+. . .
+
+Drop the *worst* variable.  (p-values or R-squared)
+
+. . .
+
+Check if dropping it helped.  (penalized metric or cross-validation)
+
+. . .
+
+Stop when dropping is no longer good.
+
+
+## Backwards selection with `leaps`
+
+```{r}
+#| label: backward-selection
+#| warning: false
+
+models <- regsubsets(Rating ~ ., 
+                     data = cann, 
+                     method = "backward",
+                     nvmax = 62)
+
+summary(models)
+```
+
+## Backwards selection with `leaps`
+
+```{r}
+#| label: backward-selection-bic
+#| echo: false
+
+model_bic <- tibble(BIC = summary(models)$bic, 
+                    model = seq(from = 1, 
+                                to = 61, 
+                                by = 1
+                                )
+                    )
+model_bic %>% 
+  mutate(model = str_c("Model ", model)
+         ) %>% 
+  arrange(BIC) %>% 
+  column_to_rownames(var = "model")
+```
+
+## Backwards selection with `leaps`
+
+```{r, echo = FALSE}
+#| echo: false
+#| label: plotting-bic-backward-selection
+
+ggplot(model_bic, 
+       mapping = aes(x = model, y = BIC)
+       ) +
+  geom_point()
+```
+
+## Backwards selection with `leaps`
+
+```{r}
+#| label: finding-min-bic-backward
+
+min_bic <- slice_min(model_bic, order_by = BIC) %>% 
+  pull(model)
+
+summary(models)$outmat[min_bic, ]
+```
+
+## Option 1: Forward Selection
+
+Start with **one variable** that you think is best.
+
+. . .
+
+Add the *next best variable*.
+
+. . .
+
+Test whether it was worth adding.
+
+. . .
+
+Keep going until it's not worth adding any more variables.
+
+## Try it!
+
+Open [`Activity-Variable-Selection`](../../Classwork/Activity-Variable-Selection.qmd)
+
+1. Determine the best model via **backwards selection**.  
+2. Fit that model to the data and report results.
+
+3. Determine the best model via **forwards selection**.  
+4. Fit that model to the data and report results.

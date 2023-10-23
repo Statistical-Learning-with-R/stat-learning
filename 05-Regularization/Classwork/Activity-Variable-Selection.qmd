@@ -7,7 +7,7 @@ format:
     code-line-numbers: true
     code-tools: true
     self-contained: true
-editor: visual
+editor: source
 execute:
   message: false
 ---
@@ -17,8 +17,9 @@ execute:
 Declare your libraries:
 
 ```{r}
-#| label: libraries-r
+#| label: packages
 #| include: false
+
 library(tidyverse)
 library(tidymodels)
 library(glmnet)
@@ -26,23 +27,27 @@ library(discrim)
 library(rpart)
 library(rpart.plot)
 library(baguette)
-```
+library(leaps)
 
+set.seed(98249)
+```
 
 ## Code from Lecture
 
 ```{r}
+#| label: data-read-clean
+
 cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
 
 cann <- cann %>%
-  select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>%
-  drop_na()
+  dplyr::select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>%
+  drop_na(Rating)
 
-head(cann)
 ```
 
-
 ```{r}
+#| label: best-subset-selection
+
 models <- regsubsets(Rating ~ Creative + Energetic + Tingly, 
                      data = cann, method = "exhaustive")
 
@@ -50,13 +55,24 @@ summary(models)
 ```
 
 ```{r}
-summary(models)$adjr2  # bigger is better
-summary(models)$cp     # smaller is better
-summary(models)$bic    # more negative is better
+#| label: best-subset-model-summary
+
+model_stats <- tibble(`Adj-R-Squared` = summary(models)$adjr2,
+                      `CP` = summary(models)$cp, 
+                      `BIC` = summary(models)$bic, 
+                      `model` = c("Creative", 
+                                  "Creative, Energetic", 
+                                  "Creative, Energetic, Tingly"
+                                  )
+                      ) %>% 
+  column_to_rownames(var = "model")
+
+model_stats
 ```
 
-
 ```{r}
+#| label: backward-selection
+#| warning: false
 
 models <- regsubsets(Rating ~ ., 
                      data = cann, method = "forward",
@@ -66,26 +82,45 @@ summary(models)
 ```
 
 ```{r}
-bic_scores <- summary(models)$bic
-bic_scores
+#| label: backward-selection-bic
+
+model_bic <- tibble(bic = summary(models)$bic, 
+                    model = seq(from = 1, 
+                                to = 61, 
+                                by = 1
+                                )
+                    )
+model_bic %>% 
+  mutate(model = str_c("Model ", model)
+         ) %>% 
+  arrange(bic) %>% 
+  column_to_rownames(var = "model")
+
 ```
 
 ```{r}
+#| label: plotting-bic-backward-selection
+
 ggplot(, aes(x = 1:61, y = bic_scores)) +
   geom_point()
 ```
 
 ```{r}
-which.min(bic_scores)
-summary(models)$outmat[13,]
-```
+#| label: finding-min-bic-backward
 
+min_bic <- slice_min(model_bic, order_by = bic) %>% 
+  pull(model)
+
+summary(models)$outmat[min_bic, ]
+```
 
 ## Try it!
 
-#### Determine the best model via **backwards selection**. Fit that model to the data and report results.
+1. Determine the best model via **backwards selection**.  
+2. Fit that model to the data and report results.
 
-#### Determine the best model via **forwards selection**. Fit that model to the data and report results.
+3. Determine the best model via **forwards selection**.  
+4. Fit that model to the data and report results.
 
 ## Regularization Code from Lecture
 
@@ -100,7 +135,6 @@ ridge_spec <- linear_reg(penalty = 0.1, mixture = 0) %>%
   set_engine("glmnet") %>%
   set_mode("regression")
 ```
-
 
 ## Try it!
 
