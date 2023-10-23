@@ -3,12 +3,12 @@ title: "Tuning Mixtures and Penalties"
 format: 
   revealjs:
     theme: ../../../style.scss
-editor: visual
-embed-resources: true
+editor: source
 execute: 
   echo: true
   message: false
   warning: false
+embed-resources: true
 ---
 
 ```{r}
@@ -39,7 +39,7 @@ cann <- cann %>%
 
 ## Penalty Hyperparameter
 
-Recall:  In **ridge** and **LASSO** regression, we add a *penalty* term that is balanced by a parameter $\lambda$
+Recall: In **ridge** and **LASSO** regression, we add a *penalty* term that is balanced by a parameter $\lambda$
 
 . . .
 
@@ -49,7 +49,12 @@ $$\text{minimize:} \; \;  RSS + \lambda * \text{penalty}$$
 
 What is the "best" choice of $\lambda$?
 
+. . .
+
+::: {.centered}
 ![](https://upload.wikimedia.org/wikipedia/en/4/44/Try_Everything_%28Shakira%29.jpg)
+:::
+
 
 ## Penalty Parameter
 
@@ -69,7 +74,7 @@ lasso_5 <- linear_reg(penalty = 0.5, mixture = 1) %>%
 
 ## Penalty Parameter
 
-We found that larger penalty parameter led to more coefficients of 0  (i.e., excluded variables):
+We found that larger penalty parameter led to more coefficients of 0 (i.e., excluded variables):
 
 ::: columns
 ::: {.column width="47%"}
@@ -99,28 +104,22 @@ res5 <- lasso_5 %>%
 
 res5
 ```
-
 :::
 :::
-
 
 ## Penalty Parameter
 
-$\lambda = 0.1 \rightarrow$  7 variables kept, 56 dropped
+$\lambda = 0.1 \rightarrow$ 7 variables kept, 56 dropped
 
-$\lambda = 0.5 \rightarrow$  0 variables kept, 63 dropped
+$\lambda = 0.5 \rightarrow$ 0 variables kept, 63 dropped
 
 . . .
 
 **Prediction:** What penalty leads to the best cross-validated prediction accuracy?
 
-
 Let's use `tune()` and `tune_grid()` to find out!
 
-
 ## Penalty Parameter
-
-RMSE:
 
 ```{r}
 #| label: lambda-grid
@@ -156,24 +155,24 @@ tune_res %>%
   filter(.metric == "rmse") %>%
   ggplot(mapping = aes(x = penalty, y = mean)) +
   geom_line() +
-  labs(x = "Penalty Value of Lambda", 
-       y = "RMSE")
+  labs(x = "Lambda", 
+       y = "", 
+       title = "RMSE over Different Penalty Values")
 ```
-
 
 ## Penalty Parameter
 
-One wrinkle in tuning:  The automatic grid chooses values on a log scale, not evenly spaced:
+One wrinkle in tuning: The automatic grid chooses values on a log scale, not evenly spaced:
 
 ::: columns
 ::: {.column width="40%"}
 ```{r}
 #| label: lambda-log-grid
 
-lam_grid <- grid_regular(penalty(), levels = 10)
+lam_grid <- grid_regular(penalty(), 
+                         levels = 10)
 lam_grid
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -188,16 +187,12 @@ lam_grid_2 <- grid_regular(penalty(c(0, 0.5),
                            levels = 10)
 lam_grid_2
 ```
-
 :::
 :::
-
 
 ## Penalty Parameter
 
-RMSE, smaller grid:
-
-```{r, echo = FALSE, cache = TRUE}
+```{r}
 #| echo: false
 #| cache: true
 #| label: smaller-lambda-grid
@@ -224,24 +219,23 @@ tune_res %>%
   collect_metrics() %>%
   filter(.metric == "rmse") %>%
   ggplot(aes(x = penalty, y = mean)) +
-  geom_line()
+  geom_line() + 
+  labs(x = "Lambda", 
+       y = "", 
+       title = "RMSE over Different Penalty Values")
 ```
 
 ##  {background-color="#B6CADA"}
 
-:::{.larger}
-
-Don't forget about interpretability! 
+::: larger
+Don't forget about interpretability!
 :::
-
-![](https://i.gifer.com/Y8rl.gif)
 
 How many variables do we want to retain?
 
+## Number of Variables Kept
 
-## Number of Variables kept
-
-```{r, echo = FALSE}
+```{r}
 #| echo: false
 #| label: counting-non-zero-coefficients
 
@@ -269,7 +263,6 @@ lam_grid_2 %>%
 
 ```
 
-
 ## Penalty Parameter
 
 Because our **regularized methods** are de-prioritizing RMSE, they will rarely give us better **prediction residuals**.
@@ -280,28 +273,27 @@ So, why do it?
 
 . . .
 
-**LASSO** ->  **Variable selection**
+</br>
+
+**LASSO** $\rightarrow$ **Variable selection**
 
 If we can achieve *nearly* the same predictive power with *many* fewer variables, we have a more interpretable model.
-
 
 ## Try it!
 
 Open `Activity-Variable-Selection` from last class
 
-1. Tweak your choice of penalty in your LASSO regression until you get approximately the same number of variables as you did via **stepwise selection**.
+1.  Tweak your choice of penalty in your LASSO regression until you get approximately the same number of variables as you did via **stepwise selection**.
 
-2. Are they the same variables?
-
+2.  Are they the same variables?
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
-Model stability
+::: larger
+Model Stability
 :::
 
-
-## Model stability
+## Model Stability
 
 Consider dividing the dataset into 3 randomly split subsets.
 
@@ -313,7 +305,7 @@ We fit a **linear model** on *all* predictors for each subset.
 
 Should we expect similar answers?
 
-##  Comparing the Splits
+## Split 1
 
 ```{r}
 #| echo: false
@@ -332,7 +324,6 @@ lm_dfs <- cann_split$splits %>%
     )
 
 ```
-::: {.fragment-fade-out}
 
 ```{r}
 #| label: split1-lm-model
@@ -343,13 +334,13 @@ lm_dfs[[1]] %>%
   slice(-1) %>%
   ggplot(mapping = aes(y = term, x = estimate)) +
   geom_col() +
+  xlim(c(-0.1, 0.4)) +
   labs(y = "", 
        x = "Estimate", 
        title = "Linear Regression Coefficients for 62 Variables in Cannibas Dataset")
 ```
-:::
 
-::: {.fragment-fade-in-out}
+## Split 2
 
 ```{r}
 #| label: split2-lm-model
@@ -360,15 +351,14 @@ lm_dfs[[2]] %>%
   slice(-1) %>%
   ggplot(mapping = aes(y = term, x = estimate)) +
   geom_col() +
+  xlim(c(-0.1, 0.4)) +
   labs(y = "", 
        x = "Estimate", 
        title = "Linear Regression Coefficients for 62 Variables in Cannibas Dataset")
 
 ```
 
-:::
-
-::: {.fragment-fade-in-out}
+## Split 3
 
 ```{r}
 #| label: split3-lm-model
@@ -379,31 +369,26 @@ lm_dfs[[3]] %>%
   slice(-1) %>%
   ggplot(mapping = aes(y = term, x = estimate)) +
   geom_col() +
+  xlim(c(-0.1, 0.4)) +
   labs(y = "", 
        x = "Estimate", 
        title = "Linear Regression Coefficients for 62 Variables in Cannibas Dataset")
 
 ```
-:::
 
 ## What's happening?
 
-When we have **many variables**, there is probably some *collinearity*. 
-
-</br>
+When we have **many variables**, there is probably some *collinearity*.
 
 Meaning, combinations of variables contain *the same information*.
 
 . . .
 
-This makes the model is very *unstable*! 
-
-</br>
+This makes the model is very *unstable*!
 
 So, what variables should we use?
 
-
-## Ridge Regression
+## Ridge Regression -- Split 1
 
 ```{r, echo = FALSE,  cache = TRUE}
 #| label: ridge-regression
@@ -425,7 +410,6 @@ ridge_dfs <- cann_split$splits %>%
 
 ```
 
-::: {.fragment-fade-out}
 
 ```{r}
 #| label: split1-ridge-model
@@ -436,13 +420,13 @@ ridge_dfs[[1]] %>%
   slice(-1) %>%
   ggplot(mapping = aes(y = term, x = estimate)) +
   geom_col() +
+  xlim(c(-0.1, 0.4)) +
   labs(y = "", 
        x = "Estimate", 
        title = "Ridge Regression Coefficients for 62 Variables in Cannibas Dataset")
 ```
-:::
 
-::: {.fragment-fade-in-out}
+## Split 2
 
 ```{r}
 #| label: split2-ridge-model
@@ -453,15 +437,14 @@ ridge_dfs[[2]] %>%
   slice(-1) %>%
   ggplot(mapping = aes(y = term, x = estimate)) +
   geom_col() +
+  xlim(c(-0.1, 0.4)) +
   labs(y = "", 
        x = "Estimate", 
        title = "Ridge Regression Coefficients for 62 Variables in Cannibas Dataset")
 
 ```
 
-:::
-
-::: {.fragment-fade-in-out}
+## Split 3
 
 ```{r}
 #| label: split3-ridge-model
@@ -472,12 +455,11 @@ ridge_dfs[[3]] %>%
   slice(-1) %>%
   ggplot(mapping = aes(y = term, x = estimate)) +
   geom_col() +
+  xlim(c(-0.1, 0.4)) +
   labs(y = "", 
        x = "Estimate", 
        title = "Ridge Regression Coefficients for 62 Variables in Cannibas Dataset")
 ```
-
-:::
 
 ## Ridge regression
 
@@ -489,27 +471,23 @@ It reduces the **variance** of the **coefficient estimates**.
 
 It lets all the variables "share the load" instead of putting too much weight on any one coefficient.
 
+## There is no free lunch!
 
-## There is no free lunch!  
+Lowering the *variance* of the estimates increases the *bias*.
 
-Lowering the **variance** of the estimates increases the **bias**.
-
-In other words - we aren't prioritizing **prediction** or **RMSE** anymore.  Our y-hats are not as close to our y's.
-
+In other words - we aren't prioritizing *prediction* or *RMSE* anymore. Our y-hats are not as close to our y's.
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
-
+::: larger
 Elastic Net
 :::
 
 ## Elastic Net
 
-What if we want to **reduce the number of variables** AND **reduce the coefficient variance**??
+What if we want to reduce the number of variables AND reduce the coefficient variance?
 
 ![](https://media1.tenor.com/images/efa0962878857ab3332344f84c41a345/tenor.gif?itemid=3787079)
-
 
 ## Adding Penalties
 
@@ -523,24 +501,23 @@ When we do half-and-half, this is called "Elastic Net".
 
 ## Mixtures of Penalties
 
-Why half-and-half?  Why not 1/3 and 2/3?  1/4 and 3/4???
+Why half-and-half? Why not 1/3 and 2/3? 1/4 and 3/4???
 
 . . .
 
-Mixture:
+$$\text{RSS} + \alpha \text{ } (\lambda \times \text{LASSO penalty}) + (1 - \alpha) (\lambda \times \text{Ridge penalty})$$ 
 
-$$ \text{RSS} + \alpha \text{ } (\lambda \times \text{LASSO penalty}) + (1 - \alpha) (\lambda \times \text{Ridge penalty})$$
 $\alpha$ is the `mixture` parameter.
 
 ## Try it -- Step 1
 
-Open `Activity-Variable-Selection` from last class
+Open `Activity-Variable-Selection` from last class.
 
-1. Tune both the **mixture** and the **penalty** parameters.
+1.  Tune both the **mixture** and the **penalty** parameters.
 
-2. Plot the RMSE and / or R-squared across a few penalties (at one mixture) 
+2.  Plot the RMSE and / or R-squared across a few penalties (at one mixture)
 
-3. Plot the RMSE and / or R-squared across a few mixtures (at one penalty)
+3.  Plot the RMSE and / or R-squared across a few mixtures (at one penalty)
 
 ## Try it -- Step 2
 
@@ -548,9 +525,8 @@ Open [`Activity-Mixture-Models.qmd`](../../Classwork/Activity-Mixture-Models.qmd
 
 Recall: We wanted to predict the `Type` of cannabis from the descriptor words.
 
-Consider only Indica vs. Sativa  (remove Hybrid)
+Consider only Indica vs. Sativa (remove Hybrid)
 
 Can you combine **logistic regression** with **LASSO** to tell me which words best separate Indica and Sativa?
 
 How does this compare to what you find with a decision tree?
-
