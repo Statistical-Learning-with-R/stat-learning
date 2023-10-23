@@ -138,11 +138,12 @@ lasso_spec <- linear_reg(penalty = tune(),
   set_engine("glmnet") %>%
   set_mode("regression")
 
+lasso_recipe <- recipe(Rating ~ ., data = cann) %>% 
+  step_zv()
+
 wflow_lasso <- workflow() %>%
   add_model(lasso_spec) %>%
-  add_recipe(
-    recipe(Rating ~ ., data = cann)
-  )
+  add_recipe(lasso_recipe)
 
 tune_res <- wflow_lasso %>%
   tune_grid(
