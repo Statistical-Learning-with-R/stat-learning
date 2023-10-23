@@ -90,7 +90,8 @@ ha <- read_csv(here::here("03-Classification",
 
 Download the [`heart_attack.csv`](data/heart_attack.csv) and read in the data. Perform any data cleaning you believe is necessary.
 
-::: {.callout-tip} \# Setting Primary Target
+::: callout-tip
+# Setting Primary Target
 
 You will find it helpful to reorder the `output` variable, so that the "at risk" group (e.g., level `1`) is the first level.
 
@@ -109,6 +110,7 @@ ha <- ha %>%
   ) %>%
   drop_na(output)
 ```
+:::
 
 # Part One: Fitting Models
 
@@ -257,8 +259,6 @@ The following questions give a possible scenario for why the hospital is interes
 -   Which metric(s) you would use for model selection and why.
 
 -   Which of your final models (Part One Q1-4) you would recommend to the hospital, and why.
-
--   What score you should expect for your chosen metric(s) using your chosen model to predict future observations.
 
 #### Q1
 
