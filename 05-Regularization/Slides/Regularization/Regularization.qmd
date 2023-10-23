@@ -1,0 +1,151 @@
+---
+title: "Regularization:  LASSO and Ridge Regression"
+format: 
+  revealjs:
+    theme: ../../../style.scss
+editor: source
+embed-resources: true
+execute: 
+  echo: true
+  message: false
+  warning: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(tidymodels)
+library(kknn)
+library(glmnet)
+library(here)
+library(rpart.plot)
+library(discrim)
+
+set.seed(98249)
+```
+
+## Variable Selection
+
+Reasons to dislike **forward/backward/subset selection**:
+
+::: {.incremental}
+
+* Computationally intensive - too many variables!
+
+* Hard to use cross-validation, and have to choose **one** penalized metric.
+
+* "Best subset" is almost never feasible, but forward / backward might miss a better option!
+
+:::
+
+## Defining a Loss Function -- OLS
+
+Instead: We adjust our **loss function** that we use to estimate coefficients.
+
+. . .
+
+</br>
+
+**Ordinary Linear Regression:** 
+
+minimize squared error:
+
+::: {.midi}
+
+$$\sum \text{(predict - truth)}^2$$
+:::
+
+## Defining a Loss Function -- Regularized Regression
+
+We would like to make it "harder" to allow variables into the model.
+
+. . .
+
+</br>
+
+**Regularized Regression:** 
+
+minimize squared error **plus** penalty:
+
+::: {.midi}
+
+$$\sum \text{(predict - truth)}^2 + \text{penalty on number of } \beta \text{s}$$
+:::
+
+## LASSO (conceptually)
+
+The **LASSO** (least absolute shrinkage and selection operator) says "big coefficients are bad"
+
+. . .
+
+</br>
+
+$$ \sum (\widehat{y}_i - y_i)^2 + \lambda \sum | \beta_j |$$
+
+. . .
+
+</br>
+
+$$ \text{RSS} + \text{penalty*(sum of absolute coefficients)}$$
+
+## LASSO with `tidymodels`
+
+```{r}
+#| label: lasso-regression
+
+lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+```
+
+. . .
+
+</br>
+
+`penalty`:  $\lambda$
+
+`mixture`:  
+
+  * 1 specifies a pure lasso model
+  * 0 specifies a ridge regression model
+
+
+## Ridge Regression (conceptually)
+
+**Ridge Regression** says "big coefficients are bad, and bigger coefficients are REALLY bad"
+
+. . .
+
+</br>
+
+$$ \sum (\widehat{y}_i - y_i)^2 + \lambda \sum \beta_j^2 $$
+
+. . .
+
+</br>
+
+$$ \text{RSS} + \text{penalty*(sum of coefficients squared)}$$
+
+## Ridge Regression in `tidymodels`
+
+```{r}
+#| label: ridge-regression
+
+ridge_spec <- linear_reg(penalty = 0.1, mixture = 0) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+```
+
+## Try it!
+
+Open `Activity-Variable-Selection` (again)
+
+1. Fit a **LASSO** model to the cannabis data with lambda = 0.1.  Then fit one with lambda = 0.5.  What is different?
+
+2. Fit a **Ridge Regression** model to the cannabis data with lambda = 0.1.  Then fit one with lambda = 0.5.  What is different?
+
+3. Which model do you prefer?
+
+4. (Bonus)  What is the best choice of lambda?

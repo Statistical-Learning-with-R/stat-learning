@@ -6,7 +6,7 @@ format:
     code-fold: true
     code-line-numbers: true
     code-tools: true
-    self-contained: true
+embed-resources: true
 editor: source
 execute:
   message: false
@@ -125,12 +125,16 @@ summary(models)$outmat[min_bic, ]
 ## Regularization Code from Lecture
 
 ```{r}
+#| label: lasso-regression
+
 lasso_spec <- linear_reg(penalty = 0.1, mixture = 1) %>%
   set_engine("glmnet") %>%
   set_mode("regression")
 ```
 
 ```{r}
+#| label: ridge-regression
+
 ridge_spec <- linear_reg(penalty = 0.1, mixture = 0) %>%
   set_engine("glmnet") %>%
   set_mode("regression")
@@ -138,10 +142,10 @@ ridge_spec <- linear_reg(penalty = 0.1, mixture = 0) %>%
 
 ## Try it!
 
-#### Fit a **LASSO** model to the cannabis data with lambda = 0.1. Then fit one with lambda = 0.5. What is different?
+1. Fit a **LASSO** model to the cannabis data with lambda = 0.1.  Then fit one with lambda = 0.5.  What is different?
 
-#### Fit a **Ridge Regression** model to the cannabis data with lambda = 0.1. Then fit one with lambda = 0.5. What is different?
+2. Fit a **Ridge Regression** model to the cannabis data with lambda = 0.1.  Then fit one with lambda = 0.5.  What is different?
 
-#### Which model do you prefer?
+3. Which model do you prefer?
 
-#### (Bonus) What is the best choice of lambda?
+4. (Bonus)  What is the best choice of lambda?
