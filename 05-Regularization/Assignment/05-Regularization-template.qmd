@@ -1,5 +1,6 @@
 ---
 title: "Lab 5: Variable Selection and Regularization"
+author: "YOUR NAME HERE"
 format: 
   html:
     code-fold: true
@@ -37,32 +38,18 @@ You can read the paper here (although you don't need to for this lab): https://w
 
 In this lab, we'll see if we can learn more about the genetic drivers of AML and ALL via modern statistical learning techniques.
 
-# Template Quarto File & Datasets
-
-Download the template Quarto file here: [`05-Regularization-template.qmd`](05-Regularization-template.qmd) 
-
-Download the main dataset [(`genes_cancer_train.csv`)](data/genes_cancer_train.csv) and the validation dataset [(`genes_cancer_validate.csv`)](data/genes_cancer_validate.csv).
-
 ```{r}
 #| label: data-load
 #| message: false
 #| echo: false
 
-genes <- read_csv(here::here("05-Regularization", 
-                             "Assignment", 
-                             "data", 
-                             "genes_cancer_train.csv")
+genes <- read_csv(here::here()
                   ) 
-genes_validation <- read_csv(here::here("05-Regularization", 
-                             "Assignment", 
-                             "data", 
-                             "genes_cancer_validate.csv")
-                  )
+genes_validation <- read_csv(here::here()
+                             )
 ```
 
 ## Reducing Size of Data
-
-For most of this lab (right up until the end), we will use a smaller version of the datasets, so as not to murder your personal computers. We'll choose a random 100 of the variables:
 
 ```{r}
 #| label: subsetting-data
@@ -71,7 +58,6 @@ set.seed(282)
 
 random_columns <- sample(3:ncol(genes), 
                          size = 100)
-
 genes_sub <- genes %>% 
   select(1, 
          2, 
@@ -79,36 +65,7 @@ genes_sub <- genes %>%
          )
 ```
 
-# Some Words of Caution
-
-A few words of caution for this lab:
-
-1.  Don't forget to clean and adjust your data. You'll need to drop the id column (`patient`), since we don't want to use the patient number as a predictor. There are two ways to do this:
-
-- Remove `patient` from the datasets
-- Change the role of the `patient` variable in a recipe step (code shown below)
-
-```{r}
-#| eval: false
-#| label: example-update-role
-
-recipe(MODEL, data = genes_sub) %>%
-  update_role(patient, new_role = "id variable")
-```
-
-2.  There are a **lot** of variables in the dataset! You'll be using the `cancer ~ .` trick in your recipes and model formulas, rather than typing out a ton of gene names. Be careful what kind of models and functions you put this into; some might overwhelm your computer.
-
-3.  In particular, be careful when using the `regsubsets()` function. Make sure you avoid the exhaustive (all subsets) search... You'd be asking your computer to fit more models than there are atoms in the universe! Make **absolutely** sure that you set the `method` to be either "forward" or "backward", and also that you choose a value for `nvmax`.
-
-4.  Even with the above precautions, we are getting into Big Computation territory. Small errors in this lab have the potential to crash your R session. Save your Quarto file (and any other unsaved files on your computer frequently), and don't be afraid to force-quit RStudio if you accidentally run something bigger than you meant to. When in doubt, **start with small examples** and work your way up!
-
-5.  Use `glmnet` as your engine whenever you are doing LASSO or Ridge of any kind.
-
 # Part One: Classification without regularization
-
-::: {.callout-important}
-# Use your `genes_sub` dataset for everything in this part.
-:::
 
 #### Q1: Decision Tree
 
@@ -142,55 +99,9 @@ How does this method compare to a single decision tree? Give an explanation for 
 
 Use forwards or backwards selection (your choice) to choose the ideal number of variables, up to a maximum of 10. Which genes are chosen?
 
-::: {.callout-caution}
-# Changing Cancer to an Integer
-
-You will have to convert `cancer` to a fake quantitative variable first. This is obviously not really justifiable, and it's not what we'd do if we were serious about stepwise selection - but we're just making a fast-and-dirty comparison here.
-
-The code below will do the trick.
-
-```{r}
-#| label: cancer-to-integer
-
-genes_weird_sub <- genes_sub %>%
-  mutate(
-    cancer = factor(cancer), 
-    cancer = as.integer(cancer)
-  )
-```
-:::
-
-::: {.callout-tip}
-# Grabbing Variables
-
-To find the selected variables from a particular row of the "asterisks" output, use:
-
-```{r}
-#| label: code-to-grab-variables-selected
-#| eval: false
-
-vars <- summary(models)$outmat[1,]
-names(vars[vars == "*"])
-```
-:::
-
 #### Q8: Tuning LASSO
 
 Tune a LASSO regression. Identify the largest `penalty` parameter that doesn't cause you to lose any prediction accuracy.
-
-::: {.callout-tip}
-# A Recommended Grid
-
-Use the following lambda grid. Make sure you **look** at the range of values that it chooses, rather than just copy pasting the code. 😉
-
-```{r}
-#| label: lambda-grid
-
-lam_grid <- grid_regular(penalty(c(-10, 0), 
-                                 trans = log2_trans()), 
-                         levels = 10)
-```
-:::
 
 #### Q9: LASSO Variable Selection
 
@@ -222,14 +133,7 @@ In your own words, give an explanation for what we saw in Q1 versus in Q3. Why w
 
 #### Q14: Tuning
 
-Using `genes_sub`, tune both the penalty and the mixture term.\
-Choose the penalty that is largest without losing accuracy.
-
-::: {.callout-tip}
-# `levels` in Tuning Grid
-
-Remember that the `levels` argument in your `grid_regular` function is telling you the number of unique values of **each** parameter that will be tried!
-:::
+Using `genes_sub`, tune both the penalty and the mixture term. Choose the penalty that is largest without losing accuracy.
 
 #### Q15: Mixture Parameter
 
