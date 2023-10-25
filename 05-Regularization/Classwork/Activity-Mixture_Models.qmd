@@ -29,17 +29,8 @@ library(rpart.plot)
 library(baguette)
 ```
 
-# Try it!
-
-Recall: We wanted to predict the `Type` of cannabis from the descriptor words.
-
-Consider only Indica vs. Sativa  (remove Hybrid)
-
-Can you combine **logistic regression** with **LASSO** to tell me which words best separate Indica and Sativa?
-
-How does this compare to what you find with a decision tree?
-
 ```{r}
+#| label: data-load-clean
 
 cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
 
@@ -50,3 +41,13 @@ cann_no_hybrid <- cann %>%
   filter(Type != "Hybrid")
 
 ```
+
+# Try it!
+
+Recall: We wanted to predict the `Type` of cannabis from the descriptor words.
+
+Consider only Indica vs. Sativa  (remove Hybrid)
+
+Can you combine **logistic regression** with **LASSO** to tell me which words best separate Indica and Sativa?
+
+How does this compare to what you find with a decision tree?
