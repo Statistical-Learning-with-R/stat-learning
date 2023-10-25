@@ -52,7 +52,7 @@ What is the "best" choice of $\lambda$?
 . . .
 
 ::: {.centered}
-![](https://upload.wikimedia.org/wikipedia/en/4/44/Try_Everything_%28Shakira%29.jpg)
+![](images/Try_Everything.jpeg)
 :::
 
 
