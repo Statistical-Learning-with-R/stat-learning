@@ -19,7 +19,7 @@ execute:
 
 This week we will have **two** topics we are focusing on---dimension reduction and clustering. We will break these topics into two installments, first covering dimension reduction (since it is related to last week's reading on regularization) and then moving to clustering. 
 
-# Dimension Reduction
+# Dimension Reduction -- PCA
 
 ## Textbook Reading
 
@@ -31,17 +31,27 @@ This week we will have **two** topics we are focusing on---dimension reduction a
 Read pages 252 through 261 **and** pages 496 through 508! 
 :::
 
+## Reading Guide -- Due Monday, October 30 at 2:10pm
+
+📝 [Download the Word Document](reading-guide/week-6a.docx)
+
 ## Tutorial Videos
 
 Here's a helpful video which explains how PCA works: <https://youtu.be/FgakZw6K1QQ?si=n9f_d4lM1AGjFNg_>
-
-## Concept Quiz 
 
 # Clustering
 
 ## Textbook Reading
 
 📖 [**Required Reading:** *ISLR -- Chapter 12, Section 12.4*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+::: callout-warning
+# Read pages 514 through 530! 
+:::
+
+## Reading Guide -- Will be Posted by Sunday
+
+<!-- 📝 [Download the Word Document](reading-guide/week-6a.docx) -->
 
 ## Tutorial Videos
 
@@ -50,6 +60,3 @@ Here's a helpful video which explains how K-means clustering works:
 
 Here's a helpful video which explains how hierarchical clustering works:
 <https://youtu.be/7xHsRkOdVwo?si=8q8X1fjpiW5BiBCQ>
-
-## Concept Quiz 
-

@@ -1,0 +1,11 @@
+---
+title: "Week 6 Reading Guide -- Clustering"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---

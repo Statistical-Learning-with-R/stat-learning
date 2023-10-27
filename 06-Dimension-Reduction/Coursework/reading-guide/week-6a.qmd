@@ -1,0 +1,23 @@
+---
+title: "Week 6 Reading Guide -- PCA"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---
+
+**How is the first principal component chosen?**
+
+**Why does PCA constrain the loadings such that** $\phi_{11}^2 + \phi_{21}^2 = 1$ (in the two variable case)?
+
+**When finding the first principal component line, what criteria is minimized?**
+
+**How is the second principal component chosen?**
+
+**How would one decide how many principal components to use?**
+
+**Should the predictor variables be standardized when using PCA?**
