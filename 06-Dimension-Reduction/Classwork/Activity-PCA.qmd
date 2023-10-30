@@ -28,7 +28,6 @@ library(rpart.plot)
 library(baguette)
 ```
 
-
 ## Data Prep
 
 ```{r}
@@ -43,7 +42,6 @@ cann_matrix <- cann %>%
 cann_types <- cann %>% pull(Type)
 ```
 
-
 ## Relevant code from Lecture
 
 (You will need to change this for the Cannabis data!)
@@ -54,20 +52,17 @@ fed %>%
   geom_point()
 ```
 
-
 PCA:
 
 ```{r}
 pc <- prcomp(fed_matrix, center = TRUE, scale = TRUE)
 ```
 
-
 Combinations of variables that create new axes:
 
 ```{r}
 pc$rotation
 ```
-
 
 Check out most important PCs:
 
@@ -76,7 +71,6 @@ pc$rotation %>%
   data.frame() %>%
   arrange(desc(abs(PC1)))
 ```
-
 
 Make a dataframe with PCs as columns:
 
@@ -87,7 +81,6 @@ new_dims_df <- pc$x %>%
 new_dims_df
 ```
 
-
 Plot first two PC dims:
 
 ```{r}
@@ -95,7 +88,6 @@ new_dims_df %>%
   ggplot(aes(x = PC1, y = PC2, color = auths_known)) +
   geom_point()
 ```
-
 
 Standard deviations and variances:
 
@@ -107,7 +99,6 @@ pc$sdev
 cumul_vars <- cumsum(pc$sdev^2)/sum(pc$sdev^2)
 cumul_vars
 ```
-
 
 ## Try it!
 
