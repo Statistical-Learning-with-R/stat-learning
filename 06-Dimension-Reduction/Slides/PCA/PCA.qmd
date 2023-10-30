@@ -176,7 +176,7 @@ If we choose a couple words and plot our data...
 #| label: two-words-plot
 
 fed_known %>%
-  ggplot(aes(x = there, y = would, color = auths_known)) +
+  ggplot(aes(x = there, y = would, color = Author)) +
   geom_point() +
   labs(x = "There", 
        y = "Would", 

@@ -31,15 +31,15 @@ library(baguette)
 ## Data Prep
 
 ```{r}
-cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
-
-cann <- cann %>% drop_na()
+cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1") %>% 
+  drop_na()
 
 cann_matrix <- cann %>%
   select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>%
   as.matrix()
 
-cann_types <- cann %>% pull(Type)
+cann_types <- cann %>% 
+  pull(Type)
 ```
 
 ## Relevant code from Lecture
@@ -48,14 +48,16 @@ cann_types <- cann %>% pull(Type)
 
 ```{r}
 fed %>%
-  ggplot(aes(x = there, y = would, color = auths_known)) +
+  ggplot(aes(x = there, y = would, color = Author)) +
   geom_point()
 ```
 
 PCA:
 
 ```{r}
-pc <- prcomp(fed_matrix, center = TRUE, scale = TRUE)
+pc <- prcomp(fed_matrix, 
+             center = TRUE, 
+             scale = TRUE)
 ```
 
 Combinations of variables that create new axes:
@@ -69,14 +71,20 @@ Check out most important PCs:
 ```{r}
 pc$rotation %>% 
   data.frame() %>%
-  arrange(desc(abs(PC1)))
+  arrange(
+    desc(
+      abs(PC1)
+      )
+    )
 ```
 
 Make a dataframe with PCs as columns:
 
 ```{r}
 new_dims_df <- pc$x %>%
-  as.data.frame()
+  as.data.frame() %>% 
+  bind_cols(auths_known) %>% 
+  rename(Author = `...71`)
 
 new_dims_df
 ```
@@ -85,7 +93,7 @@ Plot first two PC dims:
 
 ```{r}
 new_dims_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = auths_known)) +
+  ggplot(aes(x = PC1, y = PC2, color = Author)) +
   geom_point()
 ```
 
@@ -102,20 +110,18 @@ cumul_vars
 
 ## Try it!
 
-#### Apply PCA to the cannabis data
+1.  Apply PCA to the cannabis data
 
-#### Interpret the PC rotations - what are the most important variables?
+2.  Interpret the PC rotations
 
-#### Plot the data on the first two axes, and color by Type.
+3.  Plot the data on the first two axes, and color by Type.
 
-#### Choose a "good" number of PCs to use.
+4.  Choose a "good" number of PCs to use.
 
-#### Fit a KNN classifier using:
+5.  Fit a KNN classifier using:
 
-#### (a) All the variables
+- All the variables
+- Only the 5 most important variables according to PCA
+- Only your chosen PCs
 
-#### (b) Only the 5 most important variables according to PCA.
-
-#### (C) Only your chosen PCs.
-
-#### How does the accuracy of these three approaches compare?
+6.  Compare the accuracy of these three approaches!
