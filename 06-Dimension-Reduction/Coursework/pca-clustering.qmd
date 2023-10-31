@@ -49,9 +49,34 @@ Here's a helpful video which explains how PCA works: <https://youtu.be/FgakZw6K1
 # Read pages 514 through 530! 
 :::
 
-## Reading Guide -- Will be Posted by Sunday
+## Concept Quiz 
 
-<!-- 📝 [Download the Word Document](reading-guide/week-6a.docx) -->
+**Question 1** -- PCA and clustering are both examples of what type of method?
+
+- supervised learning
+- unsupervised learning
+
+**Question 2** -- The K-means clustering procedure ensures that each observations belongs to 
+[at most one / at least one] cluster, the clusters are [overlapping / non-overlapping], and the [within-cluster / between-cluster] variance is as small as possible. 
+
+**Question 3** -- In the first step of the K-means algorithm, each observation is [assigned to the cluster with the closest mean / randomly assigned to a cluster]. K-means [is / is not] sensitive to the initial assignment of observations to clusters, meaning the clustering results [do / do not] vary based on the initial assignment of observations.  
+
+**Question 4** -- The number of leaves in a dendrogram is always equal to the sample size. 
+
+- True
+- False
+
+**Question 5** -- On the vertical axis of a dendrogram, a value of 1 represents [n cuts / no cuts], where observations are in [one / n] cluster(s). A value of 0 represents [n cuts / no cuts], where observations are in [one / n] cluster(s).  
+
+**Question 6** -- What linkages are the most popular among statisticians (in hierarchical clustering)? **Select all that apply**
+
+- average
+- centroid
+- complete
+- single
+
+**Question 7** -- The results of clustering should be viewed as [a final model for confirming hypotheses / a starting point for generating scientific hypotheses]. 
+
 
 ## Tutorial Videos
 
