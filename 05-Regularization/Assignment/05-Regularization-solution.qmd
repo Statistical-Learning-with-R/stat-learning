@@ -1,0 +1,444 @@
+---
+title: "Assignment 5: Regularization"
+author: "Solutions by Dr. Theobold"
+format: html
+self-contained: true
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(tidymodels)
+library(leaps)
+library(rpart.plot)
+
+set.seed(282)
+```
+
+Load the main dataset, and the validation set:
+
+```{r}
+#| label: data-load
+
+genes <- read_csv(here::here("05-Regularization", 
+                             "Assignment", 
+                             "data", 
+                             "genes_cancer_train.csv")
+                  ) 
+genes_validation <- read_csv(here::here("05-Regularization", 
+                             "Assignment", 
+                             "data", 
+                             "genes_cancer_validate.csv")
+                  )
+```
+
+For most of this lab (right up until the end), we will use a smaller version of the datasets, so as not to murder your personal computers and/or RStudio Cloud account.  We'll choose a random 100 of the 
+
+```{r}
+random_columns <- sample(3:ncol(genes), 500)
+
+genes_sub <- genes[, c(1, 2, random_columns)]
+```
+
+
+```{r}
+genes <- genes %>%
+  mutate(
+    cancer = factor(cancer)
+  )
+
+genes_validation <- genes_validation %>%
+  mutate(
+    cancer = factor(cancer)
+  )
+
+genes_sub <- genes_sub %>%
+  mutate(
+    cancer = factor(cancer)
+  )
+
+genes_rec_sub <- recipe(cancer ~ ., data = genes_sub) %>%
+  update_role(patient, new_role = "id variable")
+
+genes_rec_full <- recipe(cancer ~ ., data = genes) %>%
+  update_role(patient, new_role = "id variable")
+
+```
+
+# Part One: Classification without regularization
+
+::: {.callout-important}
+# Use your `genes_sub` dataset for everything in this part.
+:::
+
+#### Q1:  Decision Tree.
+
+Fit a decision tree to this data.  Which genes does it designate as most important for differentiating ALL and AML cancers?  How pure are the nodes?
+
+```{r}
+#| label: decision-tree
+
+tree_spec <- decision_tree() %>%
+  set_mode("classification") %>%
+  set_engine("rpart")
+
+tree_fit <- workflow() %>%
+  add_model(tree_spec) %>%
+  add_recipe(genes_rec_sub) %>%
+  fit(genes_sub)
+
+tree_fitted <- tree_fit %>% 
+  extract_fit_parsnip() 
+
+rpart.plot(tree_fitted$fit, roundint = FALSE)
+```
+
+#### Q2:  Validationl.
+
+Use your tree to predict on the validation set.  How did it do?
+
+```{r}
+#| label: tree-validation
+
+genes_validation %>%
+  mutate(
+    preds = predict(tree_fit, genes_validation)$.pred_class
+  ) %>%
+  accuracy(truth = cancer, estimate = preds)
+```
+
+#### Q3: Explanation.
+
+The tree had 1000 variables to choose from.  (If we weren't limiting ourselves, it'd be over 7000!)  There were only 44 samples. It's easy to find some variable among the 44 that has a cutoff that nearly perfectly splits the samples into their groups, mostly by luck.
+
+When we predict on the validation set, we do *okay*, because the variable is probably somewhat meaningful - but not as perfectly as we might expect, and not as well as we probably could have done with more variables involved.
+
+This is a form of overfitting, even though it doesn't appear so from the tree.  When the model has too many variables to choose from, it can have "too much success" on the training data.
+
+#### Q4: Random Forest
+
+Now fit a Random Forest to the data. 
+
+```{r}
+#| label: random-forest
+
+genes_rec <- recipe(cancer ~ ., data = genes_sub) %>%
+  update_role(patient, new_role = "id variable")
+
+rf_spec <- rand_forest() %>%
+  set_mode("classification") %>%
+  set_engine("ranger")
+
+rf_fit <- workflow() %>%
+  add_model(rf_spec) %>%
+  add_recipe(genes_rec) %>%
+  fit(genes_sub)
+
+```
+
+#### Q5: Validation
+
+Use your random forest to predict on the validation set. How did it do? 
+
+```{r}
+genes_validation %>%
+  mutate(
+    cancer = factor(cancer),
+    preds = predict(rf_fit, genes_validation)$.pred_class
+  ) %>%
+  accuracy(truth = cancer, estimate = preds)
+```
+#### Q6: Explanation
+
+How does this method compare to a single decision tree? Give an explanation for the difference in results.
+
+The random forest gains about 4% in accuracy over the decision tree. 
+
+
+# Part Two:  Variable Selection
+
+#### Q7:  Stepwise selection.
+
+Use forwards or backwards selection (your choice) to choose the ideal number of variables, up to a maximum of 10.  Which genes are chosen?
+
+```{r}
+#| label: cancer-to-integer
+
+genes_weird_sub <- genes_sub %>%
+  mutate(
+    cancer = as.integer(factor(cancer))
+  )
+```
+
+```{r}
+#| label: backward-selection
+#| cache: true
+
+models <- regsubsets(cancer ~ ., data = genes_weird_sub, 
+                     method = "backward", 
+                     nvmax = 10)
+
+bic_scores <- summary(models)$bic
+
+best_model <- which.min(bic_scores)
+
+vars <- summary(models)$outmat[best_model, ]
+best_vars <- names(vars[vars == "*"])
+best_vars
+```
+
+#### Q8: LASSO.
+
+Tune a LASSO regression.  Identify the largest penalty parameter that doesn't cause you to lose any prediction accuracy. 
+
+```{r}
+#| label: lambda-grid
+
+lam_grid <- grid_regular(penalty(c(-10, 0), 
+                                 trans = log2_trans()), 
+                         levels = 10)
+```
+
+```{r, cache = TRUE}
+#| label: lasso-tune
+#| cache: true
+
+lass_spec <- logistic_reg(penalty = tune(), 
+                          mixture = 1
+                          ) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+cvs <- vfold_cv(genes_sub, 5)
+
+lass_wflow <- workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(lass_spec)
+
+tuning <- lass_wflow %>%
+  tune_grid(
+    resamples = cvs,
+    grid = lam_grid
+  )
+
+tuning %>% 
+  show_best(metric = "accuracy")
+```
+
+The largest penalty with the best accuracy is 0.0098431332. 
+
+#### Q9: LASSO Variable Selection.
+
+Using the penalty chosen in Q2, fit a final LASSO model on the **full data** (that is, on `genes` not on `genes_sub`).  What genes were selected?
+
+```{r}
+#| label: lasso-variable-selection
+#| cache: true
+
+lass_spec_untune <- logistic_reg(penalty = 0.0098431332, 
+                                 mixture = 1) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+workflow() %>%
+  add_recipe(genes_rec_full) %>%
+  add_model(lass_spec_untune) %>%
+  fit(genes) %>%
+  pull_workflow_fit() %>%
+  tidy() %>%
+  filter(estimate != 0) %>% 
+  select(term)
+```
+
+# Part Three: Reducing variance of coefficients
+
+#### Q10: Ordinary Logistic Regression
+
+Randomly divide the observations in the dataset (back to `genes_sub`) in half.
+Fit a logistic regression on the  with no penalty term to each half.
+
+Report the estimates for the top five predictors (not the Intercept!).  How different were they between the two subsamples of the datset?
+
+```{r}
+#| label: logistic-regression
+#| cache: true
+
+splits <- initial_split(genes_sub, 0.5)
+genes_sub_1 <- training(splits)
+genes_sub_2 <- testing(splits)
+
+nopenalty_spec <- logistic_reg() %>%
+  set_mode("classification") %>%
+  set_engine("glm")
+
+workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(nopenalty_spec) %>%
+  fit(genes_sub_1) %>%
+  pull_workflow_fit() %>%
+  tidy() %>%
+  select(term, estimate) %>%
+  filter(term != "(Intercept)") %>%
+  slice_max(order_by = estimate, n = 5)
+
+workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(nopenalty_spec) %>%
+  fit(genes_sub_2) %>%
+  pull_workflow_fit() %>%
+  tidy() %>%
+  select(term, estimate) %>%
+  filter(term != "(Intercept)") %>% 
+  slice_max(order_by = estimate, n = 5)
+
+```
+
+#### Q11: Ridge Regression - Tuning
+
+Tune a logistic regression with ridge penalty on `genes_sub`.  Once again, choose the largest penalty that does not noticeably decrease the accuracy.
+
+```{r, cache = TRUE}
+#| label: ridge-regression-tune
+#| cache: true
+
+ridge_spec <- logistic_reg(penalty = tune(),
+                           mixture = 0) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+ridge_wflow <- workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(ridge_spec)
+
+tuning <- ridge_wflow %>%
+  tune_grid(
+    resamples = cvs,
+    grid = lam_grid
+  )
+
+tuning %>% 
+  show_best(metric = "accuracy")
+```
+For ridge regression, a penalty of 0.0212623438 is the largest with the same predictive accuracy. 
+
+#### Q12: Comparison
+
+Fit a logistic regression with the penalty selected in Q2 on the two random halves of the dataset that you created in Q1.
+
+Compare the estimates of the top five predictors (not the Intercept!).  How different were they?
+
+```{r}
+#| label: ridge-comparison
+#| cache: true
+
+ridge_spec_untune <- logistic_reg(penalty = 0.0212623438, 
+                                  mixture = 0) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(ridge_spec_untune) %>%
+  fit(genes_sub_1) %>%
+  pull_workflow_fit() %>%
+  tidy() %>%
+  select(term, estimate) %>%
+  filter(term != "(Intercept)") %>% 
+  slice_max(order_by = estimate, n = 5)
+
+workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(ridge_spec_untune) %>%
+  fit(genes_sub_2) %>%
+  pull_workflow_fit() %>%
+  tidy() %>%
+  select(term, estimate) %>%
+  filter(term != "(Intercept)") %>% 
+  slice_max(order_by = estimate, n = 5)
+```
+
+#### Q13: Explanation
+
+In your own words, give an explanation for what we saw in Q1 versus in Q3.
+
+# Part Four: A final model
+
+#### Q14: Tuning
+
+Using `genes_sub`, tune both the `penalty` and the `mixture` term. Choose the `penalty` that is largest without losing accuracy.
+
+```{r}
+#| label: elastic-net-tune
+#| cache: true
+
+elastic_spec <- logistic_reg(penalty = tune(), 
+                             mixture = tune()) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+elastic_wflow <- workflow() %>%
+  add_recipe(genes_rec) %>%
+  add_model(elastic_spec)
+
+elastic_grid <- grid_regular(
+  penalty(
+    c(-10, 0), 
+    trans = log2_trans()
+    ),
+  mixture(),
+  levels = 4)
+
+tuning <- elastic_wflow %>%
+  tune_grid(
+    resamples = cvs,
+    grid = elastic_grid
+  )
+
+tuning %>% 
+  show_best(metric = "accuracy")
+```
+
+#### Q15: Mixture Parameter
+
+Interpret the selected `mixture` parameter in words.
+
+#### Q16: Conclusion
+
+Using the parameters you selected above, fit your model to the **full dataset**.
+
+How many genes were selected?  Which seem to be most important?
+
+Report the performance of the model on the validation set.
+
+```{r}
+#| label: elastic-net-final
+#| cache: true
+
+elastic_spec_untune <- logistic_reg(penalty = 0.0098431332, 
+                                    mixture = 1/3) %>%
+  set_mode("classification") %>%
+  set_engine("glmnet")
+
+elastic_wflow <- workflow() %>%
+  add_recipe(genes_rec_full) %>%
+  add_model(elastic_spec_untune)
+
+elastic_fit <- elastic_wflow %>%
+  fit(genes) 
+
+elastic_fit %>%
+  tidy() %>%
+  filter(estimate != 0)
+
+genes_validation %>%
+  mutate(
+    preds = predict(elastic_fit, genes_validation)$.pred_class
+  ) %>%
+  accuracy(truth = cancer,
+           estimate = preds)
+```
+
