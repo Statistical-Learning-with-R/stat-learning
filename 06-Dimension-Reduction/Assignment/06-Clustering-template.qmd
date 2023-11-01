@@ -1,5 +1,6 @@
 ---
-title: "Clustering and PCA"
+title: "Lab 6: Clustering and PCA"
+author: "YOUR NAME HERE"
 format: 
   html:
     code-fold: true
@@ -25,8 +26,6 @@ library(rpart)
 library(rpart.plot)
 library(baguette)
 ```
-
-Download the template Quarto file here: [`06-Clustering-template.qmd`](06-Clustering-template.qmd)
 
 # Dataset: Spotify Song Attributes
 
@@ -76,17 +75,6 @@ This dataset contains measurements of various musical / acoustic attributes for 
 ## Plotting the Results
 
 **Question 11** -- Plot the observations in the first two PCs, and color them by their assigned clusters in Q3.
-
-::: {.callout-tip}
-# Joining PCA Results and K-Means Results
-```{r}
-pca_km <- pca$x %>%
-  as_tibble() %>%
-  mutate(
-    cluster = factor(km$cluster)
-  )
-```
-:::
 
 ## Interpreting the Results
 
@@ -146,9 +134,3 @@ songs_full %>%
 ```
 
 Refer back to your cluster interpretations at the end of Parts One (Q13) and Two (Q17). Did they turn out to be correct? That is, do the styles of the artists that are most represented in a particular cluster seem to match your predictions?
-
-::: {.callout-tip}
-# Use Wikipedia (or Chat GPT)
-
-You might need to use Wikipedia to figure out the style / genre of artists you are not familiar with.
-:::
