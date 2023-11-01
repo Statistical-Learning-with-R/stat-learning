@@ -32,6 +32,12 @@ So far in this class, we've only done [supervised learning]{style="color: #ed840
 
 Clustering is a type of [unsupervised learning]{style="color: #b87579;"}. Meaning, we want to sort our observations into clusters based on the predictors, but we don't have a pre-conceived notion of [what those clusters represent]{style="color: #b87579;"}!
 
+## Clustering Usage 
+
+::: {.centered}
+![](images/clustering-articles.png)   
+:::
+
 ## Clustering
 
 The general goal of clustering is to make clusters such that points **within** a cluster are closer to each other than to the points **outside** the cluster.
@@ -55,12 +61,6 @@ What *algorithm* do we use to select the clusters?
 :::
 
 
-## Clustering Usage 
-
-::: {.centered}
-![](images/clustering-articles.png)   
-:::
-
 ## K-means Clustering Algorithm
 
 Idea:  Iteratively update the **centers** of the clusters until convergence.
@@ -70,10 +70,9 @@ Idea:  Iteratively update the **centers** of the clusters until convergence.
 1. Plop $k$ points down in space. These are the *centroids*.
 
 ::: {.callout-tip}
-# Choosing Initial Centroids
-
-There are many ways to choose initial centroids -- randomly in space, randomly chosen observations in the dataset, the farthest point(s). 
+# There are many ways to choose initial centroids!
 :::
+
 . . .
 
 2. Determine which centroid each observation is closest to.  Assign it to that cluster.
@@ -105,36 +104,41 @@ It gives back centroids, cluster assignments, and sum-of-squares.
 
 . . .
 
-```{r, echo = FALSE}
+```{r}
 #| label: data-load-clean
 #| echo: false
 #| message: false
 
 # Read data
-fed <- read.csv("https://www.dropbox.com/s/9t8sxr1sg0monih/federalist.txt?dl=1")
-fed <- fed[,-1]
+fed <- read.csv(here::here("06-Dimension-Reduction", 
+                           "Slides", 
+                           "PCA", 
+                           "data", 
+                           "federalist.txt")
+                ) %>% 
+  select(-X) 
 
 # Keep numeric section only
-fed_all <- as.matrix(fed[,-1])
-fed_all <- apply(fed_all, 2, as.numeric)
+fed_clean <- fed %>% 
+  mutate(across(.cols = -Author, .fns = ~ as.numeric(.x)
+                )
+         )
 
 auths <- fed$Author
 
 # Data from papers with known authors
-fed_known <- as.matrix(fed[auths != 'DIS',-1])
-fed_known <- apply(fed_known, 2, as.numeric)
+fed_known <- fed_clean %>% 
+  filter(Author != "DIS")
 
-auths_known = auths[auths != 'DIS']
+auths_known <- fed_known$Author
 
 # Data from papers with unknown authors
-fed_unknown <- as.matrix(fed[auths == 'DIS',-1])
-fed_unknown <- apply(fed_unknown, 2, as.numeric)
+fed_unknown <- fed_clean %>% 
+  filter(Author == "DIS") 
 
-fed_ex <- as_tibble(fed_known) %>% 
-  cbind(auths_known)
-fed_matrix <- fed_ex %>% 
-  select(-auths_known) %>% 
-  as.matrix()
+
+fed_matrix <- fed_known %>% 
+  select(-Author)
 ```
 
 . . .
@@ -152,10 +156,16 @@ fed_km <- kmeans(fed_matrix,
 ::: {.callout-tip}
 # Optional Arguments
 
-`nstart`, the number of random sets that should be chosen, is by default set to 1
+`nstart` -- the number of random sets that should be chosen, is by default set to 1
 
-`algorithm` -- allows you to choose which K-means algorithm you would like to use
+`algorithm` -- allows you to choose which K-means algorithm you would like to use (Loyd, MacQueen, or Hartigan-Wong)
 :::
+
+<!-- Hartigan and Wong's method starts by partitioning the points into random clusters -->
+
+<!-- Loyd -- randomly assigns all points to a centroid -->
+
+<!-- MacQueen -- randomly chooses k datapoints / observations as centroids -->
 
 ## Centers
 
@@ -168,14 +178,44 @@ fed_km$centers
 
 ## Sums of Squares
 
+::: columns
+::: {.column width="30%"}
+Total Sum of Squares
+
 ```{r}
-#| label: kmeans-ss
+#| label: kmeans-total-ss
 #| echo: true
 
 fed_km$totss
+```
+
+:::
+
+::: {.column width="30%"}
+::: {.fragment}
+Within Sum of Squares 
+
+```{r}
+#| label: kmeans-within-ss
+#| echo: true
+
 fed_km$withinss
+```
+:::
+:::
+
+::: {.column width="30%"}
+::: {.fragment}
+Between Sum of Squares
+```{r}
+#| label: kmeans-between-ss
+#| echo: true
+
 fed_km$betweenss
 ```
+:::
+:::
+:::
 
 ## Cluster Assignments
 
@@ -187,7 +227,7 @@ fed_km$betweenss
 
 res <- tibble(
   clust = fed_km$cluster, 
-  auth = fed_ex$auths)
+  auth = fed_known$Author)
 
 res
 ```
@@ -200,6 +240,7 @@ res
 
 ::: {.fragment}
 ```{r}
+#| echo: true
 res %>% 
   count(clust, auth)
 ```
@@ -228,9 +269,14 @@ Did we maybe "muddy the waters" by weighing all variables equally?
 
 </br>
 
-It is **very common** to do a PCA reduction before running k-means!
+It is **very common** to do a PCA reduction before running K-means!
 
-## Preprocessing with PCA
+## Integrating PCA with K-means
+
+
+::: columns
+::: {.column width="45%"}
+**Pre-processing**
 
 ```{r}
 #| echo: true
@@ -239,27 +285,58 @@ pc <- prcomp(fed_matrix,
              center = TRUE, 
              scale = TRUE)
 
-fed_reduced <- pc$x[, 1:2]
+fed_reduced <- pc$x[, 1:2] 
+```
 
+:::
+
+::: {.column width="50%"}
+::: {.fragment}
+**Fitting**
+
+```{r}
+#| echo: true
 fed_pca_km <- kmeans(fed_reduced, 
                      centers = 3)
 ```
+:::
+:::
+:::
 
 . . .
+
+**Inspecting**
 
 ```{r}
 #| label: pca-kmeans-3-centers-results
 #| echo: true
-res <- tibble(
+res3 <- tibble(
   clust = fed_pca_km$cluster, 
-  auth = fed_ex$auths)
+  auth = fed_known$Author)
 
-res %>% 
+res3 %>% 
   count(clust, auth)
 ```
 
 
 ## What if we'd done four centroids?
+
+::: columns
+::: {.column width="45%"}
+**Three Centroids**
+
+```{r}
+res3 %>% 
+  count(clust, auth)
+```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+**Four Centroids**
 
 ```{r}
 #| echo: false
@@ -274,13 +351,15 @@ fed_reduced <- pc$x[, 1:2]
 fed_pca_km <- kmeans(fed_reduced, 
                      centers = 4)
 
-res <- tibble(
+res4 <- tibble(
   clust = fed_pca_km$cluster, 
-  auth = fed_ex$auths)
+  auth = fed_known$Author)
 
-res %>% 
+res4 %>% 
   count(clust, auth)
 ```
+:::
+:::
 
 
 ## K-means Takeaways
@@ -311,7 +390,7 @@ res %>%
 
 ## Try it!
 
-Open a **Activity-Clustering.Rmd**
+Open a [Activity-Clustering.Rmd`](../../Classwork/Activity-Clustering.qmd)
 
 1. Apply k-means clustering to the cannabis data using *all* the word predictors.
 2. What was the within and between sum of squares?
@@ -344,6 +423,10 @@ Idea:  Merge observations that are close together.
 
 ##  {background-color="#B6CADA"}
 
+::: {.larger}
+Merging Observations
+:::
+
 
 ::: columns
 ::: {.column width="45%"}
@@ -354,16 +437,18 @@ Idea:  Merge observations that are close together.
 :::
 
 ::: {.column width="45%"}
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Hierarchical_clustering_simple_diagram.svg/418px-Hierarchical_clustering_simple_diagram.svg.png)
+![](images/hierarchical-final.png)
 :::
 :::
 
 
-## Hierarchical clustering
+## Hierarchical Clustering in R
 
 The `hclust()` function needs to be given a *distance matrix*.
 
 . . .
+
+</br>
 
 ```{r}
 #| error: true
@@ -374,7 +459,7 @@ fed_hc <- fed_matrix %>%
 ```
 
 
-## Hierarchical clustering
+## Hierarchical Clustering in R
 
 When you give `hclust()` a distance matrix...
 
@@ -387,18 +472,18 @@ fed_hc <- fed_matrix %>%
 
 . . .
 
-it gives back a **dendrogram**.
+it gives back a (not super pretty) *dendrogram*.
 
 ```{r}
 #| echo: true
 plot(fed_hc, 
-     labels = fed_ex$auths)
+     labels = fed_known$Author)
 ```
 
 
 ## Choosing Clusters from Dendrograms
 
-To decide how to assign clusters, we can choose **how many** clusters we want...
+To decide how to assign clusters, we can choose *how many* clusters (`k`) we want we can use `cuttree()` to cut the dendrogram into a specific number of clusters.
 
 ```{r}
 #| echo: true
@@ -408,12 +493,14 @@ res_hc <- cutree(fed_hc,
 res_hc
 ```
 
+. . .
+
 ```{r}
 #| echo: true
 
 tibble(
   clust = res_hc,
-  auth = fed_ex$auths
+  auth = fed_known$Author
 ) %>%
   count(clust, auth)
 ```
@@ -421,7 +508,7 @@ tibble(
 
 ## Option 2 
 
-Or we can choose a **height cutoff** for the dendrogram
+Or we can choose a *height cutoff* (`h`) for the dendrogram
 
 ```{r}
 #| echo: true
@@ -438,7 +525,7 @@ res_hc_2
 
 tibble(
   clust = res_hc_2,
-  auth = fed_ex$auths
+  auth = fed_known$Author
 ) %>%
   count(clust, auth)
 ```
@@ -469,8 +556,6 @@ tibble(
 
 ## Try it!
 
-Open `Activity-Clustering.qmd`
-
-1 Apply hierarchical clustering to the cannabis data
+1. Apply hierarchical clustering to the cannabis data
 2. Compare your results to k-means. 
 3. Which method do you prefer?  Why?

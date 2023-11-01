@@ -6,8 +6,8 @@ format:
     code-fold: true
     code-line-numbers: true
     code-tools: true
-    self-contained: true
-editor: visual
+embed-resources: true
+editor: source
 execute:
   message: false
 ---
@@ -19,6 +19,7 @@ Declare your libraries:
 ```{r}
 #| label: libraries-r
 #| include: false
+
 library(tidyverse)
 library(tidymodels)
 library(glmnet)
@@ -28,27 +29,33 @@ library(rpart.plot)
 library(baguette)
 ```
 
-
 ## Data Prep
 
 ```{r}
-cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
+#| label: data-read-clean
 
-cann <- cann %>% drop_na()
+cann <- read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1") %>% 
+  drop_na()
 
 cann_matrix <- cann %>%
   select(-Type, -Strain, -Effects, -Flavor, -Dry, -Mouth) %>%
   as.matrix()
 
-cann_types <- cann %>% pull(Type)
+cann_types <- cann %>% 
+  pull(Type)
 ```
 
+# K-Means
 
 ## Code from Lecture
 
+**Fitting K-means**
 ```{r}
-fed_km <- kmeans(fed_matrix, 3)
-fed_km
+#| label: fitting-k-means
+#| echo: false
+#| eval: false
+
+fed_km <- kmeans(fed_matrix, centers = 3)
 
 fed_km$centers
 
@@ -60,13 +67,16 @@ res <- tibble(
   clust = fed_km$cluster, 
   auth = auths_known)
 
-res
-
-res %>% count(clust, auth)
+res %>% 
+  count(clust, auth)
 ```
 
-
+**Using PCA with K-means**
 ```{r}
+#| label: pca-with-k-means
+#| echo: false
+#| eval: false
+
 pc <- prcomp(fed_matrix, center = TRUE, scale = TRUE)
 
 fed_reduced <- pc$x[, 1:2]
@@ -77,35 +87,31 @@ res <- tibble(
   clust = fed_pca_km$cluster, 
   auth = auths_known)
 
-res %>% count(clust, auth)
+res %>% 
+  count(clust, auth)
 ```
-
-```{r}
-
-fed_pca_km <- kmeans(fed_reduced, 4)
-
-res <- tibble(
-  clust = fed_pca_km$cluster, 
-  auth = auths_known)
-
-res %>% count(clust, auth)
-```
-
-
 
 ## Try it!
 
-#### Apply k-means clustering to the cannabis data using *all* the word predictors.
-#### What was the within and between sum of squares?
-#### Did the clusters match up with the Type?
+1. Apply k-means clustering to the cannabis data using *all* the word predictors.
+2. What was the within and between sum of squares?
+3. Did the clusters match up with the Type?
 
-#### Refer back to your PCA analysis of the cannabis data.
-#### Apply k-means clustering to the **second and third** PC only
-#### Plot these clusters.  What do you think they capture?
+Now, refer back to your PCA analysis of the cannabis data (from Monday).
+
+4. Apply k-means clustering to the **second and third** PC only
+5. Plot these clusters.  What do you think they capture?
+
+
+
+# Hierarchical Clustering 
 
 ## More code from class
 
 ```{r}
+#| label: hierarchical-clustering
+#| eval: false
+#| echo: false
 fed_hc <- fed_matrix %>% 
   scale() %>% 
   dist() %>% 
@@ -114,15 +120,13 @@ fed_hc <- fed_matrix %>%
 plot(fed_hc, labels = fed_known$auths)
 ```
 
-
-
 ```{r}
+#| label: cutting-based-on-clusters
+#| echo: false
+#| eval: false
+
 res_hc <- cutree(fed_hc, k = 3)
 
-res_hc
-```
-
-```{r}
 tibble(
   clust = res_hc,
   auth = fed_known$auths
@@ -131,11 +135,13 @@ tibble(
 ```
 
 ```{r}
-res_hc_2 <- cutree(fed_hc, h = 0.05)
-res_hc_2
-```
+#| label: cutting-based-on-height
+#| echo: false
+#| eval: false
 
-```{r}
+res_hc_2 <- cutree(fed_hc, 
+                   h = 0.05)
+
 tibble(
   clust = res_hc_2,
   auth = auths_known
@@ -145,5 +151,6 @@ tibble(
 
 ## Try it!
 
-#### Apply hierarchical clustering to the cannabis data
-#### Compare your results to k-means. Which do you prefer?  Why?
+1. Apply hierarchical clustering to the cannabis data
+2. Compare your results to k-means. 
+3. Which method do you prefer?  Why?
