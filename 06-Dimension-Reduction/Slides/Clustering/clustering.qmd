@@ -3,7 +3,7 @@ title: "Clustering"
 format: 
   revealjs:
     theme: [../../../style.scss, dark]
-editor: visual
+editor: source
 embed-resources: true
 ---
 
@@ -32,10 +32,10 @@ So far in this class, we've only done [supervised learning]{style="color: #ed840
 
 Clustering is a type of [unsupervised learning]{style="color: #b87579;"}. Meaning, we want to sort our observations into clusters based on the predictors, but we don't have a pre-conceived notion of [what those clusters represent]{style="color: #b87579;"}!
 
-## Clustering Usage 
+## Clustering Usage
 
-::: {.centered}
-![](images/clustering-articles.png)   
+::: centered
+![](images/clustering-articles.png)
 :::
 
 ## Clustering
@@ -60,41 +60,37 @@ What *algorithm* do we use to select the clusters?
 :::
 :::
 
-
 ## K-means Clustering Algorithm
 
-Idea:  Iteratively update the **centers** of the clusters until convergence.
+Idea: Iteratively update the **centers** of the clusters until convergence.
 
 . . .
 
-1. Plop $k$ points down in space. These are the *centroids*.
+1.  Plop $k$ points down in space. These are the *centroids*.
 
-::: {.callout-tip}
+::: callout-tip
 # There are many ways to choose initial centroids!
 :::
 
 . . .
 
-2. Determine which centroid each observation is closest to.  Assign it to that cluster.
-
+2.  Determine which centroid each observation is closest to. Assign it to that cluster.
 
 ## K-means Clustering Algorithm Continued
 
-
-3. Find the mean of each cluster.  These are the *new* centroids.
+3.  Find the mean of each cluster. These are the *new* centroids.
 
 . . .
 
-4. Continue this process (assigning points to clusters and updating the centroids) until the centroids don't change.
+4.  Continue this process (assigning points to clusters and updating the centroids) until the centroids don't change.
 
 ## A K-Means Annimation
 
 ![](images/annimation.png)
 
-</br> 
+</br>
 
 <https://www.naftaliharris.com/blog/visualizing-k-means-clustering/>
-
 
 ## K-means Clustering in R
 
@@ -153,7 +149,7 @@ fed_km <- kmeans(fed_matrix,
                  centers = 3)
 ```
 
-::: {.callout-tip}
+::: callout-tip
 # Optional Arguments
 
 `nstart` -- the number of random sets that should be chosen, is by default set to 1
@@ -188,12 +184,11 @@ Total Sum of Squares
 
 fed_km$totss
 ```
-
 :::
 
 ::: {.column width="30%"}
-::: {.fragment}
-Within Sum of Squares 
+::: fragment
+Within Sum of Squares
 
 ```{r}
 #| label: kmeans-within-ss
@@ -205,8 +200,9 @@ fed_km$withinss
 :::
 
 ::: {.column width="30%"}
-::: {.fragment}
+::: fragment
 Between Sum of Squares
+
 ```{r}
 #| label: kmeans-between-ss
 #| echo: true
@@ -237,24 +233,21 @@ res
 :::
 
 ::: {.column width="45%"}
-
-::: {.fragment}
+::: fragment
 ```{r}
 #| echo: true
 res %>% 
   count(clust, auth)
 ```
 :::
-
 :::
 :::
-
 
 ## K-means + PCA
 
 ::: columns
 ::: {.column width="45%"}
-Did we really need all 200 variables to find those clusters?  
+Did we really need all 200 variables to find those clusters?
 :::
 
 ::: {.column width="5%"}
@@ -273,7 +266,6 @@ It is **very common** to do a PCA reduction before running K-means!
 
 ## Integrating PCA with K-means
 
-
 ::: columns
 ::: {.column width="45%"}
 **Pre-processing**
@@ -287,11 +279,10 @@ pc <- prcomp(fed_matrix,
 
 fed_reduced <- pc$x[, 1:2] 
 ```
-
 :::
 
 ::: {.column width="50%"}
-::: {.fragment}
+::: fragment
 **Fitting**
 
 ```{r}
@@ -318,7 +309,6 @@ res3 %>%
   count(clust, auth)
 ```
 
-
 ## What if we'd done four centroids?
 
 ::: columns
@@ -329,7 +319,6 @@ res3 %>%
 res3 %>% 
   count(clust, auth)
 ```
-
 :::
 
 ::: {.column width="5%"}
@@ -361,19 +350,17 @@ res4 %>%
 :::
 :::
 
-
 ## K-means Takeaways
-
 
 ::: columns
 ::: {.column width="45%"}
 **Pros:**
 
-* Simple algorithm, easy to understand
+-   Simple algorithm, easy to understand
 
-* Plays nice with PCA
+-   Plays nice with PCA
 
-* SUPER fast to compute
+-   SUPER fast to compute
 :::
 
 ::: {.column width="5%"}
@@ -382,51 +369,48 @@ res4 %>%
 ::: {.column width="45%"}
 **Cons:**
 
-* Very sensitive to location of initial centroids
+-   Very sensitive to location of initial centroids
 
-* User has to pick the number of clusters
+-   User has to pick the number of clusters
 :::
 :::
 
 ## Try it!
 
-Open a [Activity-Clustering.Rmd`](../../Classwork/Activity-Clustering.qmd)
+Open [`Activity-Clustering.qmd`](../../Classwork/Activity-Clustering.qmd)
 
-1. Apply k-means clustering to the cannabis data using *all* the word predictors.
-2. What was the within and between sum of squares?
-3. Did the clusters match up with the Type?
+1.  Apply k-means clustering to the cannabis data using *all* the word predictors.
+2.  What was the within and between sum of squares?
+3.  Did the clusters match up with the Type?
 
 Now, refer back to your PCA analysis of the cannabis data (from Monday).
 
-4. Apply k-means clustering to the **second and third** PC only
-5. Plot these clusters.  What do you think they capture?
-
+4.  Apply k-means clustering to the **second and third** PC only
+5.  Plot these clusters. What do you think they capture?
 
 ## Hierarchical Clustering
 
 (also called **agglomerative** clustering)
 
-Idea:  Merge observations that are close together.
+Idea: Merge observations that are close together.
 
 . . .
 
-1. Find the closest two observations.  Replace them with their centroid.
+1.  Find the closest two observations. Replace them with their centroid.
 
 . . .
 
-2. Find the next two closest observations.  (One might be the centroid!) Replace them with their centroid.
+2.  Find the next two closest observations. (One might be the centroid!) Replace them with their centroid.
 
 . . .
 
-3. Continue until all observations have been merged.
-
+3.  Continue until all observations have been merged.
 
 ##  {background-color="#B6CADA"}
 
-::: {.larger}
+::: larger
 Merging Observations
 :::
-
 
 ::: columns
 ::: {.column width="45%"}
@@ -440,7 +424,6 @@ Merging Observations
 ![](images/hierarchical-final.png)
 :::
 :::
-
 
 ## Hierarchical Clustering in R
 
@@ -458,7 +441,6 @@ fed_hc <- fed_matrix %>%
   hclust()
 ```
 
-
 ## Hierarchical Clustering in R
 
 When you give `hclust()` a distance matrix...
@@ -470,16 +452,13 @@ fed_hc <- fed_matrix %>%
   hclust()
 ```
 
-. . .
-
-it gives back a (not super pretty) *dendrogram*.
+## it gives back a (not super pretty) *dendrogram*.
 
 ```{r}
 #| echo: true
 plot(fed_hc, 
      labels = fed_known$Author)
 ```
-
 
 ## Choosing Clusters from Dendrograms
 
@@ -497,6 +476,7 @@ res_hc
 
 ```{r}
 #| echo: true
+#| output-location: column
 
 tibble(
   clust = res_hc,
@@ -505,8 +485,7 @@ tibble(
   count(clust, auth)
 ```
 
-
-## Option 2 
+## Option 2
 
 Or we can choose a *height cutoff* (`h`) for the dendrogram
 
@@ -522,6 +501,7 @@ res_hc_2
 
 ```{r}
 #| echo: true
+#| output-location: column
 
 tibble(
   clust = res_hc_2,
@@ -530,17 +510,15 @@ tibble(
   count(clust, auth)
 ```
 
-
 ## Hierarchical Clustering Takeaways
 
 ::: columns
 ::: {.column width="40%"}
 **Pros:**
 
-* Fast computation for moderate sized data
+-   Fast computation for moderate sized data
 
-* Gives back full information in dendrogram form
-
+-   Gives back full information in dendrogram form
 :::
 
 ::: {.column width="5%"}
@@ -549,13 +527,12 @@ tibble(
 ::: {.column width="55%"}
 **Cons:**
 
-* User has to decide how to go from dendrogram to cluster assignments
-
+-   User has to decide how to go from dendrogram to cluster assignments
 :::
 :::
 
 ## Try it!
 
-1. Apply hierarchical clustering to the cannabis data
-2. Compare your results to k-means. 
-3. Which method do you prefer?  Why?
+1.  Apply hierarchical clustering to the cannabis data
+2.  Compare your results to k-means.
+3.  Which method do you prefer? Why?
