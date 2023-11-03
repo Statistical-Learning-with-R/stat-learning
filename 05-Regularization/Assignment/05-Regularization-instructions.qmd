@@ -210,20 +210,19 @@ Tune a logistic regression with ridge penalty on `genes_sub`. Once again, choose
 
 #### Q12: Comparison
 
-Fit a logistic regression with the penalty selected in Q2 on the two random halves of the dataset that you created in Q1.
+Fit a logistic regression with the penalty selected in Q11 on the two random halves of the dataset that you created in Q10.
 
 Compare the estimates of the first five variables. How different were they?
 
 #### Q13: Explanation
 
-In your own words, give an explanation for what we saw in Q1 versus in Q3. Why were the results similar or different?
+In your own words, give an explanation for what we saw in Q10 versus in Q12. Why were the results similar or different?
 
 # Part Four: A final model
 
 #### Q14: Tuning
 
-Using `genes_sub`, tune both the penalty and the mixture term.\
-Choose the penalty that is largest without losing accuracy.
+Using `genes_sub`, tune both the penalty and the mixture term. Choose the penalty that is largest without losing accuracy.
 
 ::: {.callout-tip}
 # `levels` in Tuning Grid
