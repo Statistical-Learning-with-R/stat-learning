@@ -3378,7 +3378,7 @@ vertical-align: -.125em;
 <section id="q10-ordinary-logistic-regression" class="level4">
 <h4 class="anchored" data-anchor-id="q10-ordinary-logistic-regression">Q10: Ordinary Logistic Regression</h4>
 <p>Randomly divide the observations in the dataset (back to <code>genes_sub</code>) in half. Fit a logistic regression on the with no penalty term to each half.</p>
-<p>Report the estimates for the top five predictors (not the Intercept!). How different were they between the two subsamples of the datset?</p>
+<p>Report the estimates for the first five predictors (not the Intercept!). How different were they between the two subsamples of the datset?</p>
 <div class="cell" data-hash="05-Regularization-solution_cache/html/logistic-regression_648c7a2875a03174e8f0420a90f3cf75">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: logistic-regression</span></span>
@@ -3408,17 +3408,17 @@ vertical-align: -.125em;
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate) <span class="sc">%&gt;%</span></span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> estimate, <span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
-  term             estimate
-  &lt;chr&gt;               &lt;dbl&gt;
-1 L43576_at           1.07 
-2 M55543_at           0.768
-3 U25182_at           0.345
-4 U22970_rna1_s_at    0.246
-5 Z35102_at           0.233</code></pre>
+  term        estimate
+  &lt;chr&gt;          &lt;dbl&gt;
+1 Y10812_at      0.169
+2 Y12556_at     -0.373
+3 M37238_s_at   -0.138
+4 D25248_at      0.141
+5 X06661_at     -1.79 </code></pre>
 </div>
 </div>
 </div><div class="column" style="width:5%;">
@@ -3437,17 +3437,17 @@ vertical-align: -.125em;
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate) <span class="sc">%&gt;%</span></span>
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">!=</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> estimate, <span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
-  term               estimate
-  &lt;chr&gt;                 &lt;dbl&gt;
-1 `HG1102-HT1102_at`   0.196 
-2 D25248_at            0.178 
-3 M55543_at            0.154 
-4 Y10812_at            0.143 
-5 D49738_at            0.0688</code></pre>
+  term        estimate
+  &lt;chr&gt;          &lt;dbl&gt;
+1 Y10812_at     0.143 
+2 Y12556_at    -0.0703
+3 M37238_s_at  -0.0828
+4 D25248_at     0.178 
+5 X06661_at    -0.0930</code></pre>
 </div>
 </div>
 </div>
@@ -3630,7 +3630,7 @@ vertical-align: -.125em;
 <section id="q15-mixture-parameter" class="level4">
 <h4 class="anchored" data-anchor-id="q15-mixture-parameter">Q15: Mixture Parameter</h4>
 <p>Interpret the selected <code>mixture</code> parameter in words.</p>
-<p>The mixture associated with the highest penalty and accuracy is 0.333. This mixture indicates that our model is assigning approximately 1/3 of the penalty to the ridge method and 2/3 of the penalty to LASSO.</p>
+<p>The mixture associated with the highest penalty and accuracy is 0.333. This mixture indicates that our model is assigning approximately 1/3 of the penalty to the ridge method and 2/3 of the penalty to LASSO. This means, we are prioritizing reducing bias over variance with a mixture that gives higher weight to LASSO (which reduces bias) and lower weight to ridge (which reduces variance).</p>
 </section>
 <section id="q16-conclusion" class="level4">
 <h4 class="anchored" data-anchor-id="q16-conclusion">Q16: Conclusion</h4>

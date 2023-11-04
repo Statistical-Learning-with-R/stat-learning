@@ -283,7 +283,7 @@ workflow() %>%
 
 Randomly divide the observations in the dataset (back to `genes_sub`) in half. Fit a logistic regression on the with no penalty term to each half.
 
-Report the estimates for the top five predictors (not the Intercept!). How different were they between the two subsamples of the datset?
+Report the estimates for the first five predictors (not the Intercept!). How different were they between the two subsamples of the datset?
 
 ```{r}
 #| label: logistic-regression
@@ -313,7 +313,7 @@ workflow() %>%
   tidy() %>%
   select(term, estimate) %>%
   filter(term != "(Intercept)") %>%
-  slice_max(order_by = estimate, n = 5)
+  slice_head(n = 5)
 
 ```
 
@@ -337,7 +337,7 @@ workflow() %>%
   tidy() %>%
   select(term, estimate) %>%
   filter(term != "(Intercept)") %>% 
-  slice_max(order_by = estimate, n = 5)
+  slice_head(n = 5)
 ```
 
 :::
@@ -488,7 +488,7 @@ The highest penalty with the highest accuracy is 0.0992.
 
 Interpret the selected `mixture` parameter in words.
 
-The mixture associated with the highest penalty and accuracy is 0.333. This mixture indicates that our model is assigning approximately 1/3 of the penalty to the ridge method and 2/3 of the penalty to LASSO. 
+The mixture associated with the highest penalty and accuracy is 0.333. This mixture indicates that our model is assigning approximately 1/3 of the penalty to the ridge method and 2/3 of the penalty to LASSO. This means, we are prioritizing reducing bias over variance with a mixture that gives higher weight to LASSO (which reduces bias) and lower weight to ridge (which reduces variance). 
 
 #### Q16: Conclusion
 
