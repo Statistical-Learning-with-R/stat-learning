@@ -28,7 +28,6 @@ library(rpart.plot)
 library(baguette)
 ```
 
-
 ## Data Prep
 
 ```{r}
@@ -46,7 +45,6 @@ fed_unknown <- fed %>%
 
 ```
 
-
 ## PCA projected dataset prep
 
 ```{r}
@@ -55,7 +53,9 @@ fed_matrix <- fed_known %>%
   select(-Author) %>% 
   as.matrix()
 
-pc <- prcomp(fed_matrix, center = TRUE, scale = TRUE)
+pc <- prcomp(fed_matrix, 
+             center = TRUE, 
+             scale = TRUE)
 
 fed_pca_df <- pc$x %>%
   as.data.frame() %>%
@@ -75,23 +75,22 @@ fed_pca_df_unknown <- fed_unknown %>%
   )
 
 fed_pca_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = Author)) +
+  ggplot(mapping = aes(x = PC1, y = PC2, color = Author)) +
   geom_point()
 ```
 
-
 ## Try it!
 
-#### Fit a support vector classifier, tuning the **cost** parameter
-#### Use it to predict the unknown authors
+1. Fit a support vector classifier, tuning the **cost** parameter
 
 ```{r}
-svm_spec <- svm_poly(cost = 2, degree = 1) %>%
+svm_spec <- svm_poly(cost = tune(), degree = 1) %>%
   set_mode("classification") %>%
   set_engine("kernlab")
 ```
 
+2. Use it to predict the unknown authors
 
-#### Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
-#### Use it to predict the unknown authors
+3. Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
 
+4. Use it to predict the unknown authors
