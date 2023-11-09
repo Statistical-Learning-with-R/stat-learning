@@ -1,0 +1,325 @@
+---
+title: "Classification with Support Vector Machines"
+format: 
+  revealjs:
+    theme: [../../style.scss, dark]
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(tidymodels)
+library(kknn)
+library(glmnet)
+library(discrim)
+```
+
+# Maximal Margin Classifier
+
+## Maximal Margin
+
+Let's revisit the Federalist papers data.
+
+Recall that we plotted the essays in the first two PC dimensions, and saw that these separated the authors reasonably well:
+
+```{r}
+#| label: read-clean-data
+#| echo: false
+
+# Read data
+fed <- read.csv(here::here("06-Dimension-Reduction", 
+                           "Slides", 
+                           "PCA", 
+                           "data", 
+                           "federalist.txt")
+                ) %>% 
+  select(-X) 
+
+# Keep numeric section only
+fed_clean <- fed %>% 
+  mutate(across(.cols = -Author, .fns = ~ as.numeric(.x)
+                )
+         )
+
+auths <- fed$Author
+
+# Data from papers with known authors
+fed_known <- fed_clean %>% 
+  filter(Author != "DIS")
+
+auths_known <- fed_known$Author
+
+# Data from papers with unknown authors
+fed_unknown <- fed_clean %>% 
+  filter(Author == "DIS")
+
+fed_matrix <- fed_known %>% 
+  select(-Author)
+
+pc <- prcomp(fed_matrix, 
+             center = TRUE, 
+             scale = TRUE)
+
+fed_pca_df <- pc$x %>%
+  as.data.frame() %>%
+  mutate(
+    author = auths_known
+  )
+
+fed_pca_df_uk <- fed_unknown %>% 
+  select(-Author) %>% 
+  scale() %>% 
+  as_tibble() %>%
+  mutate(your = na_if(your, NaN), 
+         your = if_else(is.na(your), 
+                        0,
+                        your)
+           ) %>% 
+  as.matrix() %*%
+  pc$rotation %>%
+  as_tibble() %>%
+  mutate(
+    author = "Unknown"
+  )
+```
+
+
+## Maximal Margin
+
+```{r}
+fed_pca_df %>%
+  ggplot(aes(x = PC1, y = PC2, color = auths_known)) +
+  geom_point()
+```
+
+Suppose we are interested in classifying a new observation as "John Jay" or "Not John Jay".
+
+. . .
+
+There are many lines we could draw that split the *training* data perfectly between JJ and not JJ
+
+. . .
+
+```{r}
+fed_pca_df %>%
+  ggplot(aes(x = PC1, y = PC2, color = author)) +
+  geom_point() +
+  geom_abline(slope = 5, intercept = 25) + 
+  geom_abline(slope = 6, intercept = 30) +
+  geom_abline(slope = 5, intercept = 22) 
+```
+
+
+## Maximal Margin
+
+The "best" one is the one that is furthest from the nearest observation on either side.
+
+. . .
+
+```{r}
+fed_pca_df %>%
+  ggplot(aes(x = PC1, y = PC2, color = author)) +
+  geom_point() +
+  geom_abline(slope = 5, intercept = 23.25) +
+  geom_abline(slope = 5, intercept = 20, lty = 2) +
+  geom_abline(slope = 5, intercept = 26.5, lty = 2)
+```
+
+
+## Maximal Margin
+
+Let's check out where the essays with **unknown authorship** fall on this plot:
+
+## 
+
+```{r}
+fed_pca_all  <- bind_rows(fed_pca_df, fed_pca_df_uk)
+
+fed_pca_all %>%
+  ggplot(aes(x = PC1, y = PC2, color = author)) +
+  geom_point() +
+  geom_abline(slope = 5, intercept = 23.25) +
+  geom_abline(slope = 5, intercept = 20, lty = 2) +
+  geom_abline(slope = 5, intercept = 26.5, lty = 2)
+```
+
+
+## Maximal Margin
+
+Okay, so **what's the problem?**
+
+. . .
+
+In **real situation** we rarely have observations that *perfectly* fall on either side of a line/plane.
+
+. . .
+
+Adding **one more observation** could *totally change* our classification line!
+
+. . .
+
+None of the unknown essays are John Jay.
+
+Suppose we wanted instead to separate "Hamilton" from "Not Hamilton"
+
+##
+
+```{r}
+fed_pca_df %>%
+  ggplot(aes(x = PC1, y = PC2, color = author)) +
+  geom_point() +
+  geom_abline(slope = 2, intercept = 2) 
+```
+
+
+## Soft Margin
+
+A **soft margin** is a margin with only a certain number of misclassified points.
+
+. . .
+
+There are two decisions to make here:
+
+. . .
+
+1. How big is our margin?  
+
+(`M` = width of margin)
+
+. . .
+
+2. How many misclassified observations are we willing to have?  
+
+(`C` = cost of a misclassified point)
+
+## An Initial Attempt
+
+Width of margin: 2
+Misclassified points in margin: 3
+
+```{r}
+fed_pca_df %>%
+  ggplot(aes(x = PC1, y = PC2, color = author)) +
+  geom_point() +
+  geom_abline(slope = 2, intercept = 2) +
+  geom_abline(slope = 2, intercept = 0, lty = 2) +
+  geom_abline(slope = 2, intercept = 4, lty = 2)
+```
+
+
+## Support Vector Classifier
+
+The **support vector** is the set of all observations that falling within the **soft margin** that are **misclassified**.
+
+. . .
+
+A **support vector classifier** tries to find:
+
+. . .
+
+a *line/plane* that will be used to classify future observations ...
+
+. . .
+
+... that give us the biggest *margin width*...
+
+. . .
+
+... while still respecting the cost, `C`.
+
+
+## Support Vector Classifier
+
+```{r}
+#| label: svm-specification
+#| echo: true
+
+svm_spec <- svm_poly(cost = 2, degree = 1) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+
+fed_recipe <- recipe(author ~ PC1 + PC2, data = fed_pca_df)
+
+fed_wflow <- workflow() %>%
+  add_model(svm_spec) %>%
+  add_recipe(fed_recipe)
+
+my_svm <- fed_wflow %>%
+  fit(fed_pca_df)
+```
+
+## 
+
+```{r}
+#| echo: true
+#| label: svm-workflow-fit
+
+my_svm %>% 
+  extract_fit_parsnip()
+```
+
+
+## Making Predictions
+
+```{r}
+#| label: svm-prediction
+#| echo: true
+
+predict(my_svm, new_data = fed_pca_df)
+```
+
+## Plotting Predictions
+
+```{r}
+#| echo: false
+#| label: svm-plotting-predictions
+
+fed_pca_all %>%
+  mutate(
+    preds = predict(my_svm, fed_pca_all)$.pred_class
+  ) %>%
+  ggplot(aes(x = PC1, y = PC2, color = preds, pch = author)) +
+  geom_point()
+
+
+```
+
+
+## Not Separable Groups
+
+What if we simply couldn't separate our data with a line / hyperplane?
+
+. . .
+
+![](images/svm.png)
+
+
+## Increasing the Dimensions
+
+What if we imagine our points exist in **three dimensions**?
+
+. . .
+
+![](https://codingmachinelearning.files.wordpress.com/2016/08/capture2.jpg?w=352&h=250)
+
+
+## Support Vector Machine
+
+A **support vector machine** classifies observations using dividers in **extra dimensions**!
+
+. . .
+
+In this class, we will only implement **polynomial** svms.
+
+
+## Try it!
+
+Open [`Activity-SVM.qmd`](../../Classwork/Activity-SVM.qmd)
+
+1. Fit a support vector classifier, tuning the **cost** parameter
+
+2. Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
+
