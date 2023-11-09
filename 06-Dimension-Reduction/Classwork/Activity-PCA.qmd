@@ -48,7 +48,7 @@ cann_types <- cann %>%
 
 ```{r}
 fed %>%
-  ggplot(aes(x = there, y = would, color = Author)) +
+  ggplot(mapping = aes(x = there, y = would, color = Author)) +
   geom_point()
 ```
 
@@ -93,7 +93,7 @@ Plot first two PC dims:
 
 ```{r}
 new_dims_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = Author)) +
+  ggplot(mapping = aes(x = PC1, y = PC2, color = Author)) +
   geom_point()
 ```
 
@@ -120,8 +120,8 @@ cumul_vars
 
 5.  Fit a KNN classifier using:
 
-- All the variables
-- Only the 5 most important variables according to PCA
-- Only your chosen PCs
+-   All the variables
+-   Only the 5 most important variables according to PCA
+-   Only your chosen PCs
 
 6.  Compare the accuracy of these three approaches!
