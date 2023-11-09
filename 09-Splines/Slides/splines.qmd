@@ -1,0 +1,227 @@
+---
+title: "Regression with Splines"
+format: revealjs
+editor: visual
+embed-resources: true
+---
+
+# Splines and Knots
+
+---
+## Motivation
+
+A **linear regression** is a very *simplistic* equation to fit to data.
+
+--
+
+$$y = b_1 x_1 + b_2 x_2 + ... + \epsilon$$
+
+--
+
+What if we let it be more flexible:
+
+--
+
+$$y = b_1 f(x_1) + \epsilon$$
+---
+## Motivation
+
+But how to choose the function **f** that the predictors get put through?
+
+--
+
+We have already seen some choices!
+
+--
+
+**Polynomial** regression
+
+--
+
+**transformations** of data (e.g. `log`)
+
+---
+## Piecewise regression
+
+What if we let our function **depend on the value of x**?
+
+--
+
+$f(x) =  $
+
+* $f_1(x)$ if $x < c_1$
+* $f_2(x)$ if $c_1 < x < c_2$
+* ... etc
+
+--
+
+$c_1$, $c_2$, etc are cutoffs.  We call these **knots**
+
+---
+
+![](PiecewiseCubicFit2.png)
+
+---
+## Piecewise regression
+
+What questions should we ask?
+
+--
+
+What **function** do we use at each range?
+
+
+--
+
+Where do we put the **knots**?
+
+--
+
+What can go wrong?
+
+---
+## Choosing the function
+
+Generally, we choose the **type of function**.
+
+--
+
+e.g. linear, quadratic, cubic, ...
+
+--
+
+Then, we use the **best fit** for **each range**
+
+--
+
+$f(x) =  $
+
+* $5x + 2x^2$ if $x < c_1$
+* $-2x + 7x^2$ if $c_1 < x < c_2$
+* ... etc
+
+
+---
+## Where to put the knots?
+
+It's good to have **more knots** when you want **more flexibility**.
+
+--
+
+Often, we space them **uniformly** - but we don't have to!
+
+--
+
+In practical terms:  Just another dial to toggle!
+
+
+---
+## What could go wrong?
+
+What happens at the **boundaries** of the knots?
+
+--
+
+![](PiecewiseCubicFit.PNG)
+
+---
+## What could go wrong?
+
+What if we require that the functions be **equal** at the knots?
+
+--
+
+![](PiecewiseCubicFit2.png)
+
+---
+## What could go wrong?
+
+What if we require that the functions be **smooth** at the knots?
+
+--
+
+![](PiecewiseCubicCts.PNG)
+
+---
+## Natural Splines
+
+A **spline** is a **piecewise regression** that has:
+
+--
+
+* Some number of **knots**
+
+--
+
+* Some **polynomial** form of the functions
+
+e.g. "A cubic spline"
+
+--
+
+* Some **smoothness condition** on the behavior at knots.
+
+    + A degree 0 spline requires equality at knots.
+    + A degree 2 spline requires continuity (first derivative exists) at knots.
+    + A degree 3 spline requires smoothness (second derivative exists) at knots.
+    
+---
+## Splines
+
+A full spline is a piecewise regression that:
+
+--
+
+**minimizes** the prediction error, while
+
+--
+
+**also minimizing** the "roughness".
+
+---
+## Splines
+
+The **second derivative** of a function measures smoothness.
+
+--
+
+Thus, we choose the function .blue[f] to minimize:
+
+.center[.large[
+  .blue[sum of squared error] + lambda * .red[integral of second derivative]
+]]
+
+--
+
+.center[.large[
+  .blue[prediction error] + lambda * .red[roughness]
+]]
+
+--
+
+More knots = more flexibility = less prediction error
+
+More knots = more boundaries = less smoothness
+
+---
+
+## Choices to make:
+
+**Polynomial degree:** How much flexibility are you allowing in each function?
+
+--
+
+**Lambda:** How much should we penalize un-smoothness?
+
+
+---
+class: center, middle
+
+# Try it!
+
+## Return to the `ins` dataset of ye olde regressione lecture.  We will again try to predict costs from age.
+
+## Use `step_ns()` with the `deg_free` argument to transform your data with piecewise splines.  Use the `linear_reg()` model specification.
+
+## Try to tune your degree choice.  Which one is best?
+
