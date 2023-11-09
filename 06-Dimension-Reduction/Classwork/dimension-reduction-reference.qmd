@@ -1,0 +1,101 @@
+---
+title: "Dimension Reduction"
+subtitle: "R Cheatsheet"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute: 
+  eval: false
+---
+
+# PCA with `prcomp()`
+
+**Step 1**: Fitting a PCA
+
+```{r}
+pc <- prcomp(fed_matrix, 
+             center = TRUE, 
+             scale = TRUE)
+```
+
+**Step 2**: Check out most important PCs
+
+```{r}
+pc$rotation %>% 
+  data.frame() %>%
+  arrange(
+    desc(
+      abs(PC1)
+      )
+    )
+```
+
+**Step 3**: Inspect combinations of variables that create new axes
+
+```{r}
+pc$rotation
+```
+
+**Step 4**: Make a dataframe with PCs as columns
+
+```{r}
+new_dims_df <- pc$x %>%
+  as.data.frame() %>% 
+  bind_cols(auths_known) %>% 
+  rename(Author = `...71`)
+```
+
+::: callout-tip
+# Renaming the Response Column
+
+In the code above I'm renaming the column name R created (`...71`) when I used the `bind_cols()` function. It is unlikely your name will be identical to mine, but it is likely that you will want to change the name of your column to something different!
+:::
+
+**Step 5**: Plot first two PC dims
+
+```{r}
+new_dims_df %>%
+  ggplot(mapping = aes(x = PC1, y = PC2, color = Author)) +
+  geom_point()
+```
+
+**Step 6**: Look for PC where you have explained X% of the total variance
+
+```{r}
+cumul_vars <- cumsum(pc$sdev^2)/sum(pc$sdev^2)
+cumul_vars
+```
+
+# Clustering with `kmeans()`
+
+**Step 1**: Fitting k-Means
+
+```{r}
+fed_km <- kmeans(fed_matrix, centers = 3)
+```
+
+**Step 2**: Looking at the centers of each variable
+
+```{r}
+fed_km$centers
+```
+
+**Step 3**: Looking at the sum of squares within and between clusters
+
+```{r}
+fed_km$totss
+fed_km$withinss
+fed_km$betweenss
+```
+
+**Step 4**: Comparing cluster classification with truth
+
+```{r}
+res <- tibble(
+  clust = fed_km$cluster, 
+  auth = auths_known)
+
+res %>% 
+  count(clust, auth)
+```
