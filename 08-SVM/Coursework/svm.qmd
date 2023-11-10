@@ -1,0 +1,41 @@
+---
+title: "Support Vector Machines"
+format: 
+  html: 
+    self-contained: true
+    theme: minty
+    fontsize: 1em
+    mainfont: sans-serif
+    number-sections: true
+    number-depth: 2
+    code-block-bg: "#76b5c5"
+    highlight-style: monochrome
+editor: source
+execute: 
+  echo: true
+  eval: false
+  include: false
+---
+
+# Textbook Reading
+
+📖 [**Required Reading:** *ISLR -- Chapter 9*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+
+::: callout-warning
+# Read pages 367 through 388! 
+:::
+
+# Reading Guide -- Due Monday, November 13 at 2:10pm
+
+📝 [Download the Word Document](reading-guide/week-8.docx)
+
+# Tutorial Videos
+
+::: callout-tip
+# I would highly recommend watching at least the first video on the big ideas of SVM!
+:::
+
+- Support vector machines (the big ideas): <https://youtu.be/efR1C6CvhmE?si=6gribWR_sW5Ek2v7>
+- Polynomial kernals: <https://youtu.be/Toet3EiSFcM?si=TwZx0NfgaC963wZL>
+- Radial kernals: <https://youtu.be/Qc5IyLW_hns?si=pBkGOUtW-lwCG8wj>
+

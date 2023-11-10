@@ -32,21 +32,20 @@ editor: visual
 | 6           | 4     | 3     | blue |
 | 7           | 4     | 1     | blue |
 
-
 (a) Sketch the observations.
 
-(b) Sketch the optimal separating hyperplane. 
+(b) Sketch the optimal separating hyperplane.
 
-(c) On your sketch, indicate te margin for the maximal margin classifier. 
+(c) On your sketch, indicate te margin for the maximal margin classifier.
 
-(d) Describe the classification rule for the maximal margin classifier. 
+(d) Describe the classification rule for the maximal margin classifier.
 
 (e) Indicate the support vectors for the maximal margin classifier.
 
-(f) Argue that a slight movement of the seventh observation would not affect the maximal margin hyperplane. 
+(f) Argue that a slight movement of the seventh observation would not affect the maximal margin hyperplane.
 
-(g) Sketch a hyperplane that **is not** the optimal separating hyperplane. 
+(g) Sketch a hyperplane that **is not** the optimal separating hyperplane.
 
-(h) Draw an additional observation on the plot so that the two classes are no longer separable by a hyperplane. 
+(h) Draw an additional observation on the plot so that the two classes are no longer separable by a hyperplane.
 
 (i) Suggest a kernel that might work well with a support vector machine for this data, and explain why you think it would work well.
