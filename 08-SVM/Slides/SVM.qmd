@@ -55,16 +55,16 @@ fed_matrix <- fed_known %>%
 
 ## Midterm Exam Updates
 
-::: {.incremental}
-- Concept exams have been graded and released
-- The letter grade associated with your exam is your grade *without* revisions
-- You are permitted to submit *one* round of revisions to earn a higher grade
-- Revisions are due by Friday, December 15. 
+::: incremental
+-   Concept exams have been graded and released
+-   The letter grade associated with your exam is your grade *without* revisions
+-   You are permitted to submit *one* round of revisions to earn a higher grade
+-   Revisions are due by Friday, December 15.
 :::
 
 . . .
 
-::: {.callout-tip}
+::: callout-tip
 # Take-Home Analysis
 
 The data analysis portion of the exam will be graded no later than this Friday (November 17).
@@ -72,21 +72,21 @@ The data analysis portion of the exam will be graded no later than this Friday (
 
 ## Midterm Reflections
 
-- Revisions must include *thoughtful* reflection on why your previous answer was incorrect and how your revised solution remedies these issues. 
+-   Revisions must include *thoughtful* reflection on why your previous answer was incorrect and how your revised solution remedies these issues.
 
-- Revisions and reflections will be submitted to the `Midterm Part 1 Grade & Revisions` Canvas assignment. 
+-   Revisions and reflections will be submitted to the `Midterm Part 1 Grade & Revisions` Canvas assignment.
 
 ## Lab Revision Updates
 
-- Revisions on lab assignments will be accepted until Friday, December 15. 
+-   Revisions on lab assignments will be accepted until Friday, December 15.
 
-- For the next three weeks, you are permitted to submit *up to one (1)* revision per week.  
+-   For the next three weeks, you are permitted to submit *up to one (1)* revision per week.
 
-- Remember, you are required to earn a "Satisfactory" on *all but 2* assignments to earn a B in the course. 
+-   Remember, you are required to earn a "Satisfactory" on *all but 2* assignments to earn a B in the course.
 
 # Maximal Margin Classifier
 
-## Federalist Papers 
+## Federalist Papers
 
 ```{r}
 #| label: federalist-pc
@@ -149,7 +149,6 @@ fed_pca_jj %>%
        color = "Known Authors")
 ```
 
-
 ## A Simple(r) Classification
 
 Suppose we are interested in classifying a new observation as "John Jay" or "Not John Jay".
@@ -173,7 +172,7 @@ fed_pca_df %>%
 
 ## Choosing a Line
 
-There are many lines we could draw that split the *training* data perfectly between John Jay and not John Jay! 
+There are many lines we could draw that split the *training* data perfectly between John Jay and not John Jay!
 
 ```{r}
 #| label: plot-of-pcs-comparing-lines
@@ -193,7 +192,6 @@ fed_pca_jj %>%
 . . .
 
 I'm just drawing any line that separates the two groups. Is there a better way to construct these lines?
-
 
 ## Equidistant Between Observations
 
@@ -215,14 +213,13 @@ fed_pca_jj %>%
        y = "Principle Component 2", 
        color = "Known Author")
 ```
-
 :::
 
 ::: {.column width="3%"}
 :::
 
 ::: {.column width="48%"}
-::: {.fragment}
+::: fragment
 ```{r}
 #| label: margin-option-2
 #| echo: false
@@ -270,16 +267,15 @@ fed_pca_jj %>%
 :::
 
 ::: {.column width="40%"}
-::: {.smaller}
-::: {.incremental}
-- Where could I add a John Jay essay which *would not* change the line?
-- Where could I add a John Jay essay which *would* change the line?
-- How many observations control the shape of the line?
+::: smaller
+::: incremental
+-   Where could I add a John Jay essay which *would not* change the line?
+-   Where could I add a John Jay essay which *would* change the line?
+-   How many observations control the shape of the line?
 :::
 :::
 :::
 :::
-
 
 ## Difficulties with Hard Margins
 
@@ -292,7 +288,6 @@ It is rare to have observations that *perfectly* fall on either side of a line /
 </br>
 
 Adding **one more observation** could *totally change* our classification line!
-
 
 ## A Different Comparison
 
@@ -328,14 +323,13 @@ There are two decisions to make here:
 1.  How big is our margin?
 
 (`M` = width of margin)
-
 :::
 
 ::: {.column width="5%"}
 :::
 
 ::: {.column width="50%"}
-::: {.fragment}
+::: fragment
 2.  How many misclassified observations are we willing to have?
 
 (`C` = cost of a misclassified point)
@@ -345,7 +339,7 @@ There are two decisions to make here:
 
 ## An Initial Attempt
 
-Width of margin: 2 
+Width of margin: 2
 
 ```{r}
 fed_pca_ah %>%
@@ -365,7 +359,7 @@ How many points in the margin are misclassified?
 
 ## A Second Attempt
 
-Width of margin: 1 
+Width of margin: 1
 
 ```{r}
 fed_pca_ah %>% 
@@ -383,7 +377,6 @@ fed_pca_ah %>%
 . . .
 
 How many points in the margin are misclassified?
-
 
 ## Support Vector Classifier
 
@@ -431,7 +424,7 @@ my_svm <- fed_wflow %>%
   fit(fed_pca_ah)
 ```
 
-::: {.callout-tip}
+::: callout-tip
 # Install a New Package
 
 You will need to install the `kernlab` package this week!
@@ -500,7 +493,6 @@ fed_pca_ah %>%
 
 How well did the model do?
 
-
 ## Model Metrics
 
 ```{r}
@@ -520,7 +512,7 @@ What if we simply couldn't separate our data with a line / hyperplane?
 
 . . .
 
-::: {.centered}
+::: centered
 ![](images/svm.png)
 :::
 
@@ -530,22 +522,19 @@ What if we imagine our points exist in **three dimensions**?
 
 . . .
 
-:::{.centered}
+::: centered
 ![](https://codingmachinelearning.files.wordpress.com/2016/08/capture2.jpg?w=352&h=250)
 :::
 
 ## Support Vector Machine
 
-A [support vector machine]{style="color: #ed8402;"} is an extension of the support vector machine classifer that results from enlarging the feature space in a specific way, using [kernels]{style="color: #ed8402;"}. 
+A [support vector machine]{style="color: #ed8402;"} is an extension of the support vector machine classifer that results from enlarging the feature space in a specific way, using [kernels]{style="color: #ed8402;"}.
 
 . . .
 
-In this class, we will only implement *polynomial* kernals. 
+In this class, we will only implement *polynomial* kernals.
 
 ## Try it!
 
-Open [`Activity-SVM.qmd`](../../Classwork/Activity-SVM-2.qmd)
+Open [`07-SVM.qmd`](../../Assignment/07-SVM-template.qmd) to explore how SVM (and PCA) can be used to classify the class of different zoo animals. 
 
-1.  Fit a support vector classifier, tuning the **cost** parameter
-
-2.  Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
