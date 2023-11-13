@@ -536,5 +536,5 @@ In this class, we will only implement *polynomial* kernals.
 
 ## Try it!
 
-Open [`07-SVM.qmd`](../../Assignment/07-SVM-template.qmd) to explore how SVM (and PCA) can be used to classify the class of different zoo animals. 
+Open [`07-SVM.qmd`](../Assignment/07-SVM-template.qmd) to explore how SVM (and PCA) can be used to classify the class of different zoo animals. 
 
