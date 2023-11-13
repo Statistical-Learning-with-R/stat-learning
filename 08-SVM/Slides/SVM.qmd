@@ -144,8 +144,8 @@ fed_pca_all  <- bind_rows(fed_pca_df, fed_pca_df_uk)
 fed_pca_jj %>%
   ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
   geom_point() + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Authors")
 ```
 
@@ -165,8 +165,8 @@ fed_pca_df %>%
          ) %>% 
   ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
   geom_point() + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Authors")
 ```
 
@@ -181,8 +181,8 @@ There are many lines we could draw that split the *training* data perfectly betw
 fed_pca_jj %>% 
   ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
   geom_point() + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Authors") +
   geom_abline(slope = 5, intercept = 25) +
   geom_abline(slope = 5, intercept = 22, lty = "dashed") +
@@ -209,8 +209,8 @@ fed_pca_jj %>%
   geom_abline(slope = 5, intercept = 23.25) +
   geom_abline(slope = 5, intercept = 20, lty = "dashed") +
   geom_abline(slope = 5, intercept = 26.5, lty = "dashed") +
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Author")
 ```
 :::
@@ -230,8 +230,8 @@ fed_pca_jj %>%
   geom_abline(slope = -8, intercept = -31.5) +
   geom_abline(slope = -8, intercept = -38, lty = "dashed") +
   geom_abline(slope = -8, intercept = -25, lty = "dashed") +
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Author")
 ```
 :::
@@ -257,8 +257,8 @@ fed_pca_jj %>%
   geom_abline(slope = -8, intercept = -31.5) +
   geom_abline(slope = -8, intercept = -38, lty = "dashed") +
   geom_abline(slope = -8, intercept = -25, lty = "dashed") +
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Author")
 ```
 :::
@@ -297,8 +297,8 @@ Suppose we wanted instead to separate "Hamilton" from "Not Hamilton"...
 fed_pca_ah %>% 
   ggplot(aes(x = PC1, y = PC2, color = author_ah)) +
   geom_point() + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Authors")
 ```
 
@@ -348,8 +348,8 @@ fed_pca_ah %>%
   geom_abline(slope = 2, intercept = 2) +
   geom_abline(slope = 2, intercept = 0, lty = 2) +
   geom_abline(slope = 2, intercept = 4, lty = 2) + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Authors")
 ```
 
@@ -368,8 +368,8 @@ fed_pca_ah %>%
   geom_abline(slope = 2, intercept = 2) + 
   geom_abline(slope = 2, intercept = 3, lty = "dashed") + 
   geom_abline(slope = 2, intercept = 1, lty = "dashed") + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Known Authors")
   
 ```
@@ -483,8 +483,8 @@ fed_pca_ah %>%
     ) %>%
   ggplot(aes(x = PC1, y = PC2, color = preds, pch = author)) +
   geom_point() + 
-  labs(x = "Principle Component 1", 
-       y = "Principle Component 2", 
+  labs(x = "Principal Component 1", 
+       y = "Principal Component 2", 
        color = "Predicted Author", 
        pch = "Known Author")
 ```
