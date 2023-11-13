@@ -1,0 +1,124 @@
+---
+title: "Support Vector Machines"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: source
+execute:
+  message: false
+---
+
+```{r}
+#| label: libraries-r
+#| include: false
+
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(baguette)
+```
+
+# Data: Zoo animals
+
+This week's dataset contains information about animals commonly found at a zoo. The data contains dummy variables for several features that an animal might have, such as:
+
+-   Is the animal a predator?
+-   Does the animal produce milk?
+-   Is the animal aquatic?
+
+There is also one quantitative variable, `legs` stating how many legs the animal has.
+
+Run the following code to read the data and convert the predictors into matrix form:
+
+```{r}
+#| message: false
+#| warning: false
+#| label: data-load
+
+zoo <- read_csv("https://www.dropbox.com/s/kg89g2y3tp6p9yh/zoo_final.csv?dl=1")
+
+zoo_matrix <- zoo %>%
+  select(-Class_Type, -animal_name) %>%
+  as.matrix() 
+```
+
+# Part One: PCA Preprocessing
+
+#### Q1: PCA
+
+Apply a PCA transformation to the matrix version of the data. Interpret the results - which variables are most important in the variation of the observations? What do each of the first three PCs seem to represent?
+
+#### Q2: Choosing PCs
+
+Look at the percent of variance explained by each PC. Make an argument for the number of PCs you believe are appropriate to include in your analysis.
+
+#### Q3: New dataset
+
+Since PCA is a data processing tool, we can instead apply it as part of a recipe in tidymodels. In the code below, we carry out this process. First, you are tasked with specifying the `recipe()` for the model you are considering. Next, we use `update_role()` to assign the animal names to be an "id" column, so that the models don't use that variable in the classification process. Finally, we use `step_pca()` to automatically include the PCA process in your data pipeline. The `threshold` argument will select the number of PCs necessary to reach the proportion of total variance you specify (e.g., 80%).
+
+Adjust the code below to complete this recipe:
+
+```{r}
+#| label: recipe-including-pca
+
+zoo_rec <- recipe() %>%   ### Recipe code here
+  update_role(animal_name, new_role = "id") %>%
+  step_pca(all_numeric(), threshold = 0.8, 
+           options = c(center = TRUE, scale = TRUE))
+
+```
+
+The `prep()` step is then used to prepare by computing the PCs, and the `bake()` function is then used to make a new dataframe with the chosen PCs as columns.
+
+```{r}
+#| label: prep-and-bake-pca-recipe
+
+zoo_trained <- zoo_rec %>% 
+  prep(zoo)
+
+zoo_pcs <- zoo_trained %>% 
+  bake(zoo)
+```
+
+#### Q4: Explore
+
+To verify that the above process worked:
+
+-   plot your observations in the first two PC dimensions (PC1, PC2), colored by the animal type
+-   plot your observations in PC2 and PC3, colored by animal type
+-   comment on the plots (i.e., why are certain animal types grouped the way that they are?)
+
+## Part Two: SVM
+
+#### Q5: Linear
+
+Create a Support Vector Classifier (aka, an SVM with a linear kernel) that classifies the `Class_Type` of an animal based on the first three PCs (PC1, PC2, PC3). Choose the `cost` that is largest without losing accuracy.
+
+Report appropriate metrics of your classifier.
+
+#### Q6: SVM
+
+Repeat Q1, this time for a full Support Vector Machine with a polynomial kernel. Choose the `degree` that is the smallest without losing accuracy. (*You may use the same `cost` you chose in Q5.*)
+
+#### Q7: Interpretation
+
+**In simple terms**, explain why your polynomial SVM had better accuracy than your ordinary linear one.
+
+## Part Three: Full Data Comparison
+
+Recall that PCA has two purposes:
+
+1.  Reduce the dimensionality for interpretability reasons.
+
+2.  Remove "noise" that is in the lower PCs, for better prediction power.
+
+In this lab, we mainly used PCA for Goal #1. It was easier to visualize our animal types in the first couple PC dimensions. But did it also help us in Goal #2?
+
+Fit an SVM classifier (linear kernal) using the original data, rather than the PCA transformed / reduced version. Is this better or worse than the model fit in Q5?
