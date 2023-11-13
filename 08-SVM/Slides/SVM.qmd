@@ -53,6 +53,37 @@ fed_matrix <- fed_known %>%
   select(-Author)
 ```
 
+## Midterm Exam Updates
+
+::: {.incremental}
+- Concept exams have been graded and released
+- The letter grade associated with your exam is your grade *without* revisions
+- You are permitted to submit *one* round of revisions to earn a higher grade
+- Revisions are due by Friday, December 15. 
+:::
+
+. . .
+
+::: {.callout-tip}
+# Take-Home Analysis
+
+The data analysis portion of the exam will be graded no later than this Friday (November 17).
+:::
+
+## Midterm Reflections
+
+- Revisions must include *thoughtful* reflection on why your previous answer was incorrect and how your revised solution remedies these issues. 
+
+- Revisions and reflections will be submitted to the `Midterm Part 1 Grade & Revisions` Canvas assignment. 
+
+## Lab Revision Updates
+
+- Revisions on lab assignments will be accepted until Friday, December 15. 
+
+- For the next three weeks, you are permitted to submit *up to one (1)* revision per week.  
+
+- Remember, you are required to earn a "Satisfactory" on *all but 2* assignments to earn a B in the course. 
+
 # Maximal Margin Classifier
 
 ## Federalist Papers 
@@ -499,13 +530,13 @@ What if we imagine our points exist in **three dimensions**?
 
 . . .
 
-:::{.center}
+:::{.centered}
 ![](https://codingmachinelearning.files.wordpress.com/2016/08/capture2.jpg?w=352&h=250)
 :::
 
 ## Support Vector Machine
 
-A [support vector machine]{style="color: #ed8402;"} is an extension of the support vector machine classifer that results from enlarging the feature space in a specifc way, using [kernels]{style="color: #ed8402;"}. 
+A [support vector machine]{style="color: #ed8402;"} is an extension of the support vector machine classifer that results from enlarging the feature space in a specific way, using [kernels]{style="color: #ed8402;"}. 
 
 . . .
 
@@ -513,7 +544,7 @@ In this class, we will only implement *polynomial* kernals.
 
 ## Try it!
 
-Open [`Activity-SVM.qmd`](../../Classwork/Activity-SVM.qmd)
+Open [`Activity-SVM.qmd`](../../Classwork/Activity-SVM-2.qmd)
 
 1.  Fit a support vector classifier, tuning the **cost** parameter
 
