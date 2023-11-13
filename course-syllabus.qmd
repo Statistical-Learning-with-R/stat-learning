@@ -158,7 +158,7 @@ You will access each week's assignment through Canvas, which you will walk throu
 Different from what you may have experienced, lab assignments are graded for "proficiency" of specific learning targets, which describe what you should be able to do after taking this course. You'll receive a score for *each section* of an assignment, meaning you will receive *one* score for *multiple* questions. Each section will receive either a grade of **Success** or **Growing**, as described in the rubric below.
 
 | Score      | Justification                                                                                                           |
-|------------------|------------------------------------------------------|
+|------------|-------------------------------------------------------------------------------------------------------------------------|
 | Successful | The solution to the problem is correct, legible, and easy to follow, with all reasoning provided. Any error is trivial. |
 | Growing    | The solution shows growth toward mastering the topic; however, it is incorrect and/or incomplete.                       |
 
@@ -206,29 +206,31 @@ In this class we will be using a contract grading system. This is designed to gi
 **You are guaranteed a grade of a B for this class if you meet the following conditions**:
 
 -   Submit all pre-class readings, concept quizzes, and class activities on time[^2] with a maximum of 2 missed assignments.
--   Submit all lab assignments on time[^3] (no missed assignments)
--   Obtain a "satisfactory"[^4] on all but 2 labs assignments
--   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual and application portions of the midterm exam[^5].
--   Submit the final project on time and meet the "satisfactory" conditions on the rubric.
--   Obtain a "satisfactory" conditions of the rubric on **both** the conceptual and application portions of the midterm exam.
+-   Submit all lab assignments on time[^3] (no missed assignments).
+-   Obtain a "Satisfactory"[^4] on all but 2 labs assignments.
+-   Obtain a "Satisfactory" conditions of the rubric on **both** the conceptual and application portions of the midterm exam[^5].
+-   Submit the final project on time and meet the "Satisfactory" conditions on the rubric.
+-   Obtain a "Satisfactory" conditions of the rubric on **both** the conceptual and application portions of the finel exam.
 
 [^2]: See @sec-late for information on deadline extensions
 
 [^3]: See @sec-late for information on deadline extensions
 
-[^4]: This means that **every** section was marked a "success"
+[^4]: This means that **every** section was marked a "Success"
 
 [^5]: This can be obtained in either the first attempt or after **one** round of revisions
 
-**Grade Deductions** Your grade will decrease by a third of a step (for example a B to a B-) for each B condition that you do not meet. Missing assignments will be scaled, so that if for example you miss six activities, have a "growing" / incomplete on 4 lab assignments, or turn in your final project late your grade will decrease by two thirds of a step (for example a B to a C+).
+**Grade Deductions** Your grade will decrease by a third of a step (for example a B to a B-) for each B condition that you do not meet. Missing assignments will be scaled, so that if for example you miss six activities, have a "Growing" / Incomplete on 4 lab assignments, or turn in your final project late your grade will decrease by two thirds of a step (for example a B to a C+).
 
 Missing an exam or a project will result in a maximum grade of a C at the instructor's discretion.
 
 **Grade Boosters** You can increase your letter grade by *up to* a third of a step (for example a B to B+) for meeting each of the following conditions (further instructions will be provided):
 
 -   Obtain a "Satisfactory" on **all** lab assignments.
--   Obtain a "Excellent" on **both** portions of the midterm exam.
--   Obtain a "Excellent" on **both** portions of the final exam.
+-   Obtain an "Excellent" on the **concept** portion of the midterm exam.
+-   Obtain an "Excellent" on the **analysis** portion of the midterm exam.
+-   Obtain a "Excellent" on **concept** portion of the final exam.
+-   Obtain an "Excellent" on the **analysis** portion of the final exam.
 -   Complete a final project that goes above and beyond the requirements. Your job is to convince me in an additional one page document why you think your contribution goes the extra mile.
 -   Select a data set from [TidyTuesday](https://github.com/rfordatascience/tidytuesday) or [Makeover Monday](https://www.makeovermonday.co.uk/data/) and use the skills you've learned in this course to perform an analysis. You will be required to submit your *tidy* analysis to the *Data Analysis - Booster* assignment portal.
 -   I encourage you to suggest your own "boosting" condition(s)! For example, if a particular mathematical result (e.g., higher variance of LOOCV compared to k-fold) interests you, I would be willing to consider a simulation study as a booster condition.
