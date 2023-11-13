@@ -171,8 +171,8 @@ fed_pca_all  <- bind_rows(fed_pca_df, fed_pca_df_uk)
 #| label: plot-of-pcs-with-known-authors
 #| echo: false
 
-fed_pca_jj %>%
-  ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
+fed_pca_df %>%
+  ggplot(mapping = aes(x = PC1, y = PC2, color = author)) +
   geom_point() + 
   labs(x = "Principal Component 1", 
        y = "Principal Component 2", 
