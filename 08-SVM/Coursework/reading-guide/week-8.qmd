@@ -36,7 +36,7 @@ editor: visual
 
 (b) Sketch the optimal separating hyperplane.
 
-(c) On your sketch, indicate te margin for the maximal margin classifier.
+(c) On your sketch, indicate the margin for the maximal margin classifier.
 
 (d) Describe the classification rule for the maximal margin classifier.
 
