@@ -4,6 +4,7 @@ format:
   revealjs:
     theme: [../../style.scss, dark]
 editor: visual
+embed-resources: true
 ---
 
 ```{r}
@@ -16,14 +17,6 @@ library(kknn)
 library(glmnet)
 library(discrim)
 ```
-
-# Maximal Margin Classifier
-
-## Maximal Margin
-
-Let's revisit the Federalist papers data.
-
-Recall that we plotted the essays in the first two PC dimensions, and saw that these separated the authors reasonably well:
 
 ```{r}
 #| label: read-clean-data
@@ -58,6 +51,15 @@ fed_unknown <- fed_clean %>%
 
 fed_matrix <- fed_known %>% 
   select(-Author)
+```
+
+# Maximal Margin Classifier
+
+## Federalist Papers 
+
+```{r}
+#| label: federalist-pc
+#| echo: false
 
 pc <- prcomp(fed_matrix, 
              center = TRUE, 
@@ -68,6 +70,21 @@ fed_pca_df <- pc$x %>%
   mutate(
     author = auths_known
   )
+
+fed_pca_jj <- fed_pca_df %>% 
+  mutate(author_jj = if_else(author == "JJ", 
+                             "John Jay", 
+                             "Not John Jay"
+                             )
+         )
+
+fed_pca_ah <- fed_pca_df %>%
+  mutate(author_ah = if_else(author == "AH", 
+                             "Hamilton", 
+                             "Not Hamilton"
+                             ), 
+         author_ah = as.factor(author_ah)
+         ) 
 
 fed_pca_df_uk <- fed_unknown %>% 
   select(-Author) %>% 
@@ -84,174 +101,330 @@ fed_pca_df_uk <- fed_unknown %>%
   mutate(
     author = "Unknown"
   )
+
+fed_pca_all  <- bind_rows(fed_pca_df, fed_pca_df_uk)
+
 ```
-
-
-## Maximal Margin
 
 ```{r}
-fed_pca_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = auths_known)) +
-  geom_point()
+#| label: plot-of-pcs-with-known-authors
+#| echo: false
+
+fed_pca_jj %>%
+  ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
+  geom_point() + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Authors")
 ```
+
+
+## A Simple(r) Classification
 
 Suppose we are interested in classifying a new observation as "John Jay" or "Not John Jay".
 
-. . .
-
-There are many lines we could draw that split the *training* data perfectly between JJ and not JJ
-
-. . .
-
 ```{r}
+#| label: plot-of-pcs-comparing-jj
+#| echo: false
+
 fed_pca_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = author)) +
-  geom_point() +
-  geom_abline(slope = 5, intercept = 25) + 
-  geom_abline(slope = 6, intercept = 30) +
-  geom_abline(slope = 5, intercept = 22) 
+  mutate(author_jj = if_else(author == "JJ", 
+                             "John Jay", 
+                             "Not John Jay"
+                             )
+         ) %>% 
+  ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
+  geom_point() + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Authors")
 ```
 
+## Choosing a Line
 
-## Maximal Margin
+There are many lines we could draw that split the *training* data perfectly between John Jay and not John Jay! 
 
-The "best" one is the one that is furthest from the nearest observation on either side.
+```{r}
+#| label: plot-of-pcs-comparing-lines
+#| echo: false
+
+fed_pca_jj %>% 
+  ggplot(mapping = aes(x = PC1, y = PC2, color = author_jj)) +
+  geom_point() + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Authors") +
+  geom_abline(slope = 5, intercept = 25) +
+  geom_abline(slope = 5, intercept = 22, lty = "dashed") +
+  geom_abline(slope = 8, intercept = 30, lty = "dotted")
+```
 
 . . .
 
+I'm just drawing any line that separates the two groups. Is there a better way to construct these lines?
+
+
+## Equidistant Between Observations
+
+. . .
+
+::: columns
+::: {.column width="47%"}
 ```{r}
-fed_pca_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = author)) +
+#| label: margin-option-1
+#| echo: false
+
+fed_pca_jj %>%
+  ggplot(aes(x = PC1, y = PC2, color = author_jj)) +
   geom_point() +
   geom_abline(slope = 5, intercept = 23.25) +
-  geom_abline(slope = 5, intercept = 20, lty = 2) +
-  geom_abline(slope = 5, intercept = 26.5, lty = 2)
+  geom_abline(slope = 5, intercept = 20, lty = "dashed") +
+  geom_abline(slope = 5, intercept = 26.5, lty = "dashed") +
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Author")
 ```
 
+:::
 
-## Maximal Margin
+::: {.column width="3%"}
+:::
 
-Let's check out where the essays with **unknown authorship** fall on this plot:
-
-## 
-
+::: {.column width="48%"}
+::: {.fragment}
 ```{r}
-fed_pca_all  <- bind_rows(fed_pca_df, fed_pca_df_uk)
+#| label: margin-option-2
+#| echo: false
 
-fed_pca_all %>%
-  ggplot(aes(x = PC1, y = PC2, color = author)) +
+fed_pca_jj %>%
+  ggplot(aes(x = PC1, y = PC2, color = author_jj)) +
   geom_point() +
-  geom_abline(slope = 5, intercept = 23.25) +
-  geom_abline(slope = 5, intercept = 20, lty = 2) +
-  geom_abline(slope = 5, intercept = 26.5, lty = 2)
+  geom_abline(slope = -8, intercept = -31.5) +
+  geom_abline(slope = -8, intercept = -38, lty = "dashed") +
+  geom_abline(slope = -8, intercept = -25, lty = "dashed") +
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Author")
 ```
+:::
+:::
+:::
 
+. . .
+
+How should we choose between these two lines???
 
 ## Maximal Margin
 
-Okay, so **what's the problem?**
+The "best" line is the line with the [largest margin]{style="color: #b76352;"} or is furthest from the nearest observation on either side.
 
 . . .
 
-In **real situation** we rarely have observations that *perfectly* fall on either side of a line/plane.
+::: columns
+::: {.column width="55%"}
+```{r}
+fed_pca_jj %>%
+  ggplot(aes(x = PC1, y = PC2, color = author_jj)) +
+  geom_point() +
+  geom_abline(slope = -8, intercept = -31.5) +
+  geom_abline(slope = -8, intercept = -38, lty = "dashed") +
+  geom_abline(slope = -8, intercept = -25, lty = "dashed") +
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Author")
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="40%"}
+::: {.smaller}
+::: {.incremental}
+- Where could I add a John Jay essay which *would not* change the line?
+- Where could I add a John Jay essay which *would* change the line?
+- How many observations control the shape of the line?
+:::
+:::
+:::
+:::
+
+
+## Difficulties with Hard Margins
+
+</br>
+
+It is rare to have observations that *perfectly* fall on either side of a line / hyperplane.
 
 . . .
+
+</br>
 
 Adding **one more observation** could *totally change* our classification line!
 
-. . .
 
-None of the unknown essays are John Jay.
+## A Different Comparison
 
-Suppose we wanted instead to separate "Hamilton" from "Not Hamilton"
-
-##
+Suppose we wanted instead to separate "Hamilton" from "Not Hamilton"...
 
 ```{r}
-fed_pca_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = author)) +
-  geom_point() +
-  geom_abline(slope = 2, intercept = 2) 
+fed_pca_ah %>% 
+  ggplot(aes(x = PC1, y = PC2, color = author_ah)) +
+  geom_point() + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Authors")
 ```
 
+. . .
+
+Where should we draw our line?
 
 ## Soft Margin
 
-A **soft margin** is a margin with only a certain number of misclassified points.
+A [soft margin]{style="color: #b76352;"} is a margin with only a certain number of misclassified points.
 
 . . .
 
 There are two decisions to make here:
 
+</br>
+
 . . .
 
-1. How big is our margin?  
+::: columns
+::: {.column width="40%"}
+1.  How big is our margin?
 
 (`M` = width of margin)
 
-. . .
+:::
 
-2. How many misclassified observations are we willing to have?  
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+::: {.fragment}
+2.  How many misclassified observations are we willing to have?
 
 (`C` = cost of a misclassified point)
+:::
+:::
+:::
 
 ## An Initial Attempt
 
-Width of margin: 2
-Misclassified points in margin: 3
+Width of margin: 2 
 
 ```{r}
-fed_pca_df %>%
-  ggplot(aes(x = PC1, y = PC2, color = author)) +
+fed_pca_ah %>%
+  ggplot(aes(x = PC1, y = PC2, color = author_ah)) +
   geom_point() +
   geom_abline(slope = 2, intercept = 2) +
   geom_abline(slope = 2, intercept = 0, lty = 2) +
-  geom_abline(slope = 2, intercept = 4, lty = 2)
+  geom_abline(slope = 2, intercept = 4, lty = 2) + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Authors")
 ```
 
-
-## Support Vector Classifier
-
-The **support vector** is the set of all observations that falling within the **soft margin** that are **misclassified**.
-
 . . .
 
-A **support vector classifier** tries to find:
+How many points in the margin are misclassified?
 
-. . .
+## A Second Attempt
 
-a *line/plane* that will be used to classify future observations ...
-
-. . .
-
-... that give us the biggest *margin width*...
-
-. . .
-
-... while still respecting the cost, `C`.
-
-
-## Support Vector Classifier
+Width of margin: 1 
 
 ```{r}
-#| label: svm-specification
-#| echo: true
+fed_pca_ah %>% 
+  ggplot(aes(x = PC1, y = PC2, color = author_ah)) +
+  geom_point() +
+  geom_abline(slope = 2, intercept = 2) + 
+  geom_abline(slope = 2, intercept = 3, lty = "dashed") + 
+  geom_abline(slope = 2, intercept = 1, lty = "dashed") + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Known Authors")
+  
+```
 
-svm_spec <- svm_poly(cost = 2, degree = 1) %>%
+. . .
+
+How many points in the margin are misclassified?
+
+
+## Support Vector Classifier
+
+The [support vector]{style="color: #ed8402;"} is the set of all observations that falling within the *soft margin* that are *misclassified*.
+
+. . .
+
+</br>
+
+A [support vector classifier]{style="color: pink;"} tries to find:
+
+. . .
+
+a *line / hyperplane* that will be used to classify future observations ...
+
+. . .
+
+... that give us the biggest *margin width* (`M`)...
+
+. . .
+
+... while still respecting the cost of missclasified points (`C`).
+
+## Fitting a Linear Support Vector Classifier with `tidymodels`
+
+</br>
+
+```{r}
+#| label: linear-svm-specification-code
+#| echo: true
+#| eval: false
+#| message: false
+
+svm_spec <- svm_linear(cost = 3, margin = 0.5) %>%
   set_mode("classification") %>%
   set_engine("kernlab")
 
-fed_recipe <- recipe(author ~ PC1 + PC2, data = fed_pca_df)
+fed_recipe <- recipe(author_ah ~ PC1 + PC2, data = fed_pca_ah)
 
 fed_wflow <- workflow() %>%
   add_model(svm_spec) %>%
   add_recipe(fed_recipe)
 
 my_svm <- fed_wflow %>%
-  fit(fed_pca_df)
+  fit(fed_pca_ah)
 ```
 
-## 
+::: {.callout-tip}
+# Install a New Package
+
+You will need to install the `kernlab` package this week!
+:::
+
+## Inspecting the Model Fit
+
+```{r}
+#| label: linear-svm-specification-fit
+#| include: false
+
+svm_spec <- svm_linear(cost = 3, margin = 0.5) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+
+fed_recipe <- recipe(author_ah ~ PC1 + PC2, data = fed_pca_ah)
+
+fed_wflow <- workflow() %>%
+  add_model(svm_spec) %>%
+  add_recipe(fed_recipe)
+
+my_svm <- fed_wflow %>%
+  fit(fed_pca_ah)
+```
 
 ```{r}
 #| echo: true
@@ -260,7 +433,6 @@ my_svm <- fed_wflow %>%
 my_svm %>% 
   extract_fit_parsnip()
 ```
-
 
 ## Making Predictions
 
@@ -277,16 +449,39 @@ predict(my_svm, new_data = fed_pca_df)
 #| echo: false
 #| label: svm-plotting-predictions
 
-fed_pca_all %>%
+fed_pca_ah %>%
   mutate(
-    preds = predict(my_svm, fed_pca_all)$.pred_class
-  ) %>%
+    preds = predict(my_svm, fed_pca_ah)$.pred_class, 
+    author = if_else(author == "AH", 
+                     "Hamilton", 
+                     "Not Hamilton"
+                     )
+    ) %>%
   ggplot(aes(x = PC1, y = PC2, color = preds, pch = author)) +
-  geom_point()
-
-
+  geom_point() + 
+  labs(x = "Principle Component 1", 
+       y = "Principle Component 2", 
+       color = "Predicted Author", 
+       pch = "Known Author")
 ```
 
+. . .
+
+How well did the model do?
+
+
+## Model Metrics
+
+```{r}
+#| label: prediction-metrics
+#| echo: true
+
+predict(my_svm, new_data = fed_pca_ah) %>% 
+  bind_cols(truth = fed_pca_ah$author_ah) %>% 
+  rename(prediction = .pred_class) %>% 
+  conf_mat(truth = truth, 
+           estimate = prediction)
+```
 
 ## Not Separable Groups
 
@@ -294,8 +489,9 @@ What if we simply couldn't separate our data with a line / hyperplane?
 
 . . .
 
+::: {.centered}
 ![](images/svm.png)
-
+:::
 
 ## Increasing the Dimensions
 
@@ -303,23 +499,22 @@ What if we imagine our points exist in **three dimensions**?
 
 . . .
 
+:::{.center}
 ![](https://codingmachinelearning.files.wordpress.com/2016/08/capture2.jpg?w=352&h=250)
-
+:::
 
 ## Support Vector Machine
 
-A **support vector machine** classifies observations using dividers in **extra dimensions**!
+A [support vector machine]{style="color: #ed8402;"} is an extension of the support vector machine classifer that results from enlarging the feature space in a specifc way, using [kernels]{style="color: #ed8402;"}. 
 
 . . .
 
-In this class, we will only implement **polynomial** svms.
-
+In this class, we will only implement *polynomial* kernals. 
 
 ## Try it!
 
 Open [`Activity-SVM.qmd`](../../Classwork/Activity-SVM.qmd)
 
-1. Fit a support vector classifier, tuning the **cost** parameter
+1.  Fit a support vector classifier, tuning the **cost** parameter
 
-2. Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
-
+2.  Fit a support vector **machine**, tuning the **cost** parameter AND the **degree** parameter.
