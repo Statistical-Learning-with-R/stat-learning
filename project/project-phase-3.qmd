@@ -1,0 +1,14 @@
+---
+title: "Project Phase 3 -- Rough Draft"
+subtitle: "Due Friday, December 3" 
+format: html
+editor: visual
+---
+
+Please provide a draft of your written report detailing your analysis and conclusions.  There is no template for this report; you should decide how best to present your work.
+
+As with your Project Proposal in Phase 2, this report is written directly to the imagined client(s).  
+
+It can be in draft form, but should be essentially complete.  That is to say, it's okay if some paragraphs are still in bullet point form, or if your plots are not yet cleaned up into final form.  However, you should have very few "TBD" or "Finish this later" subsections.
+
+This is your last chance for feedback before the final report submission.  My expectations for that final report are very high - this is a graduate-level course - so please make the most of this last checkpoint.

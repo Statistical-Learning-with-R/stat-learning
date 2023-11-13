@@ -1,27 +1,27 @@
 ---
 title: "Project Phase 2: Project Proposal"
+subtitle: "Due Sunday, November 19"
 format: html
 editor: visual
 ---
 
 # Project Proposal
 
-In this phase, you will write a proposal for your project. The proposal will include an introduction, a project timeline, and preliminary analysis.
+In this phase, you will write a proposal for your project. The proposal will include an introduction, a preliminary analysis, and a project timeline. 
 
-This is a common first step when working with external clients: you’ll often do the first bit of work, then come to them with an overview and early results to determine if it’s worth completing the project in full. (Often this is because you’re trying to get them to fund further work; but don’t worry about that aspect in this project!)
+This is a common first step when working with external clients: you'll often do the first bit of work, then come to them with an overview and early results to determine if it's worth completing the project in full. (Often this is because you're trying to get them to fund further work; but don't worry about that aspect in this project!)
 
-Please address this specifically to one or two organizations. That means you can use phrasing like, “Your organization works with…” or “We will provide you with…”
+Please address this specifically to one or two organizations. That means you can use phrasing like, "Your organization works with..." or "We will provide you with..."
 
 # Introduction
 
-In this section, you want to show the client that you understand the data context and their organization’s needs/goals.
+In this section, you want to show the client that you understand the data context and their organization's needs/goals.
 
 Please write 1-2 pages for this part - consider it a draft for the introduction of your final report. This will contain approximately the same information you wrote up in Phase 1; you are simply reworking it into paragraph form and addressing any issues mentioned in my feedback.
 
 # Previous Work
 
-Find 1-5 articles, reports, or analyses that are similar to the goals of your project. Very briefly summarize their work, and comment on its similarities and differences to your project.
-(It is completely okay if there is huge overlap between your project and analyses that have already been done, but make it clear what you are contributing that is new.)
+Find 1-5 articles, reports, or analyses that are similar to the goals of your project. Very briefly summarize their work, and comment on its similarities and differences to your project. (It is completely okay if there is huge overlap between your project and analyses that have already been done, but make it clear what you are contributing that is new.)
 
 # Exploratory Analysis
 
@@ -31,7 +31,7 @@ Make sure that your summaries or plots are accompanied by discussion and interpr
 
 # Preliminary Results
 
-Fit at least one model for each of your datasets (or, if you are combining datasets, fit two models with different response variables). You do not need to do any model selection here; you are simply fitting a “first pass” model to get a sense of the problem.
+Fit at least one model for each of your datasets (or, if you are combining datasets, fit two models with different response variables). You do not need to do any model selection here; you are simply fitting a "first pass" model to get a sense of the problem.
 
 Report and discuss the results of the models. What takeaways from these models will you use to help you refine your analysis?
 
@@ -55,9 +55,8 @@ What are some conclusions that you would be excited to discover? What results mi
 
 # Challenges
 
-Are there any aspects of the data that you are worried about, or that are challenging to clean/manipulate?
+Are there any aspects of the data that you are worried about, or that are challenging to clean / manipulate?
 
 Is there any information that is not in your dataset that you wish you could have?
 
 Are there any other concerns you have regarding the success of your project?
-
