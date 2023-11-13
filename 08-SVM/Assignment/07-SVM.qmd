@@ -1,6 +1,6 @@
 ---
 title: "Support Vector Machines"
-author: "YOUR NAME HERE"
+subtitle: "STAT 551, Fall 2023"
 format: 
   html:
     code-fold: true
