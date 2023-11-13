@@ -1,0 +1,78 @@
+---
+title: "Support Vector Machines"
+subtitle: "R Cheatsheet"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+execute: 
+  eval: false
+---
+
+## Support Vector Classifier (Linear)
+
+**Model Specification**
+
+```{r}
+svm_linear <- svm_linear(cost = 3, margin = 0.5) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+```
+
+::: {.callout-tip}
+# Tuning Paramters
+
+For the support vector classifier, you can `tune()` the `cost` (cost of predicting an observation on the wrong side of the margin) hyperparameter. The `margin` hyperparameter **cannot** be tuned for a classification model (only for a regression model)!  
+:::
+
+```{r}
+#| include: false
+
+svm_linear_tune <- svm_linear(cost = tune(), margin = 0.5) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+
+svm_grid <- grid_regular(
+  cost(range = c(-10, 5),
+       trans = log2_trans()
+       ), 
+  levels = 25)
+
+fed_wflow <- workflow() %>%
+  add_model(svm_linear_tune) %>%
+  add_recipe(fed_recipe)
+
+
+tune_res <- fed_wflow %>%
+  tune_grid(
+    resamples = fed_cv,
+    grid = svm_grid
+  )
+
+show_best(tune_res) 
+```
+
+
+## Support Vector Machine (Polynomial Kernal)
+
+
+```{r}
+svm_polynomial <- svm_poly(cost = 3, margin = 0.5, degree = 2) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+```
+
+::: {.callout-tip}
+# Tuning Paramters
+
+For the support vector classifier, you can `tune()` the `degeee` (degree of polynomial) and `cost` (cost of predicting an observation on the wrong side of the margin) hyperparameters. The `margin` hyperparameter **cannot** be tuned for a classification model (only for a regression model)! 
+:::
+
+```{r}
+#| include: false
+
+svm_poly_tune <- svm_poly(cost = tune(), margin = tune(), degree = 2) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab")
+```
+
