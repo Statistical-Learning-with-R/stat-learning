@@ -84,6 +84,36 @@ The data analysis portion of the exam will be graded no later than this Friday (
 
 -   Remember, you are required to earn a "Satisfactory" on *all but 2* assignments to earn a B in the course.
 
+## Plan for the Next Three Weeks
+
+::: columns
+::: {.column width="30%"}
+**Week 8** -- Support Vector Machines 
+
+- Final Lab Assignment
+- Project Phase 2 (Introduction, Preliminary Analysis, Project Timeline)
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="30%"}
+**Week 9** -- Neural Networks
+
+</br>
+
+- Final Activity
+- Project Phase 3 (Rough Draft)
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="33%"}
+**Week 10** -- Final Report
+:::
+:::
+
 # Maximal Margin Classifier
 
 ## Federalist Papers
