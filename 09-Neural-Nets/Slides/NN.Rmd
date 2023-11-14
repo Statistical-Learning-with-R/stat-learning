@@ -1,0 +1,325 @@
+---
+title: "Neural Networks and Deep Learning"
+resource_files:
+- appforthat.jpg
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightLines: yes
+      highlightStyle: github
+      countIncrementalSlides: false
+      ratio: '16:9'
+
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, digits = 4, scipen=999)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(tidymodels)
+library(flair)
+library(kknn)
+library(glmnet)
+library(discrim)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+library(xaringanExtra)
+style_mono_light(
+  base_color = "#26116c",
+  text_bold_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  background_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+```{css, echo = FALSE}
+.red{ color: red; }
+.blue{ color: blue; }
+.huge {
+  font-size: 200%;
+}
+.large {
+  font-size: 150%;
+}
+.tiny {
+  font-size: 50%;
+}
+```
+
+---
+class: center, middle
+
+# Regression on Residuals
+
+---
+
+## Regression on Residuals
+
+Throwback Thursday to Week 1:
+
+```{r, message = FALSE}
+ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
+
+ins_rec <- recipe(charges ~ age, data = ins)
+
+lm_spec <- linear_reg() %>%
+  set_engine("lm") %>%
+  set_mode("regression")
+
+lm_fitted <- workflow() %>%
+  add_recipe(ins_rec) %>%
+  add_model(lm_spec) %>%
+  fit(ins)
+
+lm_fitted %>% pull_workflow_fit() %>% tidy()
+```
+
+---
+## Regression on Residuals
+
+Let's save the residuals into the dataset:
+
+```{r}
+ins <- ins %>%
+  mutate(
+    predicted_charges = predict(lm_fitted, ins)$.pred,
+    residuals = predicted_charges - charges
+  )
+```
+---
+## Regression on Residuals
+
+Now, let's perform a regression to predict the *residuals*:
+
+```{r}
+ins_rec_2 <- recipe(residuals ~ bmi, data = ins)
+
+lm_fitted_2 <- workflow() %>%
+  add_recipe(ins_rec_2) %>%
+  add_model(lm_spec) %>%
+  fit(ins)
+
+lm_fitted_2 %>% pull_workflow_fit() %>% tidy()
+```
+
+---
+## Regression on Residuals
+
+How is this different from just the full regression?
+
+It's *mostly* not.
+
+```{r}
+ins_rec_full <- recipe(residuals ~ age + bmi, data = ins)
+
+lm_fitted_full <- workflow() %>%
+  add_recipe(ins_rec_full) %>%
+  add_model(lm_spec) %>%
+  fit(ins)
+
+lm_fitted_full %>% pull_workflow_fit() %>% tidy()
+```
+
+---
+## Regression on Residuals
+
+But what did the residuals look like?
+
+```{r, echo = FALSE}
+ins %>%
+  ggplot(aes(x = residuals)) +
+  geom_histogram()
+```
+
+---
+## Regression on Residuals
+
+What if we transformed them first?
+
+```{r}
+ins <- ins %>%
+  mutate(
+    log_residuals = log(residuals)
+  ) 
+```
+
+---
+
+```{r, echo = FALSE}
+ins %>%
+  ggplot(aes(x = log_residuals)) +
+  geom_histogram()
+```
+
+---
+## Regression on Residuals
+
+What if we did our *second* regression on the logged residuals?
+
+```{r}
+ins_rec_3 <- recipe(log_residuals ~ bmi, data = ins)
+
+lm_fitted_3 <- workflow() %>%
+  add_recipe(ins_rec_3) %>%
+  add_model(lm_spec) %>%
+  fit(ins)
+
+lm_fitted_3 %>% pull_workflow_fit() %>% tidy()
+```
+
+---
+## Predictions
+
+```{r}
+ins <- ins %>%
+  mutate(
+    predicted_orig = predict(lm_fitted, ins)$.pred,
+    predicted_resid = predict(lm_fitted_2, ins)$.pred,
+    predicted_log_resid = predict(lm_fitted_3, ins)$.pred
+  ) %>%
+  mutate(
+    predicted_charges_ordinary = predict(lm_fitted, ins)$.pred,
+    predicted_charges_2step = predicted_orig + predicted_resid,
+    predicted_charges_logstep = predicted_orig + exp(predicted_log_resid)
+  )
+```
+
+---
+## Original lm
+
+```{r, echo = FALSE}
+ins %>%
+  ggplot(aes(x = charges, y = predicted_charges_ordinary)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, color = "red")
+```
+
+---
+## Regression on Resids
+
+```{r, echo = FALSE}
+ins %>%
+  ggplot(aes(x = charges, y = predicted_charges_2step)) +
+  geom_point()  +
+  geom_abline(slope = 1, intercept = 0, color = "red")
+```
+
+---
+## Regression on logged resids
+
+```{r, echo = FALSE}
+ins %>%
+  ggplot(aes(x = charges, y = predicted_charges_logstep)) +
+  geom_point()  +
+  geom_abline(slope = 1, intercept = 0, color = "red")
+```
+---
+class: center, middle
+
+# Neural Networks
+
+---
+## Neural Networks
+
+A **neural network** attempts to predict and **output** from **input** by processing the data through many *layers*.
+
+--
+
+Each *layer* can be thought of as a regression on residuals.
+
+--
+
+However, in this case we aren't adding new predictors at each step.
+
+Instead, we are trying many different **regression lines** and using *all* their residuals as predictors.
+
+--
+
+The residuals are called **hidden layers**
+
+---
+
+The transformations on the residuals are called the **activation functions**.
+
+---
+
+![](https://research.aimultiple.com/wp-content/uploads/2017/08/neural-network.png)
+
+---
+
+![](https://cdn-images-1.medium.com/max/1000/1*livHOtvW8PSptrSb7OXpyA.jpeg)
+---
+## Neural Networks
+
+**How do we decide which regression equations to use at each step?**
+
+--
+
+![](https://media2.giphy.com/media/XyOrJljDNBEpa/200.gif)
+
+
+---
+## Neural Networks
+
+**How do we choose the activation functions?**
+
+--
+
+![](https://www.wired.com/wp-content/uploads/2015/03/855.gif)
+
+--
+
+Common choices:  **sigmoid**, **Rectified Linear Unit (ReLu)**, ....
+
+---
+## Neural Networks
+
+**How do we choose the number of hidden layers?**
+
+--
+
+![](https://www.wired.com/wp-content/uploads/2015/03/855.gif)
+
+--
+
+Generally, we try a few options and see how they do.
+
+At some point, more layers becomes pointless.
+
+---
+class: center, middle
+
+# Deep Learning
+
+---
+
+## What is Deep Learning?
+
+**Deep learning** is a term for a *subset* of Machine Learning techniques.
+
+--
+
+It refers to situations where the researcher doesn't choose the features.  (e.g. NNs decide on the node-to-node functions)
+
+--
+
+There's not a super clear definition.  (See: "Big Data")
+
+But definitely Deep Learning is **not interpretable**.
+
+---
+class: center, middle, inverse
+
+## Try it
+
+#### (Banned license plates walkthrough)
+
+
+

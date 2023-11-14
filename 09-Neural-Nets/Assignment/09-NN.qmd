@@ -1,0 +1,209 @@
+---
+title: "Neural Networks"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+execute:
+  message: false
+---
+
+## Setup
+
+Declare your libraries:
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+library(glmnet)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(baguette)
+library(keras)
+```
+
+
+# Instructions
+
+You will submit an HTML document to Canvas as your final version.
+
+You may work with **one** other person for this assignment. Make sure both your names are on the HTML document, and you should **both** upload a copy of the assignment to Canvas.
+
+Your document should show your code chunks/cells as well as any output. Make sure that only relevant output is printed. Do not, for example, print the entire dataset in your final knitted file.
+
+Your document should also be clearly organized, so that it is easy for a reader to find your answers to each question.
+
+There may be a small penalty for submissions that are difficult to read or navigate.
+
+# Data
+
+[This is the dataset from the midterm!  We'll see if Neural Nets can beat the
+performance of the other models you tried.]
+
+Our dataset for today contains information about clients of a credit card company over the past five years. We record two pieces of credit record information: First, their worst bill (i.e., latest payment) for any month during their time as a customer. Second, their typical monthly behavior; i.e., do they more often pay on time or late?
+
+Our goal will be to identify client traits that predict whether the client pays their bills on time.
+
+| Feature name     | Explanation Remarks                                                                                                                                                                                                              |
+|------------------------------|------------------------------------------|
+| ID               | Client number                                                                                                                                                                                                                    |
+| STATUS_WORST     | Worst credit payment status. 1: 1-29 days past due 2: 30-59 days past due 3: 60-89 days overdue 4: 90-119 days overdue 5: 120-149 days overdue 6: Overdue or bad debts, write-offs for more than 150 days 0: paid off that month |
+| STATUS_TYPICAL   | Whether the customer most often paid on time or not.                                                                                                                                                                             |
+| CODE_GENDER      | Gender                                                                                                                                                                                                                           |
+| AGE              | Age in years                                                                                                                                                                                                                     |
+| EDUCATION LEVEL  | Education level                                                                                                                                                                                                                  |
+| FAMILY_STATUS    | Marital status                                                                                                                                                                                                                   |
+| AMT_INCOME_TOTAL | Annual income                                                                                                                                                                                                                    |
+| HOUSING_TYPE     | Type of building where the person lives                                                                                                                                                                                          |
+| IS_EMPLOYED      | Whether the person is currently employed                                                                                                                                                                                         |
+| CNT_CHILDREN     | Number of children                                                                                                                                                                                                               |
+| CNT_FAM_MEMBERS  | Family size                                                                                                                                                                                                                      |
+
+We will limit our data to only a subset, for computational ease.
+
+We will also set aside 10% of our data to be a validation set.
+
+```{r}
+cc <- read_csv("https://www.dropbox.com/s/gyuyxicv27g86zr/credit_card_status.csv?dl=1")
+
+set.seed(484739)
+
+cc <- cc %>%
+  sample_n(5000) %>%
+  mutate(
+    STATUS_WORST = factor(STATUS_WORST)
+  ) %>%
+  select(-ID, -STATUS_TYPICAL)
+
+splits <- cc %>% initial_splits(0.9, strata = STATUS_WORST)
+
+cc_train <- training(splits)
+cc_validate <- testing(splits)
+```
+
+
+# Part One: Tuning
+
+The model specification function for a very simple Neural Network is `mlp`, which 
+stands for "multilayer perceptron".  Unfortunately, due to the computational complexity,
+the `mlp` function only allows for one hidden layer.  (To fit a more complex network,
+we would need to get into some more complicated structures in tidymodels, so we'll
+stick with the simple one for now.)  The engine is `nnet`.
+
+The parameters we will focus on are:
+
+* `hidden_units`: The number of nodes in the hidden layer
+* `epochs`:  The number of updates to run
+* `activation`: The activation function on the hidden layer. Possible values are: "linear", "softmax", "relu", and "elu".
+
+
+
+Choose a dataset from a previous lab or exam that has a classification element.
+
+If your dataset is large, limit it to only 1000 observations.
+
+Put aside a small validation set.
+
+## Q1 Layer Complexity
+
+Choose a reasonable value for the number of epochs, and set the activation function to be ReLu.
+
+Tune the number of nodes in your hidden layer.
+
+Instead of selecting just the one best choice, look at how your cross-validated
+accuracy and/or ROC-AUC scores change as you increase the number of nodes.  What pattern do you see?  What do you think is the best choice for number of nodes?
+
+## Q2: Epochs
+
+Set the activation function to be ReLu, and set the number of nodes to be whatever
+you chose from Q1.
+
+Fit your model with 1, 10, 100, and 1000 epochs.
+
+Hint:  You can make a grid for tuning like this:
+
+
+```{r}
+epoch_grid <- data.frame(
+  epochs = c(1, 10, 100, 1000)
+)
+```
+
+Again, instead of looking at just the one best choice, look at how your accuracy and/or
+ROC-AUC scores change as you increase the number of epochs  What pattern do you
+see?  How many epochs do you think are necessary for "convergence" to a good model?
+
+## Q3: Activation function
+
+Set the number of nodes to be whatever you chose from Q1, and choose an epoch
+number that seems reasonable based on Q2.
+
+Try your model with all possible values of the activation function.
+
+Hint:  You can make a grid for tuning like this:
+
+
+```{r}
+activation_grid <- data.frame(
+  activation = c('linear', 'softmax', 'relu', 'elu', 'tanh' )
+)
+```
+
+Comment on the results - was there much difference in your model success between
+different choices?  Which one do you think is best?
+
+# Part Two: Prediction
+
+Use your final model to predict on the validation set.
+
+Report a confusion matrix of the predictions, and comment on it.
+
+# Part Three: Interpretation
+
+Although we generally find Neural Networks to be very uninterpretable, there
+are a few tricks we can use.
+
+One is to make "fake" input, and see how changes to a single variable impact
+the results.
+
+Let's create a fake "average" person by assigning them the approximate average values from the full dataset:
+
+```{r, eval = FALSE}
+fake_person <- data.frame(
+  CODE_GENDER = "F",
+  AGE = 44,
+  EDUCATION_LEVEL = "High School Degree",
+  FAMILY_STATUS = "Married",
+  AMT_INCOME_TOTAL = 18600,
+  HOUSING_TYPE = "House / apartment",
+  IS_EMPLOYED = "Y",
+  CNT_CHILDREN = 0,
+  CNT_FAM_MEMBERS = 2
+)
+```
+
+
+## Q1: Predicted Probabilities
+
+Use your model to predict this person's STATUS_WORST value.  Instead of looking at the single predicted class, look at the estimated probabilities of each class.
+
+## Q2: Quantitative variable
+
+Choose one of the quantitative variables.  Try changing it to a different value, and re-compute the predicted probabilities.  How did they change?  Do this a few times for a few different values.
+
+What does this tell you in real world terms about how the model makes decisions?
+
+(For example, you might say "Older people are more likely to pay on time, i.e. STATUS 1")
+
+## Q3: Categorical Variable
+
+Now choose one of the categorical variables.  Change its value to different categories, and see how the predicted probabilities change.
+
+What does this tell you in real world terms about how the model makes decisions?
