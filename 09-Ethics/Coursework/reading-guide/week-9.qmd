@@ -1,0 +1,27 @@
+---
+title: "Data Ethics -- Numbers Don't Speak for Themselves"
+format:
+  docx:
+    toc: false
+  html:
+    toc: true
+prefer-html: true
+embed-resources: true
+editor: visual
+---
+
+1. What does it mean for data to be "neutral"?
+
+2. What was the issue with *FiveThirtyEight*'s use of GDELT's data on kidnappings?
+
+3. Have you ever had to investigate the context of a dataset for one of your courses? If so, for what purpose?
+
+4. The current push in scientific research requires the data associated with a study be published alongside any associated publications. Based on D'Ignazio & Klein's description of data on the worldwide web, what potential issues do you see with this requirement? 
+
+5. Based on these issues, how would you improve the publication requirement to publish a study's data?
+
+6. What was the most recent crime Cal Poly was required to report due to the Clery Act?
+
+7. As opposed to removing the missing values from a dataset, what would *data feminism* press you to do?
+
+8. What are ways you can communicate the context of the data you are working with for your project? 
