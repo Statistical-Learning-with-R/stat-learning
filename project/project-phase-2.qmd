@@ -7,7 +7,7 @@ editor: visual
 
 # Project Proposal
 
-In this phase, you will write a proposal for your project. The proposal will include an introduction, a preliminary analysis, and a project timeline. 
+In this phase, you will write a proposal for your project. The proposal will include an introduction, a preliminary analysis, and a project timeline.
 
 This is a common first step when working with external clients: you'll often do the first bit of work, then come to them with an overview and early results to determine if it's worth completing the project in full. (Often this is because you're trying to get them to fund further work; but don't worry about that aspect in this project!)
 
@@ -17,7 +17,7 @@ Please address this specifically to one or two organizations. That means you can
 
 In this section, you want to show the client that you understand the data context and their organization's needs/goals.
 
-Please write 1-2 pages for this part - consider it a draft for the introduction of your final report. This will contain approximately the same information you wrote up in Phase 1; you are simply reworking it into paragraph form and addressing any issues mentioned in my feedback.
+Please write 3 paragraphs for this part - consider it a draft for the introduction of your final report. This will contain approximately the same information you wrote up in Phase 1; you are simply reworking it into paragraph form and addressing any issues mentioned in my feedback.
 
 # Previous Work
 
