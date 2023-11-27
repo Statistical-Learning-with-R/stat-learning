@@ -1,0 +1,69 @@
+---
+title: "Data Ethics"
+format: 
+  revealjs:
+    theme: ../../style.scss
+editor: source
+embed-resources: true
+---
+
+## ethics and Ethics
+
+::: columns
+::: {.column width="40%"}
+*ethics* -- 
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+*Ethics* -- 
+
+:::
+:::
+
+## Professional Ethics
+
+::: columns
+::: {.column width="60%"}
+![](images/ASA.png)
+
+The American Statistical Association’s Ethical Guidelines for Statistical Practice are intended to help statistics practitioners make decisions ethically. Additionally, the ethical guidelines aim to promote accountability by informing those who rely on statistical analysis of the standards they should expect.
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="35%"}
+Visit [Ethical Guidelines for Statistical Practice](https://www.amstat.org/your-career/ethical-guidelines-for-statistical-practice) and discuss one of the guidelines with the person next to you. 
+
+- What surprises you? What did you learn? 
+- What scenario might this come into play?
+:::
+:::
+
+## Data Science Oath
+
+::: {.smaller}
+
+> I will respect the privacy of my data subjects, for their data are not disclosed to me that the world may know, so I will tread with care in matters of privacy and security.
+
+> I will remember that my data are not just numbers without meaning or context, but represent real people and situations, and that my work may lead to unintended societal consequences, such as inequality, poverty, and disparities due to algorithmic bias.
+
+:::
+
+::: callout-note
++ [National Academy of Sciences](https://en.wikipedia.org/wiki/National_Academy_of_Sciences)
++ [Data Values and Principles](https://datapractices.org/manifesto/)
+:::
+
+##  {background-color="#B6CADA"}
+
+*"Data are not neutral or objective. They are the products of unequal social relations, and this context is essential for conducting accurate, ethical analysis."*
+
+::: {.centered}
+![](images/data-feminism.jpeg)
+:::
+
