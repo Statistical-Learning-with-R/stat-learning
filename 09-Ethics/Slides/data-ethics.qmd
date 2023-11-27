@@ -11,14 +11,14 @@ embed-resources: true
 
 ::: columns
 ::: {.column width="40%"}
-*ethics* -- 
+*ethics* -- professional standards
 :::
 
 ::: {.column width="5%"}
 :::
 
 ::: {.column width="55%"}
-*Ethics* -- 
+*Ethics* -- humanity 
 
 :::
 :::
