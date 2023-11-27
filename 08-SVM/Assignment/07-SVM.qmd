@@ -86,7 +86,7 @@ To verify that the above process worked:
 
 #### Q5: Linear
 
-Create a Support Vector Classifier (aka, an SVM with a linear kernel) that classifies the `Class_Type` of an animal based on the first three PCs (PC1, PC2, PC3). Choose the `cost` that is largest without losing accuracy.
+Create a Support Vector Classifier (aka, an SVM with a linear kernel) that classifies the `Class_Type` of an animal *based on the number of PCs you decided to use in* ***Q2***. Choose the `cost` that is largest without losing accuracy.
 
 Report appropriate metrics of your classifier.
 
