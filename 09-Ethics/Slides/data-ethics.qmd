@@ -29,18 +29,23 @@ embed-resources: true
 ::: {.column width="60%"}
 ![](images/ASA.png)
 
+::: {.smaller}
+
 The American Statistical Association’s Ethical Guidelines for Statistical Practice are intended to help statistics practitioners make decisions ethically. Additionally, the ethical guidelines aim to promote accountability by informing those who rely on statistical analysis of the standards they should expect.
 
+:::
 :::
 
 ::: {.column width="5%"}
 :::
 
 ::: {.column width="35%"}
+::: {.smaller}
 Visit [Ethical Guidelines for Statistical Practice](https://www.amstat.org/your-career/ethical-guidelines-for-statistical-practice) and discuss one of the guidelines with the person next to you. 
 
 - What surprises you? What did you learn? 
 - What scenario might this come into play?
+:::
 :::
 :::
 
