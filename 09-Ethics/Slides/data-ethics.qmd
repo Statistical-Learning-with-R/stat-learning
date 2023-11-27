@@ -23,6 +23,8 @@ embed-resources: true
 :::
 :::
 
+<!-- https://docs.google.com/document/d/1Df5blzmHB3XS16PffGQ9ubi5DmniGWrkG6zWpueSdWQ/edit#heading=h.3nvanjtxdj5d -->
+
 ## Professional Ethics
 
 ::: columns
@@ -71,4 +73,7 @@ Visit [Ethical Guidelines for Statistical Practice](https://www.amstat.org/your-
 ::: {.centered}
 ![](images/data-feminism.jpeg)
 :::
+
+## Your turn!
+
 
