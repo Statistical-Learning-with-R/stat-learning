@@ -17,13 +17,13 @@ execute:
   include: false
 ---
 
-The second reading for this week covers the highlights of linear regression. This content of this chapter should be a review to everyone, but keep your eye out for sections where the authors highlight ways to think about regression from the statistical learning perspective. 
+The second reading for this week covers the highlights of linear regression. This content of this chapter should be a review to everyone, but keep your eye out for sections where the authors highlight ways to think about regression from the statistical learning perspective.
 
 ## Textbook Reading
 
 📖 [**Required Reading:** *ISLR -- Chapter 3 Linear Regression*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
 
-### Reading Guide -- Due Wednesday, Sept 27 at 2:10pm
+### Reading Guide
 
 📝 [Download the Word Document](reading-guide/week-1.docx)
 
@@ -33,27 +33,28 @@ The second reading for this week covers the highlights of linear regression. Thi
 Submit your completed reading guide to the Canvas assignment portal!
 :::
 
-# Concept Quiz -- Due Wednesday, Sept 25 at 2:10pm
+# Concept Quiz
 
-[ISLR exercise 3.3]
+\[ISLR exercise 3.3\]
 
 Suppose we have a data set with five predictors, X1 = GPA, X2 = IQ, X3 = Gender (1 for Female and 0 for Male), X4 = Interaction between GPA and IQ, and X5 = Interaction between GPA and Gender. The response is starting salary after graduation (in thousands of dollars). Suppose we use least squares to fit the model, and get $\hat{\beta_0} = 50$, $\hat{\beta_1} = 20$, $\hat{\beta_2} = 0.07$, $\hat{\beta_3} = 35$, $\hat{\beta_4} = 0.01$, $\hat{\beta_5} = −10$.
 
 **Question 1** -- Which answer is correct?
 
-- For a fixed value of IQ and GPA, males earn more on average than females.
+-   For a fixed value of IQ and GPA, males earn more on average than females.
 
-- For a fixed value of IQ and GPA, females earn more on average than males.
+-   For a fixed value of IQ and GPA, females earn more on average than males.
 
-- For a fixed value of IQ and GPA, males earn more on average than females provided that the GPA is high enough.
+-   For a fixed value of IQ and GPA, males earn more on average than females provided that the GPA is high enough.
 
-- For a fixed value of IQ and GPA, females earn more on average than males provided that the GPA is high enough.
+-   For a fixed value of IQ and GPA, females earn more on average than males provided that the GPA is high enough.
 
-:::{.callout-tip}
+::: callout-tip
 # Write out the model!
+
 It would be **really** helpful if you wrote out the full model with the coefficient estimates!
 :::
 
 **Question 2** -- Predict the salary of a female with IQ of 110 and a GPA of 4.0. (Round your answer to the nearest dollar)
 
-**Question 3** -- True or false: Since the coefficient for the GPA/IQ interaction term is very small, there is very little evidence of an interaction effect. 
+**Question 3** -- True or false: Since the coefficient for the GPA/IQ interaction term is very small, there is very little evidence of an interaction effect.

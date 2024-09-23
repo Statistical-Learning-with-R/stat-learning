@@ -23,7 +23,7 @@ Welcome to STAT 551! We will start off this class by getting familiar with what 
 
 📖 [**Required Reading:** *ISLR -- Chapter 2 Statistical Learning*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
 
-### Reading Guide -- Due Monday, Sept 25 at 2:10pm
+### Reading Guide 
 
 📝 [Download the Word Document](reading-guide/week-0.docx)
 
@@ -33,25 +33,24 @@ Welcome to STAT 551! We will start off this class by getting familiar with what 
 Submit your completed reading guide to the Canvas assignment portal!
 :::
 
-# Concept Quiz -- Due Monday, Sept 25 at 2:10pm
+# Concept Quiz
 
-**Question 1** -- Flexible vs. Inflexible Methods 
-a. When the sample size ($n$) is extremely large and the number of predictors ($p$) is small, flexible methods are [worse / better] than inflexible methods.
+**Question 1** -- Flexible vs. Inflexible Methods a. When the sample size ($n$) is extremely large and the number of predictors ($p$) is small, flexible methods are \[worse / better\] than inflexible methods.
 
-b. When the number of predictors ($p$) is extremely large and the number of observations ($n$) is small, flexible methods are [worse / better] than inflexible methods.
+b.  When the number of predictors ($p$) is extremely large and the number of observations ($n$) is small, flexible methods are \[worse / better\] than inflexible methods.
 
-c. When the relationship between the predictors and the response is highly non-linear, flexible methods are [worse / better] than inflexible methods.
+c.  When the relationship between the predictors and the response is highly non-linear, flexible methods are \[worse / better\] than inflexible methods.
 
-d. When the variance of the error terms is extremely high, flexible methods are  [worse / better] than inflexible methods. 
+d.  When the variance of the error terms is extremely high, flexible methods are \[worse / better\] than inflexible methods.
 
 **Question 2** -- Determine the Method(s)
 
-We collect a set of data on the top 500 firms in the US. For each firm, we record profit, the number of employees, the industry, and the CEO's salary. We are interested in understanding which factors affect a CEO's salary. 
+We collect a set of data on the top 500 firms in the US. For each firm, we record profit, the number of employees, the industry, and the CEO's salary. We are interested in understanding which factors affect a CEO's salary.
 
-For this scenario, we are interested in [prediction / inference] and the most appropriate method would be [regression / classification]. We have a sample size ($n$) of ___ and ___ predictors ($p$). 
+For this scenario, we are interested in \[prediction / inference\] and the most appropriate method would be \[regression / classification\]. We have a sample size ($n$) of \_\_\_ and \_\_\_ predictors ($p$).
 
 **Question 3** -- Determine the Method(s)
 
-We are considering launching a new product and wish to know whether it will be a success or a failure. We collect data on 20 similar products that were previously launched. For each product, we have recorded whether is was a success or a failure, the price charged for the product, the product's marketing budget, the price of the competition, and 10 other variables. 
+We are considering launching a new product and wish to know whether it will be a success or a failure. We collect data on 20 similar products that were previously launched. For each product, we have recorded whether is was a success or a failure, the price charged for the product, the product's marketing budget, the price of the competition, and 10 other variables.
 
-For this scenario, we are interested in [prediction / inference] and the most appropriate method would be [regression / classification]. We have a sample size ($n$) of ___ and ___ predictors ($p$). 
+For this scenario, we are interested in \[prediction / inference\] and the most appropriate method would be \[regression / classification\]. We have a sample size ($n$) of \_\_\_ and \_\_\_ predictors ($p$).

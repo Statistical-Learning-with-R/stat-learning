@@ -32,22 +32,16 @@ Warm-up (2-3 minutes)
 About Me...
 :::
 
-Ph.D. in Statistics from Montana State University
+Ph.D. in Statistics from UNC Chapel Hill
 
-B.S. in Mathematics & B.B.A. in Economics\
-from Colorado Mesa University
+B.S. in Statistics from Harvard
 
 ::: columns
 ::: {.column width="40%"}
-![](images/bumi.JPG)
+![](images/K-87-01.jpg)
 :::
-
-::: {.column width="5%"}
-:::
-
-::: {.column width="55%"}
-![](images/skiing.JPG)
-:::
+::: {.column width="40%"}
+![](images/derby.jpg)
 :::
 
 # What is Statistical Learning?
@@ -57,7 +51,7 @@ from Colorado Mesa University
 Every analysis we will do assumes a structure like:
 
 ::: centered
-[**output** = ]{.large}[f]{style="color: #abdbe3; font-size: 1.25em"}(**input**) + (noise)
+[**output** =]{.large}[f]{style="color: #abdbe3; font-size: 1.25em"}(**input**) + (noise)
 :::
 
 . . .
@@ -67,19 +61,19 @@ Every analysis we will do assumes a structure like:
 ...or, if you prefer...
 
 ::: centered
-[**response variable(s)** = ]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**explanatory variables**) + (noise)
+[**response variable(s)** =]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**explanatory variables**) + (noise)
 :::
 
 . . .
 
 ::: centered
-[**dependent variable(s)** = ]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**independent variables**) + (noise)
+[**dependent variable(s)** =]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**independent variables**) + (noise)
 :::
 
 . . .
 
 ::: centered
-[**target** = ]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**predictors**) + (noise)
+[**target** =]{.midi}[f]{style="color: #abdbe3; font-size: 1.25em"}(**predictors**) + (noise)
 :::
 
 # Modeling
@@ -127,13 +121,13 @@ You will often hear people refer to **machine learning** in reference to the top
 
 [My opinion:]{.larger}
 
-:::{.midi}
+::: midi
 **Statistical learning** is more concerned with the *model structure*, *interpretation of estimates*, and *understanding error*.
 :::
 
 . . .
 
-:::{.midi}
+::: midi
 **Machine learning** is more concerned with *model implementation* and *computational demands*.
 :::
 
@@ -182,15 +176,15 @@ So, why do we care about estimating [f]{style="color: #abdbe3; font-size: 1.25em
 
 </br>
 
-::: {.midi}
+::: midi
 **prediction**: We are trying to use future **inputs** to guess about future **outputs**.
 
-> Which articles are Dr. T. most likely to read?
+> Which articles are you most likely to read?
 :::
 
 . . .
 
-::: {.midi}
+::: midi
 **inference**: We are trying to tell a story about the **relationship** between variables.
 
 > Which genes are more activated when breast cancer is present?

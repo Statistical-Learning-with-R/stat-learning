@@ -1,0 +1,654 @@
+---
+title: "Stat 551: Statistical Learning with R and python"
+# author:
+date: "Fall 2024"
+
+format: 
+  # pdf:
+  #   keep-tex: true
+  #   # include-in-header: "in-header.tex"
+  #   include-in-header:
+  #     text: |
+  #       \makeatletter
+  #       \def\@maketitle{%
+  #         \begin{center}%
+  #         \let \footnote \thanks
+  #           {\LARGE \@title \par}%
+  #           {\large \@author \par}%
+  #           {\large \@date}
+  #         \end{center}%
+  #         \par
+  #         \vskip 1em}
+  #       \makeatother
+  #       \RedeclareSectionCommand[beforeskip=1ex plus -.2ex minus -.2ex,afterskip=.25ex plus -.1ex minus -.1ex]{section}
+  #       \RedeclareSectionCommand[beforeskip=1ex plus -.2ex minus -.2ex,afterskip=.25ex plus -.1ex minus -.1ex]{subsection}
+  #       \RedeclareSectionCommand[beforeskip=1ex plus -.2ex minus -.2ex,afterskip=.25ex plus -.1ex minus -.1ex]{subsubsection}
+  #       \raggedbottom
+  #       \usepackage{enumitem}
+  #       \setlist{nolistsep}
+  #   latex-engine: xelatex
+  
+    html:
+      self-contained: true
+      toc: true
+      toc-location: left
+      toc-title: "Contents"
+      
+dev: png
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+::: {.panel-tabset group="coures-resources"}
+## Instructor Contact
+
+**Dr. Kelly Bodwin**
+
+-   Email: kbodwin\@calpoly.edu
+-   Office: Building 25 Office 106
+
+## Course Info
+
+**Times:**
+
+Mondays/Wednesdays
+
+4:10pm - 6:00pm
+
+*(sorry, I didn't want late class either...)*
+
+**Room:**
+
+180-272
+
+## Office Hours
+
+
+| Day                | Time                                                                               |
+|--------------------|------------------------------------------------------------------------------------|
+| Tuesdays            | 12:10pm - 1:30pm, in-person (25-106)                                               |
+| Wednesdays            | 11:10am - 12:00pm, in-person (25-106)                                      |
+| Thursdays         | 9:40pm - 11:00pm, in-person (25-106)                                               |
+| Bonus times   |   variable, remote by appt (<https://calendly.com/kbodwin/office-hours-remote>)    |
+
+Zoom office hours by appointment are required to be scheduled at least 12-hours prior to the meeting.
+
+:::
+
+```{r setup}
+#| include: false
+
+knitr::opts_chunk$set(cache = F,
+                      fig.path = 'figs/',
+                      cache.path='cache/',
+                      fig.align = 'center')
+
+```
+
+```{r libraries}
+#| include: false
+library(tidyverse)
+library(lubridate)
+
+```
+
+
+```{r}
+#| include: false
+
+# knitr::opts_chunk$set(cache=FALSE, dev='pdf')
+# knitr::opts_chunk$set(cache=F,
+#                       fig.path = 'figs/',
+#                       cache.path='cache/',
+#                       fig.align = 'center',
+#                       echo = F,
+#                       warning=F,
+#                       message=F)
+# knitr::opts_chunk$set(
+#                   fig.process = function(x) {
+#                       x2 = sub('-\\d+([.][a-z]+)$', '\\1', x)
+#                       if (file.rename(x, x2)) x2 else x
+#                       }
+#                   )
+
+library(tidyverse)
+library(lubridate)
+
+# Create a calendar for your syllabus ----
+# Source: http://svmiller.com/blog/2020/08/a-ggplot-calendar-for-your-semester/
+# 1) what is the first Monday of the semester?
+# Any number of ways to identify dates in R, but we'll use {lubridate} and the ymd() function here.
+# Format: YYYYMMDD. In this example, 4 January 2022.
+# What are the full dates of the semester?
+semester_dates <- seq(ymd(20240923), ymd(20241213), by=1)
+# Weekday(s) of class
+class_wdays <- c("Mon", "Wed")
+
+not_here_dates <- c(
+  # Vets day
+  ymd("2024-11-11"),
+  # Tgiving Break
+  seq(ymd("2024-11-25"), ymd("2024-11-29"), by = 1)
+  )
+
+remote_dates <- c(
+  ymd("2024-10-07"),
+  ymd("2024-10-09")
+)
+
+exam_dates <- c(ymd("2024-10-30"), 
+                ymd("2024-12-04")
+                )
+
+project_dates <- c(ymd("2024-10-20"), 
+                ymd("2024-11-24"),
+                ymd("2024-12-08"),
+                ymd("2024-12-11")
+                )
+
+#project_dates <- c(ymd("2024-11-04"), ymd("2024-1205"), ymd(20221209))
+finals_week <- seq(ymd("2024-12-09"), ymd("2024-12-13"), by = 1)
+
+# Custom function for treating the first day of the month as the first week 
+# of the month up until the first Sunday 
+# (unless Sunday was the start of the month)
+wom <- function(date) {
+    first <- wday(as.Date(paste(year(date), month(date), 1, sep = "-")))
+    return((mday(date) + (first - 2)) %/% 7 + 1)
+  }
+# Create a data frame of dates, assign to Cal
+Cal <- tibble(date = seq(ymd("2024-09-01"), ymd("2024-12-31"), by=1))  %>%
+  mutate(mon = lubridate::month(date, label=T, abbr=F),
+         wkdy = weekdays(date, abbreviate=T),
+         wkdy = fct_relevel(wkdy, "Sun", "Mon", "Tue", "Wed", "Thu","Fri","Sat"), # make sure Sunday comes first
+         semester = date %in% semester_dates, 
+         project = date %in% project_dates,
+         exams = date %in% exam_dates, # is it an exam?
+         not_here = date %in% not_here_dates, # is it a day off?
+         remote = date %in% remote_dates,
+         exam_wk = date %in% finals_week,
+         day = lubridate::mday(date), 
+         week = wom(date))
+Cal <- Cal %>%
+  mutate(category = case_when(
+    project ~ "Project Checkpoint",
+    exams ~ "In-Class Exam",
+    not_here ~ "Holiday",
+    semester & wkdy %in% class_wdays & !not_here & !exam_wk & !remote ~ "Class Day",
+    remote ~ "Remote Class",
+    exam_wk ~ "Finals Week",
+    TRUE ~ "NA"
+  )) 
+class_cal <- Cal %>% 
+  ggplot(.,aes(wkdy, week)) +
+  theme_bw() +
+  theme(aspect.ratio = 0.5, 
+        panel.grid.major.x = element_blank(),
+        legend.position = "right",
+        # legend.position = c(1, 0), 
+        # legend.justification = c(1,0),
+        # legend.direction = "vertical", 
+        legend.title = element_blank(),
+        axis.title.y = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank()) +
+  geom_tile(alpha=0.8, aes(fill=category), color="black", size=.45) +
+  facet_wrap(~mon, scales = "free", ncol=2) +
+  geom_text(aes(label = day, color = semester & (!not_here))) +
+  # put your y-axis down, flip it, and reverse it
+  scale_y_reverse(breaks=NULL) +
+  # manually fill scale colors to something you like...
+  scale_color_manual(values = c("FALSE" = "grey80", "TRUE" = "black"), guide = "none") + 
+  scale_fill_manual(values=c("Class Day"="purple", 
+                             "Finals Week"="lightpink",
+                             "Holiday" = "darkgrey",
+                             "Remote Class" = "cornflowerblue",
+                             "NA" = "white", # I like these whited out...
+                             "In-Class Exam"="orange",
+                  "Project Checkpoint" = "turquoise"),
+                    #... but also suppress a label for a non-class semester day
+                    breaks=c("Finals Week", "Holiday", "Class Day", "Remote Class", "In-Class Exam", "Project Checkpoint"))
+class_cal
+
+exam_days <- filter(Cal, category == "In-Class Exam") %>%
+  mutate(topic = c("Written Exam 1", "Written Exam 2"),
+         time = c("In Class", "In Class")) %>%
+  rowwise() %>%
+  mutate(sem_week = week(date),
+         Date = paste(format(date, "%b %e"), sep = ",", collapse = ", "))
+
+project_days <- filter(Cal, category == "Project Checkpoint") %>%
+  mutate(topic = c("Project Phase 1 Due",
+                    "Project Phase 2 Due", 
+                   "Project Draft Due", 
+                   "Project Poster Session"),
+          time = c("11:59pm", "11:59pm", "11:59pm", "1:00pm")) %>%
+   mutate(Date = format(date, "%b %e"),
+          sem_week = week(date))
+
+class_days <- filter(Cal, category %in% c("Class Day", "Remote Class", "Exam")) %>%
+  mutate(sem_week = week(date)) %>%
+  group_by(sem_week) %>%
+  # group_by(sem_week) %>%
+  summarize(Date = paste(format(date, "%b %e"), sep = ",", collapse = ", ")) %>%
+  mutate(topic = c(
+    "Intro to R/python; Review of linear models",
+    "Cross-Validation, K-Nearest-Neighbors, tuning",
+    "Classification: Logistic, KNN, LDA",
+    "Decision Trees",
+    "Variable Selection and Regularization",
+    "Review",
+    "Dimension Reduction, Clustering",
+    "Support Vector Machines",
+    "Neural Networks",
+    "Project work"
+    )) %>%
+  bind_rows(project_days) %>%
+  bind_rows(exam_days) %>%
+  arrange(sem_week) %>%
+  select(Date, Topic = topic)
+```
+
+# Course Resources {.tabset .tabset-fade}
+
+::: {.panel-tabset group="course-resources"}
+
+## Textbook
+
+For this course we will be using one main textbook, accompanied by additional resources. The textbook we are using is free, but have the option to obtain a printed copy if you wish.
+
+::: columns
+::: {.column width="40%"}
+[James, Witten, Hastie & Tibshirani, **An Introduction to Statistical Learning with Applications in R** (link to free PDF version)](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="55%"}
+![](images/islr.png)
+:::
+:::
+
+The textbook is available free online here: https://www.statlearning.com/
+
+We will also occasionally make use of readings and videos from [StatQuest!](https://statquest.org/).
+
+## Required Technology
+
+In this class, we will use R Statistical Software, primarily the `tidymodels` package.
+
+If you wish to use python, primarily the `scikit-learn` library, I will allow that and I am happy to help with your code. Note, though, that lectures will include only R examples.
+
+Regardless of your software choice, you will be asked to use the Quarto document format to complete and submit your assignments.
+
+::: {.callout-note}
+
+Basic comfort with R is a formal prerequisite.  I will assume you can read, clean, manipulate, and summarize datasets; if you are not solid on these skills, you may need to do a little extra brushing up outside class.
+
+However, I am **not** assuming you have seen `tidymodels` or Quarto before.
+
+:::
+
+## Canvas
+
+Canvas will be your resource for the course materials necessary for each week. Each module will walk you through what you are expected to do each week, including:
+
+-   textbook reading
+-   practice activities
+-   lab assignments
+-   project checkpoints
+
+::: {.callout-note} 
+Make sure you are receiving email notifications for, at least, announcements and emails. In Canvas, click on your name, then Notifications. Check that Canvas is using an email address that you regularly check; you have the option of registering a mobile number. Check the boxes to get notifications for announcements, and optionally other Canvas activity.
+:::
+
+## Discord
+
+This quarter, we will make use of a classwide Discord Server.  The link on Canvas will help you join this server.  Refer to the Using Discord guide on Canvas for more information on how to effectively use this server.  
+
+Joining the Discord is not optional. Important information and discussion will happen here, and sometimes I will share hints and code snippets for activities or assignments.
+
+::: {.callout-note}
+
+Discord is also the best way to possibly get your questions answered outside of ordinary class and office hours.
+
+While I can't promise anything, I often check Discord very late at night, or on weekends, when I typically am not looking at my work email.  Don't hesitate to ping me, you might catch me feeling helpful - or you might catch a classmate who can help!
+
+:::
+
+:::
+
+# Course Description
+
+Stat 551 is a graduate-level course focused on statistical machine learning.  This quarter, you will learn many different models and algorithmic approaches to drawing conclusions and making predictions from data.  You will also work throughout the quarter on applying your knowledge to a complex, real-world dataset.
+
+## Course Objectives
+
+After taking this course, you will be able to:
+
+-   Apply statistical learning methods to real datasets using either R or python.
+
+-   Interpret, summarize, and communicate the conclusions and insights from fitting an appropriate statistical learning model.
+
+-   Compare the relative success of different algorithmic or modeling approaches using cross-validation and holdout sets.
+
+-   Describe the intuition and general theory underlying several common statistical learning models.
+
+
+## Prerequisites
+
+I expect you to enter this class with:
+
+-   Basic comfort analyzing and summarizing datasets in R or python.
+
+-   Statistical knowledge at the Year 2 level; i.e., comfort with the concepts and basic math of multiple linear regression.
+
+-   Familiarity with computers and technology (e.g., Internet browsing, word processing, opening/saving files, converting files to PDF format, sending and receiving e-mail, etc.).
+
+-   A positive attitude, a curious mind, and a respect for ethical use of data science tools.
+
+------------------------------------------------------------------------
+
+# Class Schedule & Topic Outline
+
+This schedule is tentative and subject to change.
+
+```{r calendar}
+#| echo: false
+#| eval: true
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4.5
+class_cal
+```
+
+```{r schedule}
+#| echo: false
+#| eval: true
+#| fig-pos: 'h'
+class_days %>%
+kableExtra::kable(caption = "Tentative schedule of class topics and important due dates", format = "simple")
+```
+
+
+::: {callout-note}
+
+Note that, while attendance is not taken, you **absolutely must** attend the two in-class exams and the final poster session in person!  
+
+:::
+
+# Assessment
+
+Your grade in STAT 551 will contain the following components:
+
+```{r}
+library(RColorBrewer)
+pal <- brewer.pal(n = 5, name = "Dark2")
+
+grades <- tribble(
+  ~category,  ~percent, ~meta,
+  "Readings and Check-Ins", 0.10, "Homework",
+  "Practice Activities", 0.10, "Homework",
+  "Lab Assignments", 0.20, "Homework",
+  "Exam 1: Conceptual (In-Class)", 0.10, "Exam",
+  "Exam 1: Practical (Take-Home)", 0.10, "Exam",
+  "Exam 2: Conceptual (In-Class)", 0.10, "Exam",
+  "Exam 2: Practical (Take-Home)", 0.10, "Exam",
+  "Project", 0.20, "Project"
+) %>% 
+  mutate(
+    cumul = cumsum(percent)
+  ) %>%
+  arrange(-row_number()) %>%
+  mutate(category = fct_inorder(category),
+         meta = fct_inorder(meta))
+
+grades %>% 
+  ggplot() +
+  geom_col(aes(x= 1, y = percent, fill = category), 
+           col = "black", alpha = 0.5)  +
+  scale_fill_manual(values = pal[as.numeric(grades$meta)]) + 
+  guides(fill = "none") + 
+  geom_text(aes(x = rep(1, 8), 
+                label = paste(category, "-", scales::percent(percent)), 
+                y = cumul -  0.5*percent
+                )
+            ) + 
+  scale_y_continuous('Cumulative percent', labels = scales::percent) +
+  theme_classic() +
+  xlab("")+
+  theme(aspect.ratio = 0.8, 
+        axis.text.x = element_blank())
+```
+
+
+Lower bounds for grade cutoffs are shown in the following table, which follows the Cal Poly standard:
+
+| Letter grade | X +  | X   | X - |
+|--------------|------|-----|-----|
+| A            | .    | 93  | 90  |
+| B            | 87   | 83  | 80  |
+| C            | 77   | 73  | 70  |
+| D            | 67   | 63  | 60  |
+| F            | \<60 |     |     |
+
+Interpretation of this table:
+
+-   A grade of 85 will receive a B.
+-   A grade of 77 will receive a C+.
+-   A grade of 70 will receive a C-.
+-   Anything below a 60 will receive an F.
+
+::: {.callout-note}
+
+I may "round up" grades at the end of the quarter; this decision will be made on class participation and/or improvement in the latter half of the quarter.
+
+Requesting that your grade be rounded up will *guarantee* that I will *not* round it up.
+
+:::
+
+
+# Classwork Details
+
+## Reading and Check-Ins (10%)
+
+Each week, you are expected read the required chapter(s), completing a required reading guide to walk you through the central concepts for each week. There will also be a short (~10 questions) check-in quiz over the reading from the week. These quizzes are intended to ensure that you grasped the key concepts from the week's readings. The quizzes are not timed or graded, so you can feel free to check your answers with the textbook and each other.
+
+The reading guides and quizzes are marked on completion as complete or incomplete. You are required to complete both before the start of class. I will plan our in-class lectures and work assuming you have met all prior deadlines.
+
+## Practice Activities (10%)
+
+Approximately half of each 2-hour class period will be lecture, and the other half will be time to work on in-class practice activities.
+
+These activities are designed to be done in the classroom, with me there to help walk you through things, and your classmates around you to work together.  If you opt to miss class and do these at home, you should expect them to take much longer and be much more frustrating!
+
+## Lab Assignments (20%)
+
+In the usual way, you have a longer homework assignment each week.
+
+These assignments are due every Monday night.  This means you can use some of your in-class work time on Mondays to get help with any final issues you run into. See the Late Work section below for information on extensions or deductions for late submissions.
+
+## Exam 1 (20%)
+
+The conceptual portion of the Exam 1 is on paper in class.  You will not be asked to do any coding, although there may be code provided for you to interpret or explain.  This part of the exam is **open-note**, but no digital tools are allowed.
+
+The practical portion of Exam 1 is a short take-home assignment, given to you on Monday and due by Friday.  This portion will ask you to perform and explain specific analyses on a particular dataset.  This part of the exam is **open-note** and **open-internet**, although you may not contact any humans over the course of the exam, and you must cite any online or AI resources thoroughly.
+
+
+
+## Exam 2 (20%)
+
+Exam 2 is **not** cumulative, although of course, some of the earlier skills build on each other for the later ones. 
+
+The conceptual portion of Exam 2 is on-paper in class.  You will not be asked to do any coding, although there may be code provided for you to interpret or explain.  This portion of the exam is **open-note**, but no digital tools are allowed.
+
+The practical portion of Exam 2 is a take-home assignment in the form of a Kaggle Competition open throughout Finals Week.  This part of the exam is **open-note** and **open-internet**, although you may not work with any humans.  Your grade is entirely based on the predictive accuracy you achieve.
+
+:::{.callout-note}
+
+Please make note of two things:
+
+1. The two exams are worth the same amount of points.
+
+2. Exam 2 takes place in class, on the last class day of the quarter, not during Finals Week.  You are required to be present for this.
+
+:::
+
+## Project (20%)
+
+Your final major grade category comes from your project, which has three intermediate deadlines:
+
+* **Phase 1:**  Group selection, dataset selection and summary, project proposal.
+
+* **Phase 2:**  Preliminary results, reflection.
+
+* **Phase 3:** Complete draft due.
+
+* **Presentation:** Poster session and celebration during our registrar-set Final Exam time.
+
+
+
+# Policies
+
+## Communication
+
+For questions of general interest, such as deadline clarifications or conceptual questions, please use the **Class Discord Server**.  You should check the relevant thread of the server, as well as the syllabus, *before* reaching out to me.
+
+::: {.callout-note}
+If you use private email or messaging to ask a question that should be public, I may simply answer it in Discord instead.  Please don't take this personally!  It just means that you asked a good question, and I think the rest of the class could benefit from seeing the answer.
+:::
+
+Of course, if your question is truly private, such as a grade inquiry or a personal concern, you may send me a private email or Canvas message.  Please include [Stat 551] in your email heading, to make sure that I see it and respond to it promptly!
+ 
+
+## Late Work
+
+Late assignments will automatically be docked -10% per day, up to a maximum grade penalty of 50%.  That is, as long as your work is turned in by the end of Week 10, you will still get half credit for it!
+
+### Auto-Extensions
+
+You have 3 "Auto-Extensions" to use throughout the quarter on your Lab Assignments.  These extensions push your due date 48 hours ahead, to Wednesday night.  (The usual late penalties apply after the new due date.)
+
+The rules for these are as follows:
+
+1. You must request the extension through the Google form linked on Canvas.  Any other request - by email, Discord message, verbally, etc. - does not count unless the Google form is filled out.
+
+2. The extension must be requested before the deadline; i.e., by Monday at midnight.  I do not grant after-deadline extensions except in the most truly extreme circumstances.
+
+Properly requested extensions are **automatically** granted.  
+
+::: {.callout-note}
+
+These are truly automatic!  You don't have to tell why you need the extension - maybe you have a busy week with other work, maybe you are traveling with a sports team, maybe you partied too hard for your friend's birthday.  It doesn't matter to me!
+
+The flip side of this, though, is that if you use your auto-extensions lightly, and then run into a bigger issues later, you're out of luck.
+
+:::
+
+### Special cases
+
+Sometimes, issues arise require more time than the auto-extension gives.  In general, if something comes up in your life, I **always** want to find a way to help.  Please let me know what your situation is, and we'll work together to find a good solution.
+
+The most important thing is that you tell me early.  As a rule, I do **not** grant extensions after the deadline.
+
+
+::: {.callout-note}
+
+Of course, in the case of a major crisis, that is truly exceptional and unforeseen, all these rules go out the window.  I want you to feel comfortable reaching out to me when you are facing something extra difficult.  We'll figure it out. 
+
+:::
+
+
+## Academic Integrity
+
+See [academicprograms.calpoly.edu/content/academicpolicies](https://academicprograms.calpoly.edu/content/academicpolicies/index) for Cal Poly's academic integrity policies.
+
+
+### Plagiarism
+
+You are encouraged to work with other classmates on all but the exam portions of this class.  You are also encouraged (realistically, required!) to make use of online resources to accomplish tasks.  
+
+When dealing with code, follow these guidelines:
+
+* Never copy-paste more than small snippets of code.  That is, you might borrow a little three-line function from StackOverflow, but you should not copy over a full analysis you find on Kaggle.
+
+* Attribute **all** code that is not completely your own.  If you do borrow that StackOverflow snippet, provide a link to the source.  If you reference a similar analysis for ideas, mention that in your description.
+
+:::{.callout-warning}
+
+A good "rule of thumb" is: If I sat you down by yourself in a room with no internet, could you explain to me roughly what each line of code is doing?
+
+(In fact, this is exactly what I will do if I need to investigate possible cheating.)
+
+:::
+
+#### AI tools
+
+New AI models like Chat GPT offer a whole new world of online coding resources.  This is exciting!  You should absolutely feel free to get help from these tools, they are excellent at answering questions.
+
+However, from an academic integrity perspective, treat these AI generative chat resources like, say, a tutor.  Asking a tutor to help explain a homework concept to you or help debug your code?  Totally fine!  Giving the tutor a homework question and having them answer the whole thing?  Nope.  Talking to a tutor at all, about anything, during the course of the exam?  Unacceptable.
+
+
+
+### Integrity Violations
+
+If you accidentally forget a small citation, or go a little overboard in how much you "borrow" from StackOverflow, you'll get a warning and a grade deduction on that assignment.
+
+Any instance of willful and deliberate cheating will result in a failing grade in this class, full stop.
+
+:::{.callout-warning}
+
+Be careful about being on the giving end as well as the taking end.  For example:  If you send your finished assignment to a friend, and that friend copies it, you have **both** just failed the course.
+
+:::
+
+
+
+
+### Intellectual property
+
+The materials for this course are legally the professor's intellectual property.
+
+Most class materials are publicly shared on GitHub, and you are welcome to direct others to this resource at any time.  You are also welcome to publicly share any or all of your work on the class project.
+
+Non-public class materials - most importantly, assignment solutions and any exam materials - may never be shared.
+
+:::{.callout-warning}
+
+This is not just an issue of academic honestly, it is quite literally a legal copyright scenario.  Please do not distribute solutions or exam questions from this class anywhere, for any reason. Doing so is a violation of Cal Poly's Code of Student Conduct, *and* it may constitute a violation of U.S. copyright law.
+
+:::
+
+
+## Class Conduct
+
+In this classroom, I expect you to be polite, respectful, inclusive, and open-minded.
+
+Some examples of how to be a good classmate include:
+
+* Doing your best to avoid language that is ableist, racist, sexist, or classist; or that perpetuates harmful stereotypes.
+
+* Addressing your classmates by their preferred name and pronouns.
+
+* Doing your best to be aware of your own biases, privileges, and areas of ignorance.
+
+* Listening to others' opinions, and making an effort to understand their perspective.
+
+* Taking the time to help your classmates grasp concepts or solve problems, even when you are ready to move on.
+
+
+### Attendance
+
+It is my general expectation that you will attend lecture, and remain present until you have finished the day's in-class work.  However, I do not take formal attendance in class or grade on participation.
+
+Please do not email me letting me know when you are missing class - you will not lose points for this, but it is your responsibility to catch up on the materials and complete the in-class activities.
+
+

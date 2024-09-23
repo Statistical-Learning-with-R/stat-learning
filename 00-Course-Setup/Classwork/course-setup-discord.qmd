@@ -20,7 +20,6 @@ execute:
 #| include: false
 
 library(tidyverse)
-library(emo)
 ```
 
 Welcome!
@@ -35,7 +34,7 @@ Discord is a platform for text chatting, voice chatting, and screen sharing.Thro
 
 ## Join the server
 
-Join the [Stat 551 Server (https://discord.gg/qBTmADc2X)](https://discord.gg/qBTmADc2X) to start experimenting with the interface.
+Join the Discord Server through the link on Canvas to start experimenting with the interface.
 
 When you join the server, you will be given some suggestions to get started.
 
@@ -179,9 +178,9 @@ There will be two projects throughout the quarter, where you will be asked to sy
 
 ------------------------------------------------------------------------
 
-## `r emo::ji("check")` Week 1 Concept Quiz: Course Set-up
+## Week 1 Concept Quiz: Course Set-up
 
-**Question 1:** Where are student hours held?
+**Question 1:** Where are office hours held?
 
 -   In person
 -   Discord
@@ -189,7 +188,7 @@ There will be two projects throughout the quarter, where you will be asked to sy
 -   Canvas
 
 ::: callout-tip
-Look at the [student hours](https://atheobold.github.io/stat-313/Syllabus%20%26%20Learning%20Outcomes/Syllabus.html#key-information) section of the course syllabus!
+Look at the office hours section of the course syllabus!
 :::
 
 **Question 2:** What materials and technology are required for this course? Select all that apply!
@@ -200,7 +199,7 @@ Look at the [student hours](https://atheobold.github.io/stat-313/Syllabus%20%26%
 -   Discord
 
 ::: callout-tip
-Look at the [required materials](https://atheobold.github.io/stat-313/Syllabus%20%26%20Learning%20Outcomes/Syllabus.html#required-materials) section of the course syllabus!
+Look at the required materials section of the course syllabus!
 :::
 
 **Question 3:** In this course, Reading Guides are due by \_\_\_\_, Concept Quizzes are due by \_\_\_\_, and Tutorials are due by \_\_\_\_.
@@ -213,13 +212,13 @@ Look at the [required materials](https://atheobold.github.io/stat-313/Syllabus%2
 -   Google it
 
 ::: callout-tip
-Look at the [getting help](https://atheobold.github.io/stat-313/Syllabus%20%26%20Learning%20Outcomes/Syllabus.html#classroom-community-and-policies) section of the course syllabus!
+Look at the Getting Help section of the course syllabus!
 :::
 
-**Question 6:** You have finished the week's Concept Quiz, and you want to know if you did it right. You ask your friend, and they say, "Oh, I got *Luke Skywalker* as my answer." This is a violation of the Academic Honesty policy.
+**Question 6:** You have finished the week's Concept Quiz, and you want to know if you did it right. You ask your friend, and they say, "Oh, I got *Luke Skywalker* as my answer." This is a violation of the Academic Honesty policy, true or false?
 
 **Question 7:** You and a friend have been working on Critique 1 together. You finish up and want to go to bed, but they are still a little confused. You email them your file, and say, "Don't copy this, just look how I did it so you can figure it out." Have you violated Academic Honesty policies?
 
-**Question 8:** You have been working on making a visualization for your Midterm Project for what feels like forever and it seems like you are making little to no progress. You type the prompt into Google and "Wham!" the first result is a Stack Overflow page with a solution. You copy-and-paste the solution from the Stack Overflow page into your Midterm Project and do not reference that you used an outside source. You have violated the Academic Honesty policy.
+**Question 8:** You have been working on making a visualization for your Midterm Project for what feels like forever and it seems like you are making little to no progress. You type the prompt into Google and "Wham!" the first result is a Stack Overflow page with a solution. You copy-and-paste the solution from the Stack Overflow page into your Midterm Project and do not reference that you used an outside source. You have violated the Academic Honesty policy, true or false?
 
 **Question 9:** Introduce yourself in the "Introductions" channel of the STAT 551 Discord Server and upload your favorite (PG-rated) gif.
