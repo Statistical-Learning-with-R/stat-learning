@@ -36,13 +36,15 @@ Ph.D. in Statistics from UNC Chapel Hill
 
 B.S. in Statistics from Harvard
 
-::: columns
+:::: columns
+
 ::: {.column width="40%"}
 ![](images/K-87-01.jpg)
 :::
 ::: {.column width="40%"}
 ![](images/derby.jpg)
 :::
+::::
 
 # What is Statistical Learning?
 
