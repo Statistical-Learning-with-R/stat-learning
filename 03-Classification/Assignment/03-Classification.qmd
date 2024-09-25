@@ -13,7 +13,7 @@ execute:
 
 # Instructions
 
-You will submit an HTML document to Canvas as your final version.
+You will submit an HTML document to Gradescope as your final version.
 
 ## Getting Started
 
