@@ -1,6 +1,5 @@
 ---
 title: "Assignment 2: Cross-Validation and K-Nearest-Neighbors"
-author: "Due Monday, October 9 at 5pm"
 format: html
 embed-resources: true
 editor: source

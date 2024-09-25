@@ -1,6 +1,5 @@
 ---
 title: "Assignment 1: Linear Models"
-author: "Due Monday, October 2 at 5pm"
 format: html
 embed-resources: true
 editor: visual
@@ -75,7 +74,7 @@ Are the data types for all the variables what you want them to be?
 
 6.  Discuss the model fit, specifically the p-value associated with `age` and the model's $R^2$.
 
-7.  Fit a model that also incorporates the variable `sex`. Specifically, `sex` should be included both as a main effect and in an interaction with `age`. 
+7.  Fit a model that also incorporates the variable `sex`. Specifically, `sex` should be included both as a main effect and in an interaction with `age`.
 
 8.  Provide interpretations for each of the coefficient estimates.
 
