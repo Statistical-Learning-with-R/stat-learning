@@ -74,7 +74,7 @@ Mondays/Wednesdays
 |--------------------|------------------------------------------------------------------------------------|
 | Tuesdays            | 12:10pm - 1:30pm, in-person (25-106)                                               |
 | Wednesdays            | 11:10am - 12:00pm, in-person (25-106)                                      |
-| Thursdays         | 9:40pm - 11:00pm, in-person (25-106)                                               |
+| Thursdays         | 9:40am - 11:00am, in-person (25-106)                                               |
 | Bonus times   |   variable, remote by appt (<https://calendly.com/kbodwin/office-hours-remote>)    |
 
 Zoom office hours by appointment are required to be scheduled at least 12-hours prior to the meeting.
