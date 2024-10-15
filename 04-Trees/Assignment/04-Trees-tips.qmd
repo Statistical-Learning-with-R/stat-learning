@@ -1,0 +1,31 @@
+---
+title: "Decision Trees"
+format: 
+  html:
+    self-contained: true
+editor: visual
+execute:
+  message: false
+---
+
+## Getting Started
+
+::: column-margin
+![](example-tree.png){fig-alt="A decision tree with three internal nodes and five leaves, with two splits. Two leaves belong to one node and three leaves belong to the other node."}
+:::
+
+[Download starter .qmd file](04-Trees-template.qmd)
+
+::: callout-caution
+# Within your document make sure that only relevant output is printed
+
+Do not, for example, print the preview (e.g., `str(data)`) or an entire dataset in your final knitted file.
+:::
+
+## A Preview of What's to Come
+
+In the second part of the assignment you are tasked with finding the "best" model and reporting that model to different interested parties. While this is a very open ended task, it is similar to the task(s) you will be faced with on the midterm and out in the wild.
+
+::: callout-caution
+Similar to previous assignments, I would like your **entire** analysis to be reproducible. So, I request that you include **all** the code you used when selecting your model.
+:::

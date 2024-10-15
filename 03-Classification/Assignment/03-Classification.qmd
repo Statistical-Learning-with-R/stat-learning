@@ -214,7 +214,7 @@ For a list of all available metrics here: <https://yardstick.tidymodels.org/arti
 
 Before sharing the dataset with you, I set aside a random 10% of the observations to serve as a final validation set.
 
-Download the [`heart_attack_validation.csv`](daheart_attack_validation.csv) and read in the data. Remember to clean these data the **same** way you cleaned the training data.
+Download the [`heart_attack_validation.csv`](data/heart_attack_validation.csv) and read in the data. Remember to clean these data the **same** way you cleaned the training data.
 
 ```{r}
 #| eval: false
