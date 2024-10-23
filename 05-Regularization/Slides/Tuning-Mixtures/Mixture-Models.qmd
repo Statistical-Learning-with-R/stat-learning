@@ -521,7 +521,7 @@ Open `Activity-Variable-Selection` from last class.
 
 ## Try it -- Step 2
 
-Open [`Activity-Mixture-Models.qmd`](../../Classwork/Activity-Mixture-Models.qmd)
+Open [`Activity-Mixture_Models.qmd`](../../Classwork/Activity-Mixture_Models.qmd)
 
 Recall: We wanted to predict the `Type` of cannabis from the descriptor words.
 
