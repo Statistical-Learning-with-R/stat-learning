@@ -114,7 +114,7 @@ bag_tree_wflow <- workflow() %>%
   add_model(bag_tree_spec)
 ```
 
-**Step 4**: Fit Model 
+**Step 4**: Fit Model
 
 ```{r}
 bag_tree_fit <- bag_tree_wflow %>%
@@ -130,21 +130,7 @@ bag_tree_fit %>%
 
 # Random Forests
 
-**Step 0**: Select a Subset of Predictors
-
-```{r}
-cann_reduced <- cann %>%
-  select(Type, 
-         sample(5:65, size = 30)
-         )
-```
-
-**Step 1**: Recipe on the Subset Data
-
-```{r}
-cann_recipe_2 <- recipe(Type ~ ., 
-                     data = cann_reduced)
-```
+**Step 1**: Same recipe as before
 
 **Step 2**: Model
 
@@ -167,7 +153,7 @@ mtry_grid <- grid_regular(mtry(c(1, 10)),
                           levels = 5)
 ```
 
-::: {.callout-tip}
+::: callout-tip
 # Choosing Variable Subsets
 
 `mtry` allows you to control how many variables are considered (out of the total). The code above allows between 1 and 10 variables to be included.
@@ -193,8 +179,8 @@ rf_fit %>%
 
 ```
 
-::: {.callout-tip}
+::: callout-tip
 # Tuning Other Hyperparameters
 
-You can also tune `min_n` and `trees` with random forests! 
+You can also tune `min_n` and `trees` with random forests!
 :::

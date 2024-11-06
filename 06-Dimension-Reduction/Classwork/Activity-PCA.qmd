@@ -125,3 +125,10 @@ cumul_vars
 -   Only your chosen PCs
 
 6.  Compare the accuracy of these three approaches!
+
+```{r}
+library(tidymodels)
+
+rec_1 <- recipe(Type ~ ., data = cann) |>
+  step_pca(threshold = 0.8)
+```

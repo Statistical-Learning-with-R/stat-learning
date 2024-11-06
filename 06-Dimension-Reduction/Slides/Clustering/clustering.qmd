@@ -16,6 +16,7 @@ options(htmltools.dir.version = FALSE,
         scipen = 999)
 
 library(tidyverse)
+library(tidyclust)
 library(tidymodels)
 library(kknn)
 library(glmnet)
@@ -243,6 +244,58 @@ res %>%
 :::
 :::
 
+## Tidyclust
+
+Most of the time, when you see k-means clustering "in the wild", it will be as above.
+
+. . .
+
+However, we are working on a new package to do *unsupervised learning* in the same style as `tidymodels`!
+
+[tidyclust reference](https://tidyclust.tidymodels.org/articles/k_means.html)
+
+. . .
+
+```{r}
+library(tidyclust)
+
+km_spec <- k_means(num_clusters = 3)
+fed_recipe <- recipe(~., data = fed_known) |>
+  step_rm(Author)
+
+fed_km_wflow <- workflow() |>
+  add_recipe(fed_recipe) |>
+  add_model(km_spec)
+```
+
+## Tidyclust
+
+```{r}
+km_fitted <- fed_km_wflow |> fit(fed_known)
+
+km_fitted
+```
+
+## Tidyclust
+
+```{r}
+km_fitted |> extract_centroids()
+
+km_fitted |> extract_cluster_assignment()
+```
+
+## Tidyclust
+
+```{r}
+fed_known |>
+  mutate(
+    clusters = extract_cluster_assignment(km_fitted)$.cluster
+  ) |>
+  count(clusters, Author)
+```
+
+
+
 ## K-means + PCA
 
 ::: columns
@@ -349,6 +402,33 @@ res4 %>%
 ```
 :::
 :::
+
+## Tidyclust 
+
+```{r}
+fed_recipe_pca <- recipe(~., data = fed_known) |>
+  step_rm(Author) |>
+  step_pca(num_comp = 2)
+
+fed_km_wflow_pca <- workflow() |>
+  add_recipe(fed_recipe_pca) |>
+  add_model(km_spec)
+
+km_fitted_pca <- fed_km_wflow_pca |> fit(fed_known)
+```
+
+## Tidyclust
+
+```{r}
+fed_known |>
+  mutate(
+    clusters = extract_cluster_assignment(km_fitted_pca)$.cluster
+  ) |>
+  count(clusters, Author)
+```
+
+
+
 
 ## K-means Takeaways
 
@@ -509,6 +589,18 @@ tibble(
 ) %>%
   count(clust, auth)
 ```
+
+## Tidyclust
+
+[tidyclust hierarchical clustering reference](https://tidyclust.tidymodels.org/articles/hier_clust.html)
+
+```{r}
+hc_spec <- hier_clust(
+  num_clusters = 3,
+  linkage_method = "average"
+)
+```
+
 
 ## Hierarchical Clustering Takeaways
 

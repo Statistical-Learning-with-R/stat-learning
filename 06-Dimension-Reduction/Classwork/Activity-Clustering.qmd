@@ -22,6 +22,7 @@ Declare your libraries:
 
 library(tidyverse)
 library(tidymodels)
+library(tidyclust)
 library(glmnet)
 library(discrim)
 library(rpart)
@@ -69,6 +70,23 @@ res <- tibble(
 
 res %>% 
   count(clust, auth)
+
+### OR Tidyclust:
+library(tidyclust)
+
+km_spec <- k_means(num_clusters = 3)
+fed_recipe <- recipe(~., data = fed_known) |>
+  step_rm(Author)
+
+fed_km_wflow <- workflow() |>
+  add_recipe(fed_recipe) |>
+  add_model(km_spec)
+
+km_fitted <- fed_km_wflow |> fit(fed_known)
+
+km_fitted |> extract_cluster_assignment()
+
+km_fitted |> extract_centroids()
 ```
 
 **Using PCA with K-means**
@@ -89,6 +107,26 @@ res <- tibble(
 
 res %>% 
   count(clust, auth)
+```
+
+Or, tidyclust version:
+
+```{r}
+fed_recipe_pca <- recipe(~., data = fed_known) |>
+  step_rm(Author) |>
+  step_pca(num_comp = 2)
+
+fed_km_wflow_pca <- workflow() |>
+  add_recipe(fed_recipe_pca) |>
+  add_model(km_spec)
+
+km_fitted_pca <- fed_km_wflow_pca |> fit(fed_known)
+
+fed_known |>
+  mutate(
+    clusters = extract_cluster_assignment(km_fitted_pca)$.cluster
+  ) |>
+  count(clusters, Author)
 ```
 
 ## Try it!
@@ -148,6 +186,19 @@ tibble(
 ) %>%
   count(clust, auth)
 ```
+
+Or, tidyclust:
+
+```{r}
+hc_spec <- hier_clust(
+  num_clusters = 3,
+  linkage_method = "average"
+)
+```
+
+
+
+
 
 ## Try it!
 
