@@ -406,9 +406,10 @@ res4 %>%
 ## Tidyclust 
 
 ```{r}
+#| echo: true
 fed_recipe_pca <- recipe(~., data = fed_known) |>
   step_rm(Author) |>
-  step_pca(num_comp = 2)
+  step_pca(all_numeric_predictors(), num_comp = 2)
 
 fed_km_wflow_pca <- workflow() |>
   add_recipe(fed_recipe_pca) |>
@@ -420,6 +421,7 @@ km_fitted_pca <- fed_km_wflow_pca |> fit(fed_known)
 ## Tidyclust
 
 ```{r}
+#| echo: true
 fed_known |>
   mutate(
     clusters = extract_cluster_assignment(km_fitted_pca)$.cluster

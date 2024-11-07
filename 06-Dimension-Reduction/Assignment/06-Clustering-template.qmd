@@ -54,7 +54,7 @@ This dataset contains measurements of various musical / acoustic attributes for 
 
 ## PCA
 
-**Question 3** -- Perform a Principal Components Analysis on this data. 
+**Question 3** -- Perform a Principal Components Analysis on this data.
 
 **Question 4** -- Which variables best spread the data?
 
@@ -80,7 +80,7 @@ This dataset contains measurements of various musical / acoustic attributes for 
 
 **Question 12** -- Does this clustering seem to be capturing real structure?
 
-**Question 13** -- Run the code below (using your own k-means result object) to find the average values of each variable in each cluster.
+**Question 13** -- Run the code below (using your own k-means result object in the blank) to find the average values of each variable in each cluster. (or, use the `extract_cluster_centers` function in `tidyclust`!)
 
 ```{r}
 songs %>%
@@ -109,7 +109,7 @@ What real-world qualities do you think define each cluster?
 
 **Question 15** -- Choose a cutoff for the dendrogram, and justify your choice.
 
-**Question 16** --  Produce the cluster assignments for each song based on that cutoff.
+**Question 16** -- Produce the cluster assignments for each song based on that cutoff.
 
 ## Interpreting the Results
 
@@ -128,7 +128,7 @@ Use the following code to see which artists were in which cluster:
 ```{r}
 songs_full %>%
   mutate(
-    cluster = km$cluster
+    cluster = [YOUR CLUSTER LABELS HERE]
   ) %>%
   count(cluster, Artist)
 ```
