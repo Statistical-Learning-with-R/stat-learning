@@ -131,12 +131,13 @@ Considering impact, harm, and power.
 
 ## Your turn!
 
-::: columns
-::: {.column width="47%"}
-::: {.callout-tip}
-# Option 1 -- Midterm Revisions
+## Final Project
 
-:::{.smaller}
+::: {.smaller}
+Include a "Limitations" section
+
+* What context were the data collected from? How does that limit what can be inferred from your model?
+
 - Dig deeper into *who* the data were collected on. 
   * What was the context of the data collection? 
   * Who was included in the sample? 
@@ -148,22 +149,5 @@ Considering impact, harm, and power.
   
 :::
 
-:::
-:::
-
-::: {.column width="5%"}
-:::
-
-::: {.column width="47%"}
-::: {.callout-note}
-# Option 2 -- Final Project
-
-::: {.smaller}
-- Outline a "Limitations" section
-  * What context were the data collected from? How does that limit what can be inferred from your model?
-  * How could your model detrimentally impact people? How will you ensure this will not happen? 
-
-:::
-:::
-:::
+  
 :::
