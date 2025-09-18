@@ -145,7 +145,7 @@ project_dates <- c(ymd("2025-10-27"),
                 )
 
 #project_dates <- c(ymd("2024-11-04"), ymd("2024-1205"), ymd(20221209))
-finals_week <- seq(ymd("2024-12-09"), ymd("2024-12-13"), by = 1)
+finals_week <- seq(ymd("2025-12-08"), ymd("2025-12-13"), by = 1)
 
 # Custom function for treating the first day of the month as the first week 
 # of the month up until the first Sunday 
@@ -155,7 +155,7 @@ wom <- function(date) {
     return((mday(date) + (first - 2)) %/% 7 + 1)
   }
 # Create a data frame of dates, assign to Cal
-Cal <- tibble(date = seq(ymd("2024-09-01"), ymd("2024-12-31"), by=1))  %>%
+Cal <- tibble(date = seq(ymd("2025-09-01"), ymd("2025-12-31"), by=1))  %>%
   mutate(mon = lubridate::month(date, label=T, abbr=F),
          wkdy = weekdays(date, abbreviate=T),
          wkdy = fct_relevel(wkdy, "Sun", "Mon", "Tue", "Wed", "Thu","Fri","Sat"), # make sure Sunday comes first
