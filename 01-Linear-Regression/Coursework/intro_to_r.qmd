@@ -50,9 +50,9 @@ If you already have `R` downloaded, you need to confirm that you have the most u
 -   Step 1: Open RStudio
 -   Step 2: At the top of the the Console it will say what version of R you are using
 
-> R version 4.4.1 (2024-06-14) -- "Race for Your Life" Copyright (C) 2024 The R Foundation for Statistical Computing
+> R version 4.5.1 (2025-06-13) -- "Great Square Root" Copyright (C) 2025 The R Foundation for Statistical Computing Platform: aarch64-apple-darwin20
 
-If the version **is not** 4.4.1, you need to update your version of R!
+If the version **is not** 4.5.1, you need to update your version of R!
 
 ## Install or Update R
 
@@ -106,7 +106,7 @@ If this version is 3.4 or earlier, you're going to run in to some trouble. I rec
 
 RStudio is an Integrated Development Environment (IDE) for `R`. What does that mean? Well, if you think of `R` as a language, which it is, you can think of RStudio as a program that helps you write and work in the language. RStudio makes programming in `R` much easier and this course requires you to use it!
 
-If you already have RStudio, you need to double check if you have the most recent version (2024.04.2+764). You **cannot** create Quarto documents (what we will live and breathe) unless you have a recent version of RStudio.
+If you already have RStudio, you still need to make sure you have the most recent version. You **cannot** create Quarto documents (what we will live and breathe) unless you have a recent version of RStudio.
 
 -   Step 1: Open RStudio
 -   Step 2: Click on "Help" in the upper menu
@@ -195,7 +195,7 @@ To do this you need to carry out the following steps:
 3.  Take a screenshot of the version of R that shows up at the top of your console
 
 ::: callout-caution
-Hint: If your version is not 4.4.1 you will be given an incomplete and asked to install the most recent version of R
+Hint: If your version is not 4.5.1 you will be given an incomplete and asked to install the most recent version of R
 :::
 
 **Question 2:** Upload a screenshot of your version of RStudio.
@@ -208,5 +208,5 @@ To do this you need to carry out the following steps:
 4.  Take a screenshot of the popup displaying your version
 
 ::: callout-caution
-Hint: If your version is not 2024.04.2+764 you will be given an incomplete and asked to install the most recent version of RStudio
+Hint: If your version is not from 2025 you will be given an incomplete and asked to install the most recent version of RStudio
 :::
