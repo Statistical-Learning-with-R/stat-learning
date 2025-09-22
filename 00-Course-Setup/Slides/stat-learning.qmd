@@ -5,6 +5,7 @@ format:
     theme: [night, style.scss]
     embed-resources: true
     slide-number: false
+    scrollable: true
 editor: visual
 execute: 
   echo: false
@@ -18,13 +19,13 @@ Warm-up (2-3 minutes)
 
 . . .
 
-::: large
+:::: large
 ::: {style="color: #b76352;"}
 1.  What is something that you are good at doing?
 
 2.  How did you get good at the thing you are good at doing?
 :::
-:::
+::::
 
 ## 
 
@@ -32,19 +33,51 @@ Warm-up (2-3 minutes)
 About Me...
 :::
 
-Ph.D. in Statistics from UNC Chapel Hill
+* I am unfortunately overeducated.
+    + Ph.D. in Statistics from UNC Chapel Hill
+    + B.S. in Statistics from Harvard
 
-B.S. in Statistics from Harvard
+* I love all things R.
+    + `flair` and `flourish` packages
+    + `tidyclust` R package
+    + "paRticles" blog
 
-:::: columns
+* My methodological research is in clustering/unsupervised learning.
+    + "Differential Correlation Mining" methods
+    + Resampling metrics for correlation
 
-::: {.column width="40%"}
-![](images/K-87-01.jpg)
+* My applied research (right now) is varied.
+    + Social networks in Poland
+    + Chemical properties of vineyard soil
+
+
+
+## 
+
+::: larger
+Some things I like...
 :::
-::: {.column width="40%"}
-![](images/derby.jpg)
+
+::: {.flex style="display: flex; flex-wrap: wrap; gap: 10px;"}
+
+![](./images/K-87-01.jpg){.tile style="max-width: 30%; height: auto;"}
+![](./images/backpacking.jpg){.tile style="max-width: 30%; height: auto;"}
+
+![](./images/catan.jpeg){.tile style="max-width: 30%; height: auto;"}
+
+
+![](./images/derby.jpg){.tile style="max-width: 30%; height: auto;"}
+
+![](./images/21p.jpeg){.tile style="max-width: 80%; height: auto;"}
+
+![](./images/SanJoseSharksLogo.svg){.tile style="max-width: 80%; height: auto;"}
+
+
+![](./images/fcb.png){.tile style="max-width: 30%; height: auto;"}
+
+
+
 :::
-::::
 
 # What is Statistical Learning?
 
@@ -86,19 +119,19 @@ In any case: we are trying to reconstruct information in **data**, and we are hi
 
 </br>
 
-::: columns
-::: {.column width="40%"}
+:::::::: columns
+:::: {.column width="40%"}
 The function [f]{style="color: #abdbe3; font-size: 1.5em"} might be very simple...
 
 ::: large
 Y = X + $\epsilon$
 :::
-:::
+::::
 
 ::: {.column width="5%"}
 :::
 
-::: {.column width="55%"}
+:::: {.column width="55%"}
 ::: fragment
 ...or very complex
 
@@ -108,8 +141,8 @@ $q_i = \frac{1}{1 + exp(-z_i)}$
 
 $y_i \sim Bern(q_i)$
 :::
-:::
-:::
+::::
+::::::::
 
 # This or That?
 
@@ -139,7 +172,7 @@ Often, the nature of our models will differ depending on the types of data invol
 
 </br>
 
-::: columns
+:::::: columns
 ::: {.column width="45%"}
 [**regression**]{style="color: #e28743; font-size: 1.25em"}
 
@@ -154,7 +187,7 @@ the response variables are *quantitative*
 
 the response variables are *categorical*
 :::
-:::
+::::::
 
 ## Supervised vs. Unsupervised
 
@@ -238,7 +271,7 @@ But: What the heck is the *truth*???
 
 You will learn:
 
--   To apply many different models to real data using **R**.
+-   To apply many different models to real data using `tidymodels` in **R**.
 
 -   To interpret the output of these model estimates
 

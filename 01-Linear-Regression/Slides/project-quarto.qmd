@@ -15,12 +15,12 @@ execute:
 
 ## R Projects! {.larger}
 
-::: columns
+:::::: columns
 ::: {.column width="50%"}
 ![Artwork by @allison_horst](images/here.png)
 :::
 
-::: {.column width="50%"}
+:::: {.column width="50%"}
 ::: {style="font-size: 0.75em;"}
 -   Self contained
 
@@ -30,17 +30,17 @@ execute:
 
 -   Should be how you work in RStudio **every time**
 :::
-:::
-:::
+::::
+::::::
 
 ## **Why** use `here()` to read in your data?
 
-::: columns
+:::::: columns
 ::: {.column width="40%"}
 ![Artwork by @allison_horst](images/setwd_vs_rproj_horst.png)
 :::
 
-::: {.column width="60%"}
+:::: {.column width="60%"}
 ::: {style="font-size: 0.75em;"}
 -   Never set a relative / full path or change your working directory!!!
 
@@ -48,45 +48,44 @@ execute:
 #| eval: false
 #| echo: true
 
-setwd("/Users/atheobol/Documents/Teaching/Stat 551/")
+setwd("/Users/kbodwin/Documents/Teaching/Stat 551/")
 ```
 
 -   Working in R? Rendering a document? `here()` uses the **same** path to load in data!
 :::
-:::
-:::
+::::
+::::::
 
 ## Your turn!
 
-1. Open RStudio
-2. Choose "File" and "New Project"
+1.  Open RStudio
+2.  Choose "File" and "New Project"
 
-::: columns
-::: {.column width="47%"}
-**If you already made a STAT 551 folder** 
+:::::::: columns
+:::: {.column width="47%"}
+**If you already made a STAT 551 folder**
 
 ::: {style="font-size: 0.75em;"}
-3. Choose "Existing Directory". 
-4. Browse to where your STAT 551 folder lives  
-5. Click "Create Project"
+3.  Choose "Existing Directory".
+4.  Browse to where your STAT 551 folder lives\
+5.  Click "Create Project"
 :::
-:::
+::::
 
 ::: {.column width="3%"}
 :::
 
-::: {.column width="47%"}
-**If you have not already made a STAT 551 folder** 
+:::: {.column width="47%"}
+**If you have not already made a STAT 551 folder**
 
 ::: {style="font-size: 0.75em;"}
-3. Choose "New Directory". 
-4. Type what name you want your folder to have. 
-5. Browse to where you want your folder to live (e.g., Documents). 
-6. Click "Create Project"
+3.  Choose "New Directory".
+4.  Type what name you want your folder to have.
+5.  Browse to where you want your folder to live (e.g., Documents).
+6.  Click "Create Project"
 :::
-
-:::
-:::
+::::
+::::::::
 
 # Quarto
 
@@ -96,38 +95,35 @@ setwd("/Users/atheobol/Documents/Teaching/Stat 551/")
 Why use Quarto?
 :::
 
-::: columns
-::: {.column width="33%"}
-::: bulletbox
+:::::::::::: columns
+::::: {.column width="33%"}
+:::: bulletbox
 ::: {.fragment .fade-in-then-semi-out}
 ![](images/copy-paste.PNG)
 :::
-:::
-:::
+::::
+:::::
 
-::: {.column width="33%"}
-::: bulletbox
+::::: {.column width="33%"}
+:::: bulletbox
 ::: {.fragment .fade-in-then-semi-out}
 ![](images/no.PNG)
 :::
-:::
-:::
+::::
+:::::
 
-::: {.column width="33%"}
-::: bulletbox
+::::: {.column width="33%"}
+:::: bulletbox
 ::: {.fragment .fade-in-then-semi-out}
 ![](images/yes.PNG)
 :::
-:::
-:::
-:::
+::::
+:::::
+::::::::::::
 
 ::: notes
 For those of you familiar with R Markdown, you might wonder why you should bother transitioning to Quarto. Let me tell you more about why!
 :::
-
-
-
 
 ##  {#unifies-extends-1 .centered data-menu-title="Unifies and extends 1" background-color="#0F1620" auto-animate="true"}
 
@@ -195,67 +191,67 @@ Such a unification effort presents a fantastic opportunity to identify and addre
 Quarto highlights
 :::
 
-::: columns
+:::::::::::::: columns
 ::: {.column width="5%"}
 :::
 
-::: {.column width="40%"}
-::: bulletbox
-::: {.fragment .fade-in-then-semi-out}
+:::::: {.column width="40%"}
+::::: bulletbox
+:::: {.fragment .fade-in-then-semi-out}
 ::: {style="font-size: 0.6em;"}
 ![](images/horst_quarto_ball-1_4.png){width="50px" fig-alt="One quadrant of the Quarto logo."} Consistent implementation of attractive and handy features across outputs: tabsets, code-folding, syntax highlighting, etc.
 :::
-:::
-:::
-:::
+::::
+:::::
+::::::
 
 ::: {.column width="5%"}
 :::
 
-::: {.column width="40%"}
-::: bulletbox
-::: {.fragment .fade-in-then-semi-out}
+:::::: {.column width="40%"}
+::::: bulletbox
+:::: {.fragment .fade-in-then-semi-out}
 ::: {style="font-size: 0.60em;"}
 ![](images/horst_quarto_ball-2_4.png){width="50px" fig-alt="Two quadrants of the Quarto logo."} More accessible defaults as well as better support for accessibility
 :::
-:::
-:::
-:::
+::::
+:::::
+::::::
 
 ::: {.column width="5%"}
 :::
-:::
+::::::::::::::
 
-::: columns
+:::::::::::::: columns
 ::: {.column width="5%"}
 :::
 
-::: {.column width="40%"}
-::: bulletbox
-::: {.fragment .fade-in-then-semi-out}
+:::::: {.column width="40%"}
+::::: bulletbox
+:::: {.fragment .fade-in-then-semi-out}
 ::: {style="font-size: 0.60em;"}
 ![](images/horst_quarto_ball-3_4.png){width="50px" fig-alt="Three quadrants of the Quarto logo."} Guardrails, particularly helpful for new learners: YAML completion, informative syntax errors, etc.
 :::
-:::
-:::
-:::
+::::
+:::::
+::::::
 
 ::: {.column width="5%"}
 :::
 
-::: {.column width="40%"}
-::: bulletbox
-::: {.fragment .fade-in-then-semi-out}
+:::::: {.column width="40%"}
+::::: bulletbox
+:::: {.fragment .fade-in-then-semi-out}
 ::: {style="font-size: 0.6em;"}
 ![](images/horst_quarto_ball-4_4.png){width="50px" fig-alt="Four quadrants of the Quarto logo."} Support for other languages like Python, Julia, Observable, and more via Jupyter engine for executable code chunks.
 :::
-:::
-:::
-:::
+::::
+:::::
+::::::
 
 ::: {.column width="5%"}
 :::
-:::
+::::::::::::::
 
 ::: notes
 Some highlights of these improvements include
@@ -297,9 +293,9 @@ While this is technically impressive, I'll be honest, it's not exactly what spar
 Quarto makes moving between formats straightforward
 :::
 
-::: columns
-::: {.column width="33%"}
-::: fragment
+:::::::::::: columns
+::::: {.column width="33%"}
+:::: fragment
 Document
 
 ::: {.code-file .sourceCode .cell-code}
@@ -310,11 +306,11 @@ Document
 title: "Lesson 1"
 format: html
 ```
-:::
-:::
+::::
+:::::
 
-::: {.column width="33%"}
-::: fragment
+::::: {.column width="33%"}
+:::: fragment
 Presentation
 
 ::: {.code-file .sourceCode .cell-code}
@@ -325,11 +321,11 @@ Presentation
 title: "Lesson 1"
 format: revealjs
 ```
-:::
-:::
+::::
+:::::
 
-::: {.column width="33%"}
-::: fragment
+::::: {.column width="33%"}
+:::: fragment
 Website
 
 ::: {.code-file .sourceCode .cell-code}
@@ -345,9 +341,9 @@ website:
     left:
       - lesson-1.qmd
 ```
-:::
-:::
-:::
+::::
+:::::
+::::::::::::
 
 ::: notes
 What did spark my interest was how how straightforward it is with Quarto to move between output formats.
@@ -367,11 +363,11 @@ and you can see that all that needed to change going between these formats is a 
 Welcome to Quarto!
 :::
 
-::: columns
+:::: columns
 ::: {.column width="100%"}
 ![](images/quarto_overview.png)
 :::
-:::
+::::
 
 ##  {#components .centered data-menu-title="Quarto components" background-color="#0F1620" auto-animate="true"}
 
@@ -391,8 +387,8 @@ Formatting the text in your document
 **Markdown** is a *markup language*. This means special symbols and formatting to pretty documents.
 :::
 
-::: fragment
-::: columns
+:::::: fragment
+::::: columns
 ::: {.column width="45%"}
 \*text\* -- makes italics
 
@@ -406,8 +402,8 @@ Formatting the text in your document
 
 \< \> -- embeds URLs
 :::
-:::
-:::
+:::::
+::::::
 
 ##  {#insert-code .centered data-menu-title="R code" background-color="#0F1620" auto-animate="true"}
 
@@ -462,4 +458,3 @@ When you click **Render**, here is what happens:
 ::: {style="margin-top: 150px; font-size: 5em; color: #75AADB;"}
 Let's try it!
 :::
-
