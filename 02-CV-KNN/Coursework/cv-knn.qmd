@@ -23,17 +23,15 @@ The first chapter we will focus on discusses cross validation!
 
 ## Textbook Reading
 
-📖 [**Required Reading:** *ISLR -- Chapter 5 Resampling Methods*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+📖 **Required Reading:** *ISLR -- Chapter 5 Resampling Methods*
 
 ::: callout-warning
-# Don't read the sections on Classification and Boostrapping
+# Don't read the sections on Classification and Bootstrapping
 
 Don't read Section 5.1.5 or Section 5.2!
 :::
 
-### Reading Guide -- Due Monday, October 2 at 2:10pm
-
-Will be posted by 8pm Friday!
+### Reading Guide
 
 📝 [Download the Word Document](reading-guide/week-2a.docx)
 
@@ -51,7 +49,7 @@ The second chapter we will focus on discusses k-nearest neighbors!
 
 ## Textbook Reading
 
-📖 [**Required Reading:** *ISLR -- Chapter 3, Section 5*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+📖 **Required Reading:** *ISLR -- Chapter 3, Section 5*
 
 ::: callout-tip
 # Reread Carefully!
@@ -59,7 +57,7 @@ The second chapter we will focus on discusses k-nearest neighbors!
 It is possible you already skimmed this section, but we are dedicating time specifically to this section this week, so I would encourage you to reread the **entire** section more carefully.
 :::
 
-### Reading Guide -- Due Wednesday, October 4 at 2:10pm
+### Reading Guide 
 
 No reading guide for this section, only a concept quiz!
 
@@ -67,7 +65,7 @@ No reading guide for this section, only a concept quiz!
 
 Here's a helpful video which explains how k-Nearest Neighbors works: <https://www.youtube.com/watch?v=HVXime0nQeI>
 
-## Concept Quiz -- Due Wednesday, October 4 at 2:10pm
+## Concept Quiz
 
 **Question 1** -- [Parametric / Nonparametric] methods make strong assumptions about the functional form of $f(X)$, whereas [parametric / nonparametric] methods do not make assumptions about the functional form of $f(X)$. Linear regression is an example of a [parametric / nonparametric] method and k-nearest neighbors is an example of a [parametric / nonparametric] method.
 

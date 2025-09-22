@@ -21,9 +21,9 @@ Welcome to STAT 551! We will start off this class by getting familiar with what 
 
 ## Textbook Reading
 
-📖 [**Required Reading:** *ISLR -- Chapter 2 Statistical Learning*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+📖 **Required Reading:** *ISLR -- Chapter 2 Statistical Learning*
 
-### Reading Guide 
+### Reading Guide
 
 📝 [Download the Word Document](reading-guide/week-0.docx)
 

@@ -21,7 +21,7 @@ The second reading for this week covers the highlights of linear regression. Thi
 
 ## Textbook Reading
 
-📖 [**Required Reading:** *ISLR -- Chapter 3 Linear Regression*](https://hastie.su.domains/ISLR2/ISLRv2_corrected_June_2023.pdf)
+📖 **Required Reading:** *ISLR -- Chapter 3 Linear Regression*
 
 ### Reading Guide
 
