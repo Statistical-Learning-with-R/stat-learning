@@ -28,8 +28,8 @@ library(broom)
 
 ## Choosing a Model
 
-::: columns
-::: {.column width="55%"}
+:::::::: columns
+:::: {.column width="55%"}
 Recall: We are assuming that
 
 ::: centered
@@ -37,12 +37,12 @@ Recall: We are assuming that
 :::
 
 and we would like to estimate [f]{style="color: #e28743; font-size: 1.25em"}.
-:::
+::::
 
 ::: {.column width="5%"}
 :::
 
-::: {.column width="40%"}
+:::: {.column width="40%"}
 ::: fragment
 Here's a suggestion:
 
@@ -50,8 +50,8 @@ Here's a suggestion:
 
 for every (x,y) we observe
 :::
-:::
-:::
+::::
+::::::::
 
 </br> </br>
 
@@ -161,7 +161,7 @@ glance(bmi_poly_20)
 
 ## Comparing RMSE Between Models
 
-::: columns
+:::::: columns
 ::: {.column width="47%"}
 ```{r}
 ins %>% 
@@ -180,17 +180,17 @@ ins %>%
           estimate = preds_20)
 ```
 :::
-:::
+::::::
 
 . . .
 
 </br> </br>
 
-::: centered
+:::: centered
 ::: midi
 So, which model is better?
 :::
-:::
+::::
 
 ## Does the 20th Order Seem Necessary?
 
@@ -218,26 +218,28 @@ ins %>%
 
 ## Bias and variance
 
-::: columns
-::: {.column width="45%"}
-[bias]{style="color: #e28743; font-size: 1.25em"} = how much the model is fit to the data it is [trained on]{style="color: #e28743; font-size: 1.25em"}, instead of being generalizeable to *any* data
+:::::::: columns
+:::: {.column width="45%"}
+[bias]{style="color: #e28743; font-size: 1.25em"} = how much structure you impose on the model. For example, the 1-degree linear regression was forced to be a straight line. More bias = less overfitting.
+
+[variance]{style="color: #e28743; font-size: 1.25em"} = how different the model would be if it had been [trained on]{style="color: #e28743; font-size: 1.25em"} a different random set of data.  More variance = more overfitting.
 
 </br>
 
 ::: fragment
 [variance]{style="color: #76b5c5; font-size: 1.25em"} = how much *prediction error* there is on the [training data]{style="color: #76b5c5; font-size: 1.25em"}
 :::
-:::
+::::
 
 ::: {.column width="5%"}
 :::
 
-::: {.column width="45%"}
+:::: {.column width="45%"}
 ::: fragment
 ![](https://media1.giphy.com/media/3o6Mb9T54A8sVZm8IU/source.gif)
 :::
-:::
-:::
+::::
+::::::::
 
 ##  {background-color="#34605f"}
 
@@ -253,7 +255,7 @@ One idea is to come up with a *metric* that **penalizes** complexity / flexibili
 
 </br>
 
-::: columns
+::::::: columns
 ::: {.column width="40%"}
 measure of fit - number of predictors
 :::
@@ -261,7 +263,7 @@ measure of fit - number of predictors
 ::: {.column width="5%"}
 :::
 
-::: {.column width="55%"}
+:::: {.column width="55%"}
 ::: fragment
 Examples:
 
@@ -273,12 +275,12 @@ Examples:
 
 4.  Mallow's Cp
 :::
-:::
-:::
+::::
+:::::::
 
 ## Theoretical solutions to overfitting
 
-::: columns
+:::::: columns
 ::: {.column width="45%"}
 **Pros:**
 
@@ -297,7 +299,7 @@ Examples:
 
 -   What if they don't agree? (which is common!)
 :::
-:::
+::::::
 
 ##  {background-color="#34605f"}
 
