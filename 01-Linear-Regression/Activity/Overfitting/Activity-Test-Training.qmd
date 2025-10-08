@@ -1,0 +1,154 @@
+---
+title: "Test and Training Error"
+author: "YOUR NAME HERE"
+format: 
+  html:
+    code-fold: true
+    code-line-numbers: true
+    code-tools: true
+    self-contained: true
+editor: visual
+execute:
+  message: false
+---
+
+## Setup
+
+Declare your libraries:
+
+```{r}
+#| label: libraries-r
+#| include: false
+library(tidyverse)
+library(tidymodels)
+```
+
+## Code from walkthrough
+
+```{r}
+#| label: load-data
+
+ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance_costs_1.csv?dl=1")
+head(ins)
+```
+
+```{r}
+#| label: fitting-polynomial-models
+
+lr_mod <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+
+bmi_poly_1 <- lr_mod %>%
+  fit(charges ~ bmi, data = ins)
+
+bmi_poly_20 <- lr_mod %>%
+  fit(charges ~ poly(bmi, 20), data = ins)
+```
+
+```{r}
+#| label: extracting-predictions
+
+ins <- ins %>%
+  mutate(
+    preds_1 = predict(bmi_poly_1, 
+                      new_data = ins, 
+                      type = "raw"),
+    preds_20 = predict(bmi_poly_20, 
+                       new_data = ins, 
+                       type = "raw")
+  )
+```
+
+```{r}
+tidy(bmi_poly_1)
+glance(bmi_poly_1)
+
+tidy(bmi_poly_20)
+glance(bmi_poly_20)
+```
+
+```{r}
+ins %>% 
+  rmse(truth = charges, 
+          estimate = preds_1)
+ins %>% 
+  rmse(truth = charges, 
+          estimate = preds_20)
+```
+
+```{r}
+ins %>% 
+  ggplot() +
+  geom_point(aes(x = bmi, y = charges)) +
+  geom_line(aes(x = bmi, y = preds_20),
+            color = "red", 
+            lwd = 1.25) +
+  geom_line(aes(x = bmi, y = preds_1),
+            color = "blue", 
+            lwd = 1.25) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  labs(x = "BMI", 
+       y = "", 
+       title = "Modeling Medical Charges with Polynomial Models")
+
+```
+
+```{r}
+# Set seed, so our "randomness" is consistent
+set.seed(190498)
+
+# Specifying the proportion of the data to be retained for analysis (training)
+ins_split <- ins %>% initial_split(prop = 0.90)
+
+# Save test and training as separate datasets
+ins_test <- ins_split %>% testing()
+ins_train <- ins_split %>% training()
+
+# Verify dimensions
+dim(ins)
+dim(ins_test)
+dim(ins_train)
+```
+
+```{r}
+bmi_poly_1 <- lr_mod %>%
+  fit(charges ~ bmi, data = ins_train)
+
+bmi_poly_20 <- lr_mod %>%
+  fit(charges ~ poly(bmi, 20), data = ins_train)
+
+ins_test <- ins_test %>%
+  mutate(
+    preds_1 = predict(bmi_poly_1, 
+                      new_data = ins_test, 
+                      type = "raw"),
+    preds_20 = predict(bmi_poly_20, 
+                       new_data = ins_test, 
+                       type = "raw")
+  )
+```
+
+```{r}
+ins_test %>% 
+  rmse(truth = charges, 
+          estimate = preds_1)
+
+ins_test %>% 
+  rmse(truth = charges, 
+          estimate = preds_20)
+```
+
+## Your turn
+
+Suppose you want to fit a regression that predicts `charges` from `age` and `bmi`.
+
+Consider four models:
+
+**Model 1**: `age` and `bmi` both have polynomial degree 1 (linear) **Model 2**: `age` has polynomial degree 1, `bmi` has polynomial degree 2 (quadratic and linear) **Model 3**: `age` has polynomial degree 2, `bmi` has polynomial degree 1 **Model 4**: `age` and `bmi` both have polynomial degree 2
+
+(No interactions term for any model.)
+
+Which model is best according to the **adjusted R-squared** on the training data?
+
+Which model is best according to the **MSE** of the **test** data?

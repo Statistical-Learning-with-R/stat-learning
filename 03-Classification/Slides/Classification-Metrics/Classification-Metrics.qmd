@@ -1,0 +1,286 @@
+---
+title: "Classification Metrics"
+format: 
+  revealjs:
+    theme: [solarized, style.scss]
+    embed-resources: true
+editor: visual
+execute: 
+  echo: true
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(kknn)
+library(glmnet)
+```
+
+```{css, echo = FALSE}
+.red{ color: red; }
+.blue{ color: blue; }
+.huge {
+  font-size: 200%;
+}
+.large {
+  font-size: 150%;
+}
+.tiny {
+  font-size: 50%;
+}
+```
+
+
+# Review
+
+
+
+## Review
+
+**Modeling steps:**
+
+1. **Clean** the data
+    + What do we do about `NA`'s?
+    + Convert categorical variables to **factors**
+    
+. . .
+    
+2. Establish a **model**
+    + Or **many** models to try?
+    + Do we need to **tune** any hyperparameters?
+    
+. . .
+    
+3. Establish a **recipe**
+    + Or **many** recipes to try?
+    + How will we **transform** our variables?
+    + Categorical to **dummy** variables?  (but not the response!)
+    + (data = full dataset)
+    
+. . .
+    
+4. Make **workflows** and put them in **workflowsets**
+
+. . .
+
+5. Send the workflows to cross validation for **model selection**
+    + For comparing different *models* 
+    + For *tuning*
+    + For comparing different *recipes*
+    
+. . .
+    
+6. Send your **final model** to cross-validation for **final metrics**
+    + why do we cross-validate for final metrics?
+    
+. . .
+    
+7. Fit the **final model** on the **full dataset** - this is your finished product!
+
+
+
+
+## Setup
+
+```{r, message = FALSE}
+ins <- read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance.csv?dl=1")
+
+ins <- ins %>%
+  mutate(
+    smoker = factor(smoker)
+  ) %>%
+  drop_na()
+
+knn_mod <- nearest_neighbor(neighbors = 5) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+
+knn_recipe <- recipe(smoker ~ age + bmi + charges, 
+                     data = ins)
+
+knn_wflow <- workflow() %>%
+  add_recipe(knn_recipe) %>%
+  add_model(knn_mod)
+
+cvs <- vfold_cv(ins, v = 5)
+
+knn_fit <- knn_wflow %>%
+  fit_resamples(cvs)
+
+```
+
+# Metric 1: Accuracy
+
+
+## Accuracy
+
+What percent of our guesses were correct?
+
+```{r}
+knn_fit %>% collect_metrics()
+```
+
+
+## Accuracy
+
+The problem:  Consider this data.
+
+```{r, echo = FALSE}
+set.seed(49802)
+sample(c("A", "B"), 100, prob = c(.01, .99), replace = TRUE)
+```
+
+
+If I guess "B" every time, I'll have 98% accuracy!
+
+
+
+# Metric 2: ROC-AUC
+
+
+## ROC
+
+**ROC** = "reciever operating charateristic**  (ew)
+
+. . .
+
+**False Positive Rate** = (how many A's did we say were B)/(how many did we say were "B" total)
+
+*How many did we misclassify as B?*
+
+. . .
+
+**True Positive Rate** = (how many B's did we say were B)/(how many B's are there total)
+
+*How many true B's did we miss?*
+
+
+## ROC
+
+**ROC** = plots TPR and FPR across many **decision boundaries**
+
+## TPR and FPR
+
+First, find the probability that the model assigns each observation for the **target** category of your categorical variable.  (You get to decide which is the target)
+
+```{r}
+knn_final_fit <- knn_wflow %>%
+  fit(ins)
+
+ins <- ins %>%
+  mutate(
+    prob_smoker = predict(knn_final_fit, ins, type = "prob")$.pred_yes
+  )
+```
+
+## TPR and FPR
+
+If we choose a cutoff of 0.5, what is our TPR and FPR?
+
+```{r}
+ins |>
+  mutate(
+    predict_smoker = prob_smoker > 0.5
+  ) |>
+  count(smoker, predict_smoker)
+```
+
+## TPR and FPR
+
+If we choose a cutoff of 0.8, what is our TPR and FPR?
+
+```{r}
+ins |>
+  mutate(
+    predict_smoker = prob_smoker > 0.8
+  ) |>
+  count(smoker, predict_smoker)
+```
+
+## TPR and FPR
+
+If we choose a cutoff of 0.2, what is our TPR and FPR?
+
+```{r}
+ins |>
+  mutate(
+    predict_smoker = prob_smoker > 0.2
+  ) |>
+  count(smoker, predict_smoker)
+```
+
+
+## ROC
+
+```{r}
+
+ins |>
+  mutate(
+    smoker = factor(smoker, levels = c("yes", "no"))
+  ) |>
+  roc_curve(truth = smoker, prob_smoker) %>%
+  autoplot()
+```
+
+
+
+## ROC
+
+**GOOD:** The ROC curve is way above the line  (we can achieve a really good TP rate without sacrificing FP rate)
+
+**BAD:** The ROC curve is on the line (FP/TP is a direct trade-off)
+
+## ROC-AUC
+
+**ROC-AUC** is the **area under the curve** - large values are good!
+
+* 1 = I always predict perfectly, no matter what the cutoff is.  All my predicted probs are 0% or 100%.
+
+* 0.5 = I predict just as well as random guessing.  If guess more "yes", I get more of the "no" wrong.
+
+* Below 0.5 = Yikes.
+
+
+# Other ways of talking about TP and FP
+
+## Sensitivity and Specificity
+
+* **Sensitivity** = how much of the target category do we correctly identify?
+
+= (correctly guessed Category A)/(all actual Category A's)
+
+= TP/(TP + FN)
+
+* **Specificity** = how much of the non-target category do we correctly identify?
+
+= (correctly guessed Category B)/(all actual Category B's)
+
+= TN/(TN + FP)
+
+
+## Precision and Recall
+
+* **Recall** = how much of the target category do we correctly identify?
+
+= (correctly guessed Category A)/(all actual Category A's)
+
+= TP/(TP + FN)
+
+= Sensitivity!
+
+* **Precision** = when we guess the target category, are we correct?
+
+= (correctly guessed Category A)/(all **guessed** Category A)
+
+= TP/(TP + FP)
+
+
+# Try it!
+
+## Open **Activity-Classification-2.qmd** again
+#### Go to **https://yardstick.tidymodels.org/articles/metric-types.html**
+#### Scroll down to the list of metrics
+#### As a group, research **one** of the metrics that we haven't discussed in class, and compute it for some of your models.
+
+
+

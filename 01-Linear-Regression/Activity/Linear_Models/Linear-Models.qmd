@@ -28,7 +28,7 @@ Today we will use a dataset containing counts of babies born named "Allison" bet
 ```{r}
 # You will need to change the path to load in your data! 
 
-allisons_df <- read_csv(here::here("week 1", "data", "allisons.csv"))
+allisons_df <- read_csv(here::here("01-Linear-Regression", "Activity", "Linear_Models", "data", "allisons.csv"))
 ```
 
 You can preview the dataset by clicking on the `allison_df` object in the upper right hand corner (of the Environment tab). Or you could type the following code into your console (`View(allison_df)`).
@@ -70,6 +70,8 @@ To establish the model, we need to determine which R package it comes from (the 
 lin_reg <- linear_reg() %>%
   set_engine("lm") %>%
   set_mode("regression")
+
+lin_reg
 ```
 
 Next, we will **fit** the model to our data:
@@ -77,6 +79,8 @@ Next, we will **fit** the model to our data:
 ```{r}
 lin_reg_fit <- lin_reg %>%
   fit(Count ~ Year, data = allisons_df)
+
+lin_reg_fit
 ```
 
 Let's check out the output of this model fit:
@@ -129,6 +133,8 @@ allisons_df <- allisons_df %>%
   mutate(
     Prediction = predict(lin_reg_fit, new_data = allisons_df)$.pred
          ) 
+
+allisons_df
 ```
 
 Then, we can calculate and visualize the residuals:

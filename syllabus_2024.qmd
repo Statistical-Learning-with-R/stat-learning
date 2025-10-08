@@ -1,7 +1,7 @@
 ---
-title: "Stat 551: Statistical Learning with R and python"
+title: "Stat 551: Statistical Learning with R"
 # author:
-date: "Fall 2024"
+date: "Fall 2025"
 
 format: 
   # pdf:
@@ -59,9 +59,7 @@ execute:
 
 Mondays/Wednesdays
 
-4:10pm - 6:00pm
-
-*(sorry, I didn't want late class either...)*
+12:10pm - 2:00pm
 
 **Room:**
 
@@ -69,15 +67,11 @@ Mondays/Wednesdays
 
 ## Office Hours
 
-
 | Day                | Time                                                                               |
 |--------------------|------------------------------------------------------------------------------------|
-| Tuesdays            | 12:10pm - 1:30pm, in-person (25-106)                                               |
-| Wednesdays            | 11:10am - 12:00pm, in-person (25-106)                                      |
-| Thursdays         | 9:40am - 11:00am, in-person (25-106)                                               |
-| Bonus times   |   variable, remote by appt (<https://calendly.com/kbodwin/office-hours-remote>)    |
+| Tuesdays , Thursdays          | 3:10pm - 5pm, in-person (25-106)                                     |
 
-Zoom office hours by appointment are required to be scheduled at least 12-hours prior to the meeting.
+I will likely also be on Discord throughout the day, so please don't hesitate to put questions there, even if it is late at night or early in the morning.
 
 :::
 
@@ -126,30 +120,28 @@ library(lubridate)
 # Any number of ways to identify dates in R, but we'll use {lubridate} and the ymd() function here.
 # Format: YYYYMMDD. In this example, 4 January 2022.
 # What are the full dates of the semester?
-semester_dates <- seq(ymd(20240923), ymd(20241213), by=1)
+semester_dates <- seq(ymd(20250918), ymd(20251212), by=1)
 # Weekday(s) of class
 class_wdays <- c("Mon", "Wed")
 
 not_here_dates <- c(
   # Vets day
-  ymd("2024-11-11"),
+  #ymd("2024-11-11"),
   # Tgiving Break
-  seq(ymd("2024-11-25"), ymd("2024-11-29"), by = 1)
+  seq(ymd("2025-11-24"), ymd("2025-11-28"), by = 1)
   )
 
 remote_dates <- c(
-  ymd("2024-10-07"),
-  ymd("2024-10-09")
 )
 
-exam_dates <- c(ymd("2024-10-30"), 
-                ymd("2024-12-04")
+exam_dates <- c(ymd("2025-10-29"), 
+                ymd("2025-12-03")
                 )
 
-project_dates <- c(ymd("2024-10-20"), 
-                ymd("2024-11-24"),
-                ymd("2024-12-08"),
-                ymd("2024-12-11")
+project_dates <- c(ymd("2025-10-27"), 
+                ymd("2025-12-01"),
+                #ymd("2024-12-08"),
+                ymd("2025-12-08")
                 )
 
 #project_dates <- c(ymd("2024-11-04"), ymd("2024-1205"), ymd(20221209))
@@ -214,7 +206,7 @@ class_cal <- Cal %>%
                              "In-Class Exam"="orange",
                   "Project Checkpoint" = "turquoise"),
                     #... but also suppress a label for a non-class semester day
-                    breaks=c("Finals Week", "Holiday", "Class Day", "Remote Class", "In-Class Exam", "Project Checkpoint"))
+                    breaks=c("Finals Week", "Holiday", "Class Day", "Remote Class", "In-Class Exam", "Project Worktime"))
 class_cal
 
 exam_days <- filter(Cal, category == "In-Class Exam") %>%
@@ -224,36 +216,29 @@ exam_days <- filter(Cal, category == "In-Class Exam") %>%
   mutate(sem_week = week(date),
          Date = paste(format(date, "%b %e"), sep = ",", collapse = ", "))
 
-project_days <- filter(Cal, category == "Project Checkpoint") %>%
-  mutate(topic = c("Project Phase 1 Due",
-                    "Project Phase 2 Due", 
-                   "Project Draft Due", 
+project_days <- filter(Cal, category == "Project Worktime") %>%
+  mutate(topic = c("Project Plan",
+                   "Project Draft", 
                    "Project Poster Session"),
-          time = c("11:59pm", "11:59pm", "11:59pm", "1:00pm")) %>%
+          time = c("11:59pm", "11:59pm", "10:00am")) %>%
    mutate(Date = format(date, "%b %e"),
           sem_week = week(date))
 
-class_days <- filter(Cal, category %in% c("Class Day", "Remote Class", "Exam")) %>%
-  mutate(sem_week = week(date)) %>%
-  group_by(sem_week) %>%
-  # group_by(sem_week) %>%
-  summarize(Date = paste(format(date, "%b %e"), sep = ",", collapse = ", ")) %>%
-  mutate(topic = c(
-    "Intro to R/python; Review of linear models",
+class_days <- tibble(
+  Week = paste("Week", 0:11),
+  Topic = c(
+    "Intro to tidymodels; Review of linear models",
     "Cross-Validation, K-Nearest-Neighbors, tuning",
     "Classification: Logistic, KNN, LDA",
     "Decision Trees",
     "Variable Selection and Regularization",
-    "Review",
+    "Project, Exam 1",
     "Dimension Reduction, Clustering",
     "Support Vector Machines",
     "Neural Networks",
-    "Project work"
-    )) %>%
-  bind_rows(project_days) %>%
-  bind_rows(exam_days) %>%
-  arrange(sem_week) %>%
-  select(Date, Topic = topic)
+    "Project, Exam 2",
+    "Finals Week - Poster Presentations"
+    ))
 ```
 
 # Course Resources {.tabset .tabset-fade}
