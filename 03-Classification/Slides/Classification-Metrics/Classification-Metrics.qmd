@@ -4,6 +4,7 @@ format:
   revealjs:
     theme: [solarized, style.scss]
     embed-resources: true
+    scrollable: true
 editor: visual
 execute: 
   echo: true
@@ -277,7 +278,7 @@ ins |>
 
 # Try it!
 
-## Open **Activity-Classification-2.qmd** again
+## Open **Activity-Classification.qmd** again
 #### Go to **https://yardstick.tidymodels.org/articles/metric-types.html**
 #### Scroll down to the list of metrics
 #### As a group, research **one** of the metrics that we haven't discussed in class, and compute it for some of your models.
