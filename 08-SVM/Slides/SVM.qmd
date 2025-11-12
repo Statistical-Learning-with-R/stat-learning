@@ -53,67 +53,6 @@ fed_matrix <- fed_known %>%
   select(-Author)
 ```
 
-## Midterm Exam Updates
-
-::: incremental
--   Concept exams have been graded and released
--   The letter grade associated with your exam is your grade *without* revisions
--   You are permitted to submit *one* round of revisions to earn a higher grade
--   Revisions are due by Friday, December 15.
-:::
-
-. . .
-
-::: callout-tip
-# Take-Home Analysis
-
-The data analysis portion of the exam will be graded no later than this Friday (November 17).
-:::
-
-## Midterm Reflections
-
--   Revisions must include *thoughtful* reflection on why your previous answer was incorrect and how your revised solution remedies these issues.
-
--   Revisions and reflections will be submitted to the `Midterm Part 1 Grade & Revisions` Canvas assignment.
-
-## Lab Revision Updates
-
--   Revisions on lab assignments will be accepted until Friday, December 15.
-
--   For the next three weeks, you are permitted to submit *up to one (1)* revision per week.
-
--   Remember, you are required to earn a "Satisfactory" on *all but 2* assignments to earn a B in the course.
-
-## Plan for the Next Three Weeks
-
-::: columns
-::: {.column width="30%"}
-**Week 8** -- Support Vector Machines 
-
-- Final Lab Assignment
-- Project Phase 2 (Introduction, Preliminary Analysis, Project Timeline)
-:::
-
-::: {.column width="3%"}
-:::
-
-::: {.column width="30%"}
-**Week 9** -- Neural Networks
-
-</br>
-
-- Final Activity
-- Project Phase 3 (Rough Draft)
-:::
-
-::: {.column width="3%"}
-:::
-
-::: {.column width="33%"}
-**Week 10** -- Final Report
-:::
-:::
-
 # Maximal Margin Classifier
 
 ## Federalist Papers
@@ -227,7 +166,7 @@ I'm just drawing any line that separates the two groups. Is there a better way t
 
 . . .
 
-::: columns
+::::::: columns
 ::: {.column width="47%"}
 ```{r}
 #| label: margin-option-1
@@ -248,7 +187,7 @@ fed_pca_jj %>%
 ::: {.column width="3%"}
 :::
 
-::: {.column width="48%"}
+:::: {.column width="48%"}
 ::: fragment
 ```{r}
 #| label: margin-option-2
@@ -265,8 +204,8 @@ fed_pca_jj %>%
        color = "Known Author")
 ```
 :::
-:::
-:::
+::::
+:::::::
 
 . . .
 
@@ -278,7 +217,7 @@ The "best" line is the line with the [largest margin]{style="color: #b76352;"} o
 
 . . .
 
-::: columns
+:::::::: columns
 ::: {.column width="55%"}
 ```{r}
 fed_pca_jj %>%
@@ -296,16 +235,16 @@ fed_pca_jj %>%
 ::: {.column width="5%"}
 :::
 
-::: {.column width="40%"}
-::: smaller
+::::: {.column width="40%"}
+:::: smaller
 ::: incremental
 -   Where could I add a John Jay essay which *would not* change the line?
 -   Where could I add a John Jay essay which *would* change the line?
 -   How many observations control the shape of the line?
 :::
-:::
-:::
-:::
+::::
+:::::
+::::::::
 
 ## Difficulties with Hard Margins
 
@@ -348,7 +287,7 @@ There are two decisions to make here:
 
 . . .
 
-::: columns
+::::::: columns
 ::: {.column width="40%"}
 1.  How big is our margin?
 
@@ -358,14 +297,14 @@ There are two decisions to make here:
 ::: {.column width="5%"}
 :::
 
-::: {.column width="50%"}
+:::: {.column width="50%"}
 ::: fragment
 2.  How many misclassified observations are we willing to have?
 
 (`C` = cost of a misclassified point)
 :::
-:::
-:::
+::::
+:::::::
 
 ## An Initial Attempt
 
@@ -566,5 +505,4 @@ In this class, we will only implement *polynomial* kernals.
 
 ## Try it!
 
-Open [`07-SVM.qmd`](../Assignment/07-SVM-template.qmd) to explore how SVM (and PCA) can be used to classify the class of different zoo animals. 
-
+Open [`07-SVM.qmd`](../Assignment/07-SVM-template.qmd) to explore how SVM (and PCA) can be used to classify the class of different zoo animals.

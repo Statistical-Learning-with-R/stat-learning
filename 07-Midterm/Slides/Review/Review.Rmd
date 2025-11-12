@@ -343,21 +343,21 @@ class: center, middle, inverse
 # Week 5:  Bootstrapping
 
 ---
-## Hands-on
+<!-- ## Hands-on -->
 
-`r emo::ji("check")` Manually perform a reasonable number of **bootstrapped resamples**
+<!-- `r emo::ji("check")` Manually perform a reasonable number of **bootstrapped resamples** -->
 
-## Concepts
+<!-- ## Concepts -->
 
-`r emo::ji("check")` **Explain** the advantages and reasons for bootstrapping.
+<!-- `r emo::ji("check")` **Explain** the advantages and reasons for bootstrapping. -->
 
 
-`r emo::ji("check")` **Discuss** the results of a bootstrapped process.
+<!-- `r emo::ji("check")` **Discuss** the results of a bootstrapped process. -->
 
----
-# Quick Quiz
+<!-- --- -->
+<!-- # Quick Quiz -->
 
-What is a reason we might want to **bootstrap** a Logistic Regression?
+<!-- What is a reason we might want to **bootstrap** a Logistic Regression? -->
 
 ---
 class: center, middle, inverse
