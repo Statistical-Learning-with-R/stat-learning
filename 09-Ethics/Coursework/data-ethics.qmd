@@ -1,5 +1,5 @@
 ---
-title: "Data Ethics & Data Feminism"
+title: "Special Topics: Data Ethics, Deep Learning"
 format: 
   html: 
     self-contained: true
@@ -13,9 +13,18 @@ format:
 editor: source
 ---
 
-The coursework this week was inspired by the feedback I left each of you on your Midterm Data Analysis. Specifically, feedback pertaining to (1) the ethical implications of the way your model(s) could be used by a bank to deny credit to customers and (2) bias in the data collection process. Responses to these questions more often focused on the error rates of the models, the implications of these rates on the banks, and the inaccurate recording of variables. Seldom of these discussions mentioned a critical aspect of assessing model implications -- humans. Thus, this week we are reading a chapter from *Data Feminism* (D'Ignazio & Klein, 2020) that specifically interrogates the importance of considering context in any data analysis. 
+## Data Ethics
 
-# Textbook Reading 
+In Homework 4, you were asked to use statistical modeling to predict credit defaults,
+and to report your results to Data Science or Business audiences.
+
+Reports focused on the error rates of the models and the most imporant coefficients. 
+But all of these discussions were missing a critical aspect of assessing model 
+implications -- humans. Thus, this week we are reading a chapter from *Data Feminism* 
+(D'Ignazio & Klein, 2020) that specifically interrogates the importance of considering 
+context in any data analysis. 
+
+### Textbook Reading 
 
 📖 [**Required Reading:** *Data Feminism*, Chapter 6](https://data-feminism.mitpress.mit.edu/pub/czq9dfs5/release/3)
 
@@ -23,8 +32,12 @@ The coursework this week was inspired by the feedback I left each of you on your
 <!-- #  -->
 <!-- ::: -->
 
-# Reading Guide -- Due Monday, November 27th at 2:10pm
+### Reading Guide 1
 
 📝 [Download the Word Document](reading-guide/week-9.docx)
+
+## Neural Networks
+
+
 
 

@@ -272,7 +272,7 @@ The transformations on the residuals are called the **activation functions**.
 
 --
 
-![](https://www.wired.com/wp-content/uploads/2015/03/855.gif)
+![](https://y.yarn.co/78f4cdac-a2da-4256-87d3-0e8b76b50dc6_text.gif)
 
 --
 
@@ -285,7 +285,7 @@ Common choices:  **sigmoid**, **Rectified Linear Unit (ReLu)**, ....
 
 --
 
-![](https://www.wired.com/wp-content/uploads/2015/03/855.gif)
+![](https://i.makeagif.com/media/3-09-2017/h3auQY.gif)
 
 --
 
@@ -315,11 +315,38 @@ There's not a super clear definition.  (See: "Big Data")
 But definitely Deep Learning is **not interpretable**.
 
 ---
-class: center, middle, inverse
 
-## Try it
+## Explainable AI (xAI)
 
-#### (Banned license plates walkthrough)
+Some methods exist to try to **retroactively** interpret how the deep learning model is making predictions.
 
+--
 
+Most well known:  **LIME** and **SHAP**.
+
+--
+
+General idea of LIME:
+
+* Tweak a data point (e.g. change "male" to "female")
+
+* See how the *output* changes
+
+* Do this many times and fit an *interpretable* model to the results.
+
+---
+
+## tl;dr
+
+* A Neural Network is **just another model specification**!!!
+
+* It takes an *input* and gives a predicted *output*.
+
+* It has way more **unknown coefficients** than the models we are used to...
+
+* ... so it requires **more data** and **more computation power** to be fit...
+
+* ... and the resulting coefficients are generally **not interpretable**.
+
+* *(Want to learn more?  CS 487 (4467), CS 587 (5887), DATA 4620)*
 
